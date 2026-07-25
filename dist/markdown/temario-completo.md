@@ -456,3 +456,148 @@ Una previsión es un rango con supuestos, no una cifra mágica. Explica horizont
 ## Práctica
 
 Plantea [una previsión de demanda](../../ejercicios/temario-11/aplicacion/prevision-demanda.md) y compara con [la guía](../../soluciones/temario-11/prevision-demanda.md).
+
+# Bloque 12 - Modelos predictivos para analistas
+
+## Objetivo
+
+Usar modelos predictivos de manera responsable para estimar resultados, priorizar casos y apoyar decisiones. El objetivo no es competir por la métrica más alta: es construir una predicción útil, válida y explicable.
+
+## Predicción no es causalidad
+
+Un modelo puede anticipar qué usuarios tienen riesgo de abandono sin demostrar por qué abandonarán ni qué intervención lo evitará. Usa predicción para priorizar y medir intervenciones aparte cuando la pregunta sea causal.
+
+```mermaid
+flowchart TD
+    A[Pregunta de negocio] --> B[Variable objetivo]
+    B --> C[Datos históricos y variables]
+    C --> D[Separación temporal]
+    D --> E[Modelo base]
+    E --> F[Evaluación y sesgos]
+    F --> G[Decisión o experimento]
+```
+
+## Preparación y evaluación
+
+Define el objetivo antes de tocar variables. Separa entrenamiento, validación y prueba sin filtrar información del futuro. Una fuga de información hace que un modelo parezca excelente en evaluación y fracase al usarse.
+
+Para regresión usa errores como MAE o RMSE; para clasificación considera precisión, recall, F1, AUC y, sobre todo, el coste de cada error. Una métrica no reemplaza el contexto de negocio.
+
+## Modelos que debe conocer un analista
+
+Regresión lineal y logística son referencias interpretables. Árboles y ensembles capturan relaciones complejas, pero requieren más atención a validación e interpretación. Crea primero un baseline sencillo: superar una referencia honesta es más importante que usar el modelo más sofisticado.
+
+## Interpretación y ética
+
+Explica qué variables influyen, para qué población funciona y dónde puede fallar. Evita usar variables sensibles o proxies injustificados. Documenta el impacto de falsos positivos y falsos negativos antes de automatizar una acción.
+
+## Práctica
+
+Resuelve [el caso de churn](../../ejercicios/temario-12/aplicacion/priorizar-churn.md).
+
+# Bloque 13 - Herramientas y reproducibilidad
+
+## Objetivo
+
+Trabajar como analista dentro de un equipo: convertir peticiones en entregables verificables, documentar decisiones y hacer que un análisis pueda repetirse.
+
+## De ticket a entrega
+
+Jira, Linear u otras herramientas no son solo listas de tareas. Una petición analítica debe expresar contexto, decisión, métrica, alcance, criterio de aceptación y responsable. Si falta la decisión, el análisis corre el riesgo de ser interesante pero inútil.
+
+```mermaid
+flowchart LR
+    A[Ticket o petición] --> B[Pregunta y criterios]
+    B --> C[Datos y análisis]
+    C --> D[Revisión]
+    D --> E[Dashboard, informe o decisión]
+    E --> F[Seguimiento]
+```
+
+## Git y proyectos analíticos
+
+Git registra cambios en código, documentación y definiciones. Un análisis reproducible separa datos no versionados, código, dependencias, resultados derivados y documentación. Los notebooks sirven para explorar y explicar; la lógica repetida conviene moverla a funciones o scripts comprobables.
+
+## Instrumentación y producto
+
+Herramientas como Amplitude permiten revisar eventos, propiedades, funnels, cohorts y retención. Antes de crear un gráfico, valida el tracking plan: nombre del evento, momento de envío, identidad, propiedades y cobertura. Un dashboard no arregla eventos mal definidos.
+
+## BI y comunicación
+
+Power BI, Tableau, Looker y hojas de cálculo cambian de interfaz, pero comparten lo esencial: modelo de datos, métricas definidas, filtros claros, actualización conocida y audiencia. Entrega siempre contexto, recomendación, límites y enlace al detalle.
+
+## Práctica
+
+Redacta [un ticket analítico completo](../../ejercicios/temario-13/aplicacion/ticket-analitico.md).
+
+# Bloque 14 - Nivel avanzado: causalidad, escala y criterio
+
+## Objetivo
+
+Reconocer problemas avanzados que aparecen al analizar productos y operaciones reales: causalidad, anomalías, datos grandes y datos con estructura espacial o externa.
+
+## Causalidad
+
+Cuando la pregunta es "qué ocurriría si cambiamos X", una correlación no basta. Los experimentos aleatorizados son la referencia cuando son posibles. Cuando no lo son, considera diseños cuasiexperimentales, diferencias en diferencias, regresión discontinua o matching con gran cautela y supuestos explícitos.
+
+```mermaid
+flowchart TD
+    A[Pregunta causal] --> B{¿Experimento posible?}
+    B -->|Sí| C[A/B con guardrails]
+    B -->|No| D[Diseño cuasiexperimental]
+    C --> E[Estimación y sensibilidad]
+    D --> E
+    E --> F[Decisión con límites]
+```
+
+## Escala y rendimiento
+
+Cuando un dataset no cabe cómodamente en memoria, empieza por reducir columnas y filas, filtrar antes de transferir y usar formatos columnares. DuckDB y Polars son herramientas útiles; no sustituyen un modelado correcto ni la definición clara de la pregunta.
+
+## Anomalías y monitorización
+
+Una anomalía es una observación inesperada respecto a un patrón, no necesariamente un incidente. Comprueba primero cambios de tracking, calendario, despliegues y calidad de datos. Diseña alertas con umbrales y responsables para evitar fatiga de alertas.
+
+## APIs y datos externos
+
+Documenta procedencia, licencia, frecuencia y sesgo de cada fuente. Una API puede cambiar sus campos o límites; la reproducibilidad exige guardar fecha de extracción, versión y transformaciones.
+
+## Práctica
+
+Evalúa [un supuesto causal](../../ejercicios/temario-14/aplicacion/supuesto-causal.md).
+
+# Bloque 15 - Portfolio y preparación profesional
+
+## Objetivo
+
+Convertir competencias en evidencia visible: proyectos que muestran criterio, técnica, comunicación y honestidad sobre los límites.
+
+## Qué demuestra un buen proyecto
+
+Un portfolio no es una colección de gráficos. Cada proyecto debe partir de una pregunta relevante, explicar los datos, mostrar transformaciones, justificar decisiones, comunicar hallazgos y reconocer incertidumbre. La persona que lo lea debe poder reproducir el recorrido o entender dónde no puede hacerlo.
+
+```mermaid
+flowchart TD
+    A[Problema real] --> B[Pregunta y métricas]
+    B --> C[Datos y calidad]
+    C --> D[Análisis o modelo]
+    D --> E[Hallazgos y límites]
+    E --> F[Recomendación]
+    F --> G[README y presentación]
+```
+
+## Formato recomendado
+
+Un proyecto contiene un README ejecutivo, un diccionario de datos, código o notebook reproducible, visualizaciones explicativas y una presentación breve. Es mejor tener tres proyectos claros y acabados que diez exploraciones incompletas.
+
+## Entrevistas
+
+Practica explicar una consulta SQL, detectar un error de calidad, definir una métrica y cuestionar una conclusión estadística. En casos de negocio, di qué pregunta harías primero, qué datos pedirías y cómo validarías tu recomendación.
+
+## Capstone
+
+El [proyecto final](../../proyectos/capstone/README.md) integra el curso: datos sin limpiar, análisis, métricas, visualización, recomendación y una entrega para público no técnico.
+
+## Cierre
+
+Terminar el curso no significa saberlo todo. Significa tener un método fiable para aprender una herramienta nueva, hacer preguntas mejores y justificar decisiones con evidencia.

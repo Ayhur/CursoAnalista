@@ -27,6 +27,10 @@ Los mismos contenidos se mantienen en Markdown y en PDF. Puedes descargar:
 - [Bloque 09 - SQL y NoSQL](dist/pdf/09-sql-nosql.pdf)
 - [Bloque 10 - Métricas y producto](dist/pdf/10-metricas-y-producto.pdf)
 - [Bloque 11 - Series temporales](dist/pdf/11-series-temporales.pdf)
+- [Bloque 12 - Modelos predictivos](dist/pdf/12-modelos-predictivos.pdf)
+- [Bloque 13 - Herramientas y reproducibilidad](dist/pdf/13-herramientas-y-reproducibilidad.pdf)
+- [Bloque 14 - Nivel avanzado](dist/pdf/14-nivel-avanzado.pdf)
+- [Bloque 15 - Portfolio](dist/pdf/15-portfolio.pdf)
 
 Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el script del repositorio y en GitHub Actions.
 
@@ -41,7 +45,10 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 | 04-07 | NumPy, Pandas, EDA y visualización | Disponible |
 | 08-10 | Estadística, SQL/NoSQL, métricas y producto | Disponible |
 | 11 | Series temporales | Disponible |
-| 12-15 | ML, herramientas, avanzado y portfolio | Próximamente |
+| 12 | Modelos predictivos para analistas | Disponible |
+| 13 | Herramientas y reproducibilidad | Disponible |
+| 14 | Nivel avanzado: causalidad y escala | Disponible |
+| 15 | Portfolio y preparación profesional | Disponible |
 
 ## Cómo se organiza el material
 
@@ -68,6 +75,10 @@ La teoría, los ejercicios de razonamiento y las autoevaluaciones se pueden cons
 ## Herramientas que aprenderás a entender
 
 Python, Pandas, SQL, MongoDB, DynamoDB, GitHub, Jira, Amplitude y herramientas BI. El objetivo no es memorizar una interfaz: primero se aprende el concepto de análisis y después cómo aplicarlo en cada herramienta.
+
+## Curso completo
+
+Los 16 bloques del itinerario ya están disponibles. La forma recomendada de cerrar el recorrido es completar el [capstone](proyectos/capstone/README.md) y revisarlo con su [rúbrica](evaluaciones/rubricas/capstone.md).
 
 ## Licencia
 

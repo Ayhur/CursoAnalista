@@ -16,11 +16,13 @@
 ## Fase 3 - Competencia profesional
 
 - [x] Estadística, SQL, NoSQL, métricas, KPIs y analítica de producto.
+- [x] Herramientas de empresa y reproducibilidad.
 - [ ] Jira, Amplitude, BI y reproducibilidad.
 
 ## Fase 4 - Especialización
 
-- [ ] Series temporales, modelos predictivos, prácticas avanzadas y portfolio.
+- [x] Series temporales, modelos predictivos, prácticas avanzadas y portfolio.
+- [x] Capstone y rúbrica de evaluación.
 
 ## Fase 5 - Interactividad
 
