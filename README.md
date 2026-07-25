@@ -18,6 +18,15 @@ Los mismos contenidos se mantienen en Markdown y en PDF. Puedes descargar:
 - [Bloque 00 - Orientación](dist/pdf/00-orientacion.pdf)
 - [Bloque 01 - Fundamentos de datos](dist/pdf/01-fundamentos-datos.pdf)
 - [Bloque 02 - Python desde cero](dist/pdf/02-python-desde-cero.pdf)
+- [Bloque 03 - Matemáticas aplicadas](dist/pdf/03-matematicas-aplicadas.pdf)
+- [Bloque 04 - NumPy](dist/pdf/04-numpy.pdf)
+- [Bloque 05 - Pandas](dist/pdf/05-pandas.pdf)
+- [Bloque 06 - Análisis exploratorio](dist/pdf/06-analisis-exploratorio.pdf)
+- [Bloque 07 - Visualización](dist/pdf/07-visualizacion.pdf)
+- [Bloque 08 - Estadística](dist/pdf/08-estadistica.pdf)
+- [Bloque 09 - SQL y NoSQL](dist/pdf/09-sql-nosql.pdf)
+- [Bloque 10 - Métricas y producto](dist/pdf/10-metricas-y-producto.pdf)
+- [Bloque 11 - Series temporales](dist/pdf/11-series-temporales.pdf)
 
 Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el script del repositorio y en GitHub Actions.
 
@@ -28,10 +37,11 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 | 00 | Orientación y pensamiento analítico | Disponible |
 | 01 | Fundamentos de datos | Disponible |
 | 02 | Python desde cero | Disponible |
-| 03 | Matemáticas aplicadas (teoría general opcional) | Próximamente |
-| 04-07 | NumPy, Pandas, EDA y visualización | Próximamente |
-| 08-10 | Estadística, SQL/NoSQL, métricas y producto | Próximamente |
-| 11-15 | Series temporales, ML, herramientas, avanzado y portfolio | Próximamente |
+| 03 | Matemáticas aplicadas (teoría general opcional) | Disponible |
+| 04-07 | NumPy, Pandas, EDA y visualización | Disponible |
+| 08-10 | Estadística, SQL/NoSQL, métricas y producto | Disponible |
+| 11 | Series temporales | Disponible |
+| 12-15 | ML, herramientas, avanzado y portfolio | Próximamente |
 
 ## Cómo se organiza el material
 
@@ -42,6 +52,12 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 - `evaluaciones/`: diagnósticos, pruebas de bloque, simulacros y rúbricas.
 - `notebooks/`: prácticas para abrir en Google Colab.
 - `dist/markdown/` y `dist/pdf/`: versiones consolidadas y descargables generadas.
+
+## Diagramas
+
+Los flujos de la teoría se escriben con Mermaid. GitHub los muestra como diagramas interactivos dentro de cada bloque y el generador de PDFs los transforma en flujos visuales simplificados. Sirven para representar procesos, arquitectura de datos, decisiones y árboles de métricas, como los que se usan en documentación de equipos.
+
+[Ver la guía de diagramas para empresa](recursos/diagramas-para-empresa.md).
 
 ## Estudiar desde móvil
 

@@ -1,0 +1,5 @@
+# Archivos locales generados durante validación
+.serena/
+scripts/__pycache__/
+__pycache__/
+tmp-*.png
