@@ -1,37 +1,55 @@
-# Estilo y práctica guiada
+# 06 - Laboratorio: auditoría reproducible de pedidos
 
-## Objetivos y prerrequisitos
+## Resultado observable y prerrequisitos
 
-Aplicarás las piezas del bloque en un problema pequeño y aprenderás a escribir código que otra persona pueda leer. Requiere todas las lecciones anteriores.
+Construirás y ejecutarás una auditoría pequeña de Lumen: entradas simuladas, reglas explícitas, incidencias, totales y pruebas. Requiere las cinco lecciones anteriores.
 
-## Legibilidad es una propiedad analítica
+## El problema operativo
 
-Un programa de análisis no se evalúa solo por “funciona hoy”. Debe dejar claro qué representa cada valor y qué regla se aplicó. Usa nombres como `gasto_por_categoria`, no `x`; evita repetir números mágicos como `100` sin explicar su significado; separa carga de datos, transformación y resultado.
+Producto quiere conocer el importe confirmado del día. Ingeniería advierte que algunos eventos llegan con texto en lugar de número, importe cero o estado inesperado. Informar únicamente un total sería engañoso: también hay que comunicar qué quedó fuera y por qué.
 
-Un ejemplo legible:
+El [laboratorio ejecutable](../../../notebooks/practicas/02-auditoria-pedidos.py) separa cuatro responsabilidades:
 
-```python
-LIMITE_REVISAR = 100
-
-def categorias_sobre_limite(movimientos, limite):
-    total_por_categoria = {}
-    for movimiento in movimientos:
-        categoria = movimiento["categoria"]
-        importe = movimiento["importe"]
-        total_por_categoria[categoria] = total_por_categoria.get(categoria, 0) + importe
-    return [categoria for categoria, total in total_por_categoria.items() if total > limite]
+```mermaid
+flowchart LR
+  A[Lista de eventos] --> B[validar_pedido]
+  B -->|válido| C[acumular total y canal]
+  B -->|inválido| D[guardar incidencia]
+  C --> E[resumen verificable]
+  D --> E
 ```
 
-Antes de reutilizarlo en una empresa, define cómo se tratan devoluciones, moneda, movimientos duplicados y valores ausentes. El código implementa una decisión; no decide por ti qué es correcto.
+Separar funciones no es estética: permite probar la validación sin depender de la presentación del resumen.
 
-## Comprobaciones mínimas
+## Lectura guiada del laboratorio
 
-Prueba casos normales y casos límite: lista vacía, importe exactamente 100, importe negativo y un texto donde debería haber número. Escribir esos ejemplos antes de confiar en el resultado es una forma simple de prueba.
+Primero observa `PEDIDOS_DEMO`. Es una lista deliberadamente pequeña con pedidos correctos, un importe de texto convertible, un importe cero, una clave ausente y un pedido cancelado. Después ejecuta las pruebas `assert`: si una falla, no continúes al resumen; la regla ha cambiado o está mal implementada.
+
+La función `validar_pedido` devuelve una copia normalizada del pedido válido o lanza `ValueError` con una explicación. `auditar_pedidos` no oculta la excepción: la convierte en una incidencia con id y motivo. La salida esperada de los datos demo es:
+
+```text
+Pedidos válidos confirmados: 2
+Importe confirmado: 160.50 EUR
+Por canal: {'web': 120.5, 'app': 40.0}
+Incidencias: 4
+```
+
+El pedido cancelado aparece como incidencia porque este informe tiene el contrato «solo confirmados». En otro informe podría contarse como estado separado; no hay una respuesta universal, sí debe haber una definición visible.
+
+## Estilo que protege el análisis
+
+- Usa nombres que expresen unidad y significado: `importe_confirmado`, no `resultado`.
+- Declara límites (`LIMITE_REVISION = 100`) en lugar de números mágicos repartidos.
+- No mezcles lectura, validación, cálculo y `print` en un bucle enorme.
+- Devuelve datos desde las funciones; imprime solo en el borde del programa.
+- Conserva incidencias y recuentos. Un valor excluido sin rastro es una fuga de trazabilidad.
+
+No basta con que una salida coincida una vez. Cambia un pedido demo para que valga 100, añade un canal nuevo y prueba una lista vacía. El programa debe responder de forma definida, no por accidente.
 
 ## Ejercicio de cierre
 
-Resuelve la [práctica de gastos](../../../ejercicios/temario-02/aplicacion/gastos-personales.md) y compara tu razonamiento con las [soluciones](../../../soluciones/temario-02/gastos-personales.md) solo al terminar. Si solo tienes móvil, escribe primero el pseudocódigo en texto: entradas, pasos y salidas.
+Resuelve [Auditoría de pedidos de Lumen](../../../ejercicios/temario-02/aplicacion/gastos-personales.md). Incluye un estado adicional y un límite de revisión; luego compara tu razonamiento con la [solución](../../../soluciones/temario-02/gastos-personales.md). Si estudias desde móvil, copia por partes el script en Colab o redacta primero el contrato de cada función, sus entradas y salidas esperadas.
 
-## Puente al siguiente bloque
+## Puente a NumPy y Pandas
 
-Python permite operar con estructuras pequeñas. En NumPy y Pandas aplicarás operaciones parecidas a miles de valores y tablas, pero conservarás las mismas preguntas: ¿qué representa cada dato?, ¿qué regla se aplica?, ¿cómo se comprueba?
+Aquí recorres una lista pedido por pedido para comprender el control. NumPy y Pandas aplicarán operaciones parecidas a muchas filas, pero las preguntas no desaparecen: ¿qué es válido?, ¿qué se excluyó?, ¿qué significa cero?, ¿puedo reproducir el resultado? Lleva estas preguntas al bloque 04 y, especialmente, al bloque 05.

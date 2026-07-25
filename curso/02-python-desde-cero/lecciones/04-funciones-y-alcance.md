@@ -1,45 +1,77 @@
-# Funciones y alcance
+# 04 - Funciones, contratos, módulos y alcance
 
-## Objetivos y prerrequisitos
+## Resultado observable y prerrequisitos
 
-Aprenderás a encapsular una regla reutilizable, diferenciar entrada y salida y evitar depender de variables ocultas. Requiere condiciones y bucles.
+Crearás funciones pequeñas con entradas, salida y casos límite definidos; usarás argumentos opcionales, `return`, docstrings y comprobaciones. Requiere condiciones y bucles.
 
-## Dar nombre a una transformación
+## Una función es un contrato comprobable
 
-Una **función** es un fragmento de código con un nombre, entradas y una salida. Evita copiar la misma regla en diez lugares y hace que el análisis se pueda revisar por partes.
+Repetir `if importe >= 100` en varias celdas invita a que cada copia use un límite diferente. Una función nombra la regla y publica su contrato: qué acepta, qué devuelve y qué no hace.
 
 ```python
-def clasificar_importe(importe):
-    if importe >= 100:
+def clasificar_importe(importe, limite=100):
+    """Devuelve 'alto' si importe es numérico y alcanza limite; si no, devuelve 'invalido'."""
+    if not isinstance(importe, (int, float)):
+        return "invalido"
+    if importe >= limite:
         return "alto"
-    return "habitual"
-
-clasificar_importe(120)
+    return "normal"
 ```
 
-`importe` es un **parámetro**: el nombre que la función usa para recibir un dato. `return` devuelve un resultado. Una función útil responde una pregunta concreta: “dado un importe, ¿qué etiqueta corresponde según esta regla?”.
+`importe` y `limite` son parámetros. `limite=100` es un argumento opcional: la persona que llama puede usar el valor por defecto o indicar otro. `return` entrega un resultado y termina la función; `print` solo lo muestra en pantalla. Por eso una función analítica debe normalmente devolver datos y dejar que otra parte decida cómo presentarlos.
 
-## Alcance: qué nombres existen dónde
+```mermaid
+flowchart LR
+  A[Entrada: importe y límite] --> B[Función: regla visible]
+  B --> C[Salida: alto, normal o inválido]
+  C --> D[Prueba o decisión posterior]
+```
 
-Los nombres creados dentro de una función normalmente solo existen durante esa llamada. Esto se llama **alcance**. Es una protección: una función debería depender de sus entradas, no de una variable lejana cuyo valor puede cambiar sin avisar.
+## Pruebas mínimas: normal, límite y dato inválido
+
+Un ejemplo no demuestra que una regla funcione. Comprueba al menos un caso normal, el borde y una entrada inválida:
 
 ```python
-limite = 100
+assert clasificar_importe(99) == "normal"
+assert clasificar_importe(100) == "alto"
+assert clasificar_importe("100") == "invalido"
+assert clasificar_importe(150, limite=200) == "normal"
+```
 
-def es_alto(importe, limite):
+`assert` detiene la ejecución si la afirmación es falsa. No sustituye una suite profesional de tests, pero impide confiar en una salida bonita sin comprobar la regla. Un `AssertionError` es evidencia de que la expectativa y el código no coinciden.
+
+## Alcance y efectos secundarios
+
+Los nombres creados dentro de una función son locales. Pasar datos como parámetros hace visible de qué depende la regla:
+
+```python
+LIMITE_GLOBAL = 100
+
+def es_revisable(importe, limite):
     return importe >= limite
 ```
 
-Aunque parece repetitivo pasar `limite`, deja visible el supuesto. En un análisis, los supuestos invisibles son difíciles de auditar.
+Evita que `es_revisable` lea `LIMITE_GLOBAL` sin recibirlo: cambiar una variable global en otra celda podría alterar resultados sin que la llamada lo muestre. Evita además modificar una lista recibida salvo que el contrato lo anuncie; es preferible devolver una nueva estructura o documentar el efecto.
 
-## Caso IT y límite
+## Módulos, imports, script y notebook
 
-Una función puede estandarizar una comprobación de eventos: clasificar una duración de carga como lenta o aceptable. Pero no convierte el umbral en verdad universal: 2 segundos puede ser aceptable en una página y grave durante un pago. Documenta de dónde sale el umbral.
+Un **módulo** es un archivo Python que contiene funciones reutilizables. `import math` carga un módulo de la biblioteca estándar; `from math import ceil` importa un nombre concreto. No nombres tu archivo `math.py`, porque ocultaría el módulo oficial. Un script puede proteger su ejecución principal:
 
-## Resumen y práctica
+```python
+def main():
+    print(clasificar_importe(120))
 
-- Las funciones nombran transformaciones repetibles.
-- Parámetros hacen visibles las entradas; `return` entrega la salida.
-- Evitar dependencias ocultas facilita revisar y probar.
+if __name__ == "__main__":
+    main()
+```
 
-Reescribe el cálculo de “pedido alto” como función y pruébalo con 99, 100 y 101. Después estudia [errores y depuración](05-errores-y-depuracion.md).
+Al ejecutar el archivo directamente se llama a `main`; al importarlo desde otro archivo se obtienen las funciones sin ejecutar el informe. Un notebook es útil para explorar; un módulo reduce copias cuando una regla ya está estable.
+
+## Microprácticas y resumen
+
+1. Cambia el límite por defecto a 75 y prueba una llamada que lo sobrescriba.
+2. Escribe `es_pedido_valido(pedido)` que devuelva `True` solo si contiene id, importe numérico positivo y estado confirmado.
+3. Añade tres `assert` antes de confiar en ella.
+4. Explica qué diferencia hay entre devolver una lista y hacer `print(lista)`.
+
+Una función clara permite localizar fallos. La próxima lección enseña a distinguir los errores que Python señala y los resultados erróneos que Python no puede adivinar.

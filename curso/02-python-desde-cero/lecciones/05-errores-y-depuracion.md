@@ -1,44 +1,75 @@
-# Errores y depuración
+# 05 - Errores, pruebas y depuración basada en evidencia
 
-## Objetivos y prerrequisitos
+## Resultado observable y prerrequisitos
 
-Sabrás leer el mensaje de error, formular una hipótesis mínima y comprobarla sin cambiar diez cosas a la vez. Requiere haber ejecutado código sencillo.
+Sabrás leer el final de un traceback, aislar un fallo, distinguir errores de sintaxis y de datos, y manejar solo excepciones esperadas. Requiere haber ejecutado funciones sencillas.
 
-## Un error también es evidencia
+## El traceback es un mapa, no una acusación
 
-Cuando Python no puede continuar, muestra un mensaje con una última línea relevante. `NameError` suele indicar que un nombre no existe; `TypeError`, que se intentó una operación incompatible; `KeyError`, que falta una clave del diccionario. El mensaje no sustituye la comprensión, pero delimita qué revisar.
+Un **traceback** es la ruta de llamadas que Python muestra cuando no puede continuar. La última línea nombra normalmente el tipo y la causa inmediata. Léela primero, luego vuelve a la línea de tu código indicada.
 
-Ejemplo:
+| Error | Ejemplo típico | Pregunta útil |
+| --- | --- | --- |
+| `SyntaxError` | Falta `:` o paréntesis | ¿Python puede interpretar el programa? |
+| `NameError` | Usar `importe` antes de asignarlo | ¿Ejecuté la definición y escribí el nombre igual? |
+| `IndexError` | `pedidos[3]` en lista de tres | ¿Existe esa posición? |
+| `KeyError` | `pedido["importe"]` sin clave | ¿El contrato exige ese campo? |
+| `ValueError` | `float("cuarenta")` | ¿El valor tiene forma válida para esa conversión? |
+| `TypeError` | `"42" + 5` | ¿Las operaciones son compatibles con los tipos? |
 
-```python
-importe = "42.50"
-importe + 10
-```
-
-El problema no es que Python “falle”: `importe` contiene texto, no un número. La corrección solo debe hacerse si la regla de origen confirma que ese texto representa un importe válido:
-
-```python
-importe_numerico = float(importe)
-```
-
-## Método de depuración
-
-Este flujo responde a “¿cómo investigar sin adivinar?”
+Un programa puede no lanzar excepciones y aun así estar equivocado: usar `>` en lugar de `>=` en el umbral de Lumen cambia la clasificación de 100 EUR sin que Python proteste. Por eso se combinan traceback y pruebas de casos límite.
 
 ```mermaid
-flowchart TB
-  A[Leer última línea del error] --> B[Reducir a ejemplo pequeño]
-  B --> C[Inspeccionar valor y tipo]
-  C --> D[Formular una causa]
-  D --> E[Aplicar un cambio y volver a ejecutar]
+flowchart TD
+  A[Salida inesperada o excepción] --> B[Reducir a ejemplo mínimo]
+  B --> C[Leer tipo, valor y traceback]
+  C --> D[Hipótesis concreta]
+  D --> E[Prueba que puede refutarla]
+  E --> F[Corregir una causa y volver a ejecutar]
 ```
 
-Reducir el ejemplo evita mezclar varios problemas. Usa `print(valor)` y `type(valor)` antes de cambiar código. Si la causa es un dato inesperado, no la tapes con una conversión automática: registra cuántos casos hay y decide qué significan.
+La corrección se hace después de entender la causa; cambiar cinco líneas a la vez impide saber cuál resolvió el problema.
 
-## Error habitual: silenciar en lugar de entender
+## Validar cerca de la entrada
 
-`try/except` permite manejar errores, pero capturarlos todos y continuar puede ocultar importes inválidos o pedidos perdidos. Úsalo para casos esperados y registra qué ocurrió. Un análisis correcto que descarta silenciosamente el 20 % de los datos no es fiable.
+El laboratorio recibe eventos de una fuente simulada. Conviene transformar o rechazar un valor justo al llegar, no cuando el total ya es extraño:
 
-## Resumen
+```python
+def leer_importe(pedido):
+    try:
+        importe = float(pedido["importe"])
+    except KeyError as error:
+        raise ValueError("El pedido no contiene importe") from error
+    except (TypeError, ValueError) as error:
+        raise ValueError("El importe debe ser numérico") from error
+    if importe <= 0:
+        raise ValueError("El importe debe ser positivo")
+    return importe
+```
 
-Depurar es un proceso de evidencia: leer, aislar, inspeccionar, probar. Continúa con [estilo y práctica](06-estilo-y-practica-gastos.md).
+Capturamos excepciones concretas porque son esperables en esta frontera. `except Exception: pass` sería mala práctica: silencia también problemas de programación y puede dejar un informe incompleto sin aviso. La excepción se traduce a un mensaje de negocio, pero se conserva la causa con `from error`.
+
+## `assert` y registro de incidencias
+
+Usa `assert` para afirmar un comportamiento que el programador espera durante desarrollo. Para datos que vienen de fuera, una excepción controlada o una incidencia suele ser mejor que detener toda la auditoría:
+
+```python
+incidencias = []
+for pedido in pedidos:
+    try:
+        importe = leer_importe(pedido)
+    except ValueError as error:
+        incidencias.append({"id": pedido.get("id", "sin_id"), "motivo": str(error)})
+        continue
+```
+
+Esto no «arregla» el origen. Permite calcular un total de pedidos válidos y comunicar cuántos se excluyeron. Un analista debe informar ambos números; de lo contrario, la cifra parece más precisa de lo que es.
+
+## Microprácticas
+
+1. Provoca un `SyntaxError` eliminando dos puntos tras `if`; restaura el código y explica qué esperaba Python.
+2. Crea una lista con dos pedidos e intenta acceder a `pedidos[2]`. ¿Por qué es `IndexError` y no `KeyError`?
+3. Haz que `leer_importe({"importe": "--"})` lance `ValueError`; comprueba el mensaje.
+4. Escribe un `assert` para el borde: un importe 0 no es válido.
+
+Depurar consiste en producir evidencia sobre una hipótesis. En el laboratorio final reunirás datos válidos, incidencias, pruebas y una salida que otra persona pueda revisar.
