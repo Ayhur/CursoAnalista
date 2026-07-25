@@ -44,47 +44,236 @@ El análisis empieza por una decisión, no por una herramienta. Define la pregun
 
 Realiza [los ejercicios de comprensión](../../ejercicios/temario-00/comprension/preguntas.md) antes de consultar [las soluciones](../../soluciones/temario-00/preguntas.md).
 
-# Bloque 01 - Fundamentos de datos
+# Bloque 01 - Fundamentos de datos: desde archivos hasta calidad
 
-## Objetivo
+## Propósito
 
-Reconocer qué representa un conjunto de datos, evaluar su calidad y evitar conclusiones que los datos no permiten.
+Antes de programar o abrir una base de datos, Leo debe entender qué representa un dato, cómo se organiza la información y por qué una cifra aparentemente correcta puede conducir a una decisión equivocada. Este bloque no presupone que sepas qué es CSV, JSON, una tabla o una clave.
 
-## Anatomía de una tabla
+## Resultado de salida
 
-Una observación suele ser una fila: por ejemplo, una compra. Una variable es una columna: fecha, importe o canal. Una clave identifica de forma única una observación; una clave mal definida crea duplicados y totales erróneos.
+Al terminar podrás abrir un archivo sencillo y explicar qué información contiene, distinguir una tabla de un documento JSON, identificar el grano de un conjunto de datos, proponer controles de calidad y reconocer límites de privacidad y sesgo.
 
-Las variables pueden ser numéricas, categóricas, texto, fecha/hora o booleanas. El tipo no es un detalle técnico: determina qué cálculos y visualizaciones tienen sentido.
+## Lecciones
 
-## Calidad del dato
+1. [Qué es un dato, un archivo y una tabla](lecciones/01-archivo-tabla-y-grano.md).
+2. [Filas, columnas, tipos y relaciones](lecciones/02-filas-columnas-y-relaciones.md).
+3. [CSV, JSON, Excel, Parquet y bases de datos](lecciones/03-formatos-y-almacenamiento.md).
+4. [Calidad, ausencia, sesgo, privacidad y ética](lecciones/04-calidad-y-uso-responsable.md).
 
-Antes de analizar, revisa cinco dimensiones:
+## Práctica
 
-- Completitud: ¿faltan valores necesarios?
-- Validez: ¿los valores respetan reglas, unidades y formatos?
-- Consistencia: ¿la misma idea está codificada igual en todo el conjunto?
-- Unicidad: ¿hay duplicados indebidos?
-- Actualidad: ¿el dato es suficientemente reciente para la decisión?
+Realiza [la auditoría de calidad](../../ejercicios/temario-01/comprension/auditoria-calidad.md) después de la lección 4 y compárala con [la solución razonada](../../soluciones/temario-01/auditoria-calidad.md).
 
-No elimines valores ausentes por costumbre. Primero averigua por qué faltan y si el patrón de ausencia puede sesgar el resultado.
+# 01.1 Qué es un dato, un archivo y una tabla
 
-## Archivos y bases de datos
+## Objetivos
 
-CSV es simple y común, pero no conserva todos los tipos. JSON representa estructuras anidadas. Excel es útil para tareas ligeras y revisión manual. Parquet almacena datos de forma columnar y suele ser eficiente en análisis.
+Entender qué es un dato antes de hablar de herramientas; distinguir una información suelta de un conjunto organizado; y reconocer qué representa una fila de una tabla.
 
-Las bases relacionales organizan tablas conectadas por claves y se consultan con SQL. Las bases documentales como MongoDB almacenan documentos flexibles. DynamoDB es una base NoSQL de clave-valor y documentos orientada a patrones de acceso. Ninguna tecnología elimina la necesidad de comprender la semántica de los datos.
+## Empieza por una situación cotidiana
 
-## Ética y privacidad
+Imagina una tienda que quiere saber qué productos se venden más. Cada vez que una persona compra algo, la tienda puede guardar información: fecha, producto, importe y forma de pago. Cada una de esas piezas es un **dato**: una representación de algo que ocurrió en el mundo real.
 
-Que se pueda acceder a un dato no significa que se deba usar. Minimiza la información personal, evita compartir identificadores en notebooks y piensa a quién puede perjudicar una clasificación o recomendación.
+La información se guarda en un **archivo**, igual que una fotografía o una nota de texto. Un archivo tiene nombre, contenido y un formato que indica cómo se organiza. No hay magia: un archivo de datos es una manera de guardar información para poder leerla, compartirla o analizarla después.
 
-## Resumen
+Una de las formas más comunes de organizar datos es una **tabla**. Una tabla se parece a una hoja de cálculo: tiene columnas que describen qué tipo de información guardamos y filas que recogen casos concretos.
 
-El análisis fiable empieza por saber qué mide cada columna y por comprobar la calidad de los datos antes de calcular promedios.
+```text
+fecha       | producto | importe | canal
+2026-01-03  | teclado  | 45.99   | web
+2026-01-04  | ratón    | 19.90   | tienda
+2026-01-04  | teclado  | 45.99   | web
+```
 
-## Ejercicios
+En este ejemplo, la primera fila de datos representa una compra concreta. La columna `producto` responde qué se compró; `importe`, cuánto costó. La tabla no “sabe” qué significa un teclado: nosotros le damos significado a las columnas.
 
-Realiza [la auditoría de calidad](../../ejercicios/temario-01/comprension/auditoria-calidad.md) antes de consultar [las soluciones](../../soluciones/temario-01/auditoria-calidad.md).
+## El grano: la pregunta que evita errores grandes
+
+El **grano** indica qué representa exactamente una fila. Aquí, una fila representa una compra, no un cliente ni un producto. Esta frase parece pequeña, pero evita errores muy caros: si se cuenta una fila como si fuera una persona, un cliente que compra tres veces se contará como tres clientes.
+
+```mermaid
+flowchart TD
+    A[Pregunta: qué se quiere analizar] --> B[Definir qué representa una fila]
+    B --> C[Elegir columnas necesarias]
+    C --> D[Construir o leer la tabla]
+    D --> E[Calcular sin confundir entidades]
+```
+
+Antes de cualquier análisis, completa siempre esta frase: “cada fila de este conjunto representa…”. Si no puedes completarla, no empieces a sumar ni a calcular promedios.
+
+## Ejemplo IT
+
+Una aplicación registra eventos. Una tabla puede tener una fila por clic, otra por sesión y otra por usuario. Son tablas distintas con granos distintos. Contar clics no responde cuántos usuarios usaron la aplicación; contar sesiones tampoco responde directamente cuántas personas pagaron.
+
+## Error frecuente
+
+Pensar que una tabla es “la realidad”. Una tabla es un modelo parcial. Puede no incluir compras hechas por teléfono, usuarios anónimos o devoluciones. Siempre pregunta qué no está en los datos.
+
+## Comprobación
+
+Para una academia online, escribe el grano de tres tablas posibles: una de alumnos, una de inscripciones y una de visualizaciones de vídeo. ¿Por qué no deben mezclarse sin una relación explícita?
+
+# 01.2 Filas, columnas, tipos y relaciones
+
+## Objetivos
+
+Aprender a leer una tabla con precisión: distinguir filas y columnas, reconocer tipos básicos de datos y entender por qué una clave permite relacionar tablas sin duplicar significado.
+
+## Filas y columnas no son solo una forma visual
+
+Una **fila** contiene información de un caso. Una **columna** guarda el mismo tipo de atributo para muchos casos. En una tabla de compras, `importe` debería contener números; en una tabla de usuarios, `fecha_registro` debería contener fechas. El tipo de información determina qué operaciones tienen sentido.
+
+No tiene sentido calcular la media de `ciudad`; sí puede tener sentido contar cuántos usuarios hay por ciudad. No tiene sentido ordenar alfabéticamente un importe para encontrar la venta mayor; sí tiene sentido convertirlo a número y compararlo.
+
+```mermaid
+flowchart LR
+    A[Fila: una compra] --> B[fecha]
+    A --> C[producto]
+    A --> D[importe]
+    A --> E[cliente_id]
+    E --> F[Relación con tabla de clientes]
+```
+
+## Tipos que encontrarás al empezar
+
+- **Texto:** nombre de producto, ciudad, comentario.
+- **Número:** importe, cantidad, edad, latencia.
+- **Fecha y hora:** momento de registro, compra o despliegue.
+- **Booleano:** verdadero/falso; por ejemplo, `es_cliente`.
+- **Categoría:** conjunto limitado de etiquetas, como plan `gratis`, `pro` o `empresa`.
+
+Un número puede representar cosas distintas: un identificador `cliente_id=1042` parece número, pero no debes calcular su media. Es una etiqueta técnica, no una cantidad.
+
+## Claves y relaciones
+
+Una **clave** es una columna que permite identificar o conectar información. Si `cliente_id` identifica de forma única a cada cliente, se llama clave primaria de la tabla de clientes. La misma columna puede aparecer en la tabla de compras para indicar quién realizó cada compra; allí actúa como clave foránea o referencia.
+
+```mermaid
+flowchart LR
+    A[CLIENTES: cliente_id, nombre, ciudad] -->|un cliente realiza muchas compras| B[COMPRAS: compra_id, cliente_id, importe, fecha]
+```
+
+La relación dice: un cliente puede realizar muchas compras; una compra pertenece a un cliente. Esta información es esencial al combinar tablas. Si una tabla de clientes tiene accidentalmente dos filas para el mismo `cliente_id`, una unión puede duplicar importes sin que el error sea evidente.
+
+## Error frecuente
+
+Confundir un identificador con una medida. `pedido_id` y `cliente_id` sirven para identificar; no para hacer promedios. También es un error asumir que una columna “única” realmente lo es sin comprobar duplicados y nulos.
+
+## Comprobación
+
+Diseña las columnas mínimas de una tabla de tickets de soporte. ¿Qué representa cada fila? ¿Qué columna conectaría un ticket con un cliente? ¿Cuál parece numérica pero no debe tratarse como medida?
+
+# 01.3 CSV, JSON, Excel, Parquet y bases de datos
+
+## Objetivos
+
+Saber qué problema resuelve cada formato básico y elegir una forma razonable de guardar o recibir información sin memorizar una lista de siglas.
+
+## CSV: una tabla escrita como texto
+
+Un archivo **CSV** significa *Comma-Separated Values*: valores separados por comas. Es un archivo de texto que representa una tabla. La primera línea suele contener los nombres de las columnas; cada línea posterior es una fila.
+
+```text
+fecha,producto,importe
+2026-01-03,teclado,45.99
+2026-01-04,ratón,19.90
+```
+
+CSV es sencillo de abrir, compartir y leer con Python, Excel o un editor de texto. Su simplicidad también tiene límites: no guarda bien tipos complejos, fórmulas, varias hojas ni una estructura dentro de otra. Además, hay que acordar separador, codificación, formato de fecha y separador decimal.
+
+## JSON: una ficha que puede contener otras fichas
+
+**JSON** significa *JavaScript Object Notation*. Es texto estructurado mediante pares `campo: valor`. A diferencia de un CSV, puede guardar objetos dentro de objetos y listas. Es frecuente en APIs, configuraciones y eventos de aplicaciones.
+
+```json
+{
+  "pedido_id": 1001,
+  "cliente": {
+    "nombre": "Leo",
+    "ciudad": "Madrid"
+  },
+  "productos": ["teclado", "ratón"],
+  "importe": 65.89
+}
+```
+
+El JSON anterior es una ficha de pedido. No es una tabla, aunque se pueda transformar en una. Para analizar muchos pedidos, normalmente tendrás que decidir qué campos extraer y cómo convertir listas u objetos anidados en columnas o tablas relacionadas.
+
+```mermaid
+flowchart LR
+    A[Archivo CSV] --> B[Tabla plana: filas y columnas]
+    C[Archivo JSON] --> D[Ficha con objetos y listas]
+    B --> E[Python, Excel o SQL]
+    D --> F[Leer y normalizar antes de analizar]
+```
+
+## Excel, Parquet y bases de datos
+
+**Excel** es una aplicación y un formato de libro de trabajo; es útil para revisión manual, cálculos ligeros y comunicación. No es ideal como fuente única de procesos repetibles si múltiples personas lo editan sin control.
+
+**Parquet** es un formato optimizado para datos tabulares grandes. Guarda columnas de forma eficiente y conserva tipos mejor que CSV. Normalmente lo usarás mediante Python, Spark, DuckDB o un warehouse, no editándolo a mano.
+
+Una **base de datos** organiza información para que aplicaciones y personas puedan consultarla con reglas de acceso, relaciones y actualizaciones. SQL es un lenguaje para consultar muchas bases relacionales; MongoDB almacena documentos similares a JSON; DynamoDB se diseña alrededor de claves y patrones de acceso.
+
+## Cómo elegir sin obsesionarte
+
+Empieza preguntando: ¿necesito una tabla simple que cualquiera pueda abrir? CSV. ¿Recibo una respuesta con estructuras anidadas de una API? JSON. ¿Trabajo con muchos datos tabulares repetidamente? Parquet o una base de datos. ¿Necesito revisar manualmente algo pequeño? Excel puede ser adecuado.
+
+La elección no elimina el deber de conocer grano, calidad y significado.
+
+## Comprobación
+
+Explica a otra persona la diferencia entre CSV y JSON sin usar las palabras “plano” ni “anidado”. Después indica cuál esperarías recibir de una API meteorológica y por qué.
+
+# 01.4 Calidad, ausencia, sesgo, privacidad y uso responsable
+
+## Objetivos
+
+Revisar un conjunto de datos antes de analizarlo, interpretar ausencias sin borrarlas por costumbre y reconocer que una decisión basada en datos también puede causar daño.
+
+## Calidad como condición de confianza
+
+La calidad no significa que un dataset sea perfecto. Significa que conocemos si es adecuado para una decisión concreta. Una tabla de compras puede ser suficiente para estimar ingresos diarios y no serlo para saber satisfacción de clientes.
+
+```mermaid
+flowchart TD
+    A[Pregunta de negocio] --> B[Datos disponibles]
+    B --> C[Comprobar grano y cobertura]
+    C --> D[Validar valores y relaciones]
+    D --> E[Investigar ausencias y sesgos]
+    E --> F{¿Apto para esta decisión?}
+    F -->|Sí, con límites| G[Analizar y comunicar]
+    F -->|No| H[Corregir, obtener datos o cambiar pregunta]
+```
+
+Cinco controles iniciales son especialmente útiles:
+
+- **Completitud:** ¿faltan valores necesarios para la pregunta?
+- **Validez:** ¿los valores respetan reglas, unidades y formatos?
+- **Consistencia:** ¿la misma idea está registrada de la misma forma?
+- **Unicidad:** ¿existen duplicados indebidos?
+- **Actualidad:** ¿el dato llega a tiempo para la decisión?
+
+## Los nulos cuentan una historia
+
+Un valor ausente no es automáticamente un error. Puede significar “no se aplica”, “no se midió”, “falló el sistema” o “la persona prefirió no responder”. Borrar todas las filas con nulos puede eliminar justo a la población con la que tienes un problema.
+
+Por ejemplo, si el campo `ingresos` falta sobre todo en usuarios que abandonan un formulario, la ausencia es información sobre fricción. Antes de imputar o eliminar, mide dónde faltan datos, desde cuándo y en qué segmentos.
+
+## Sesgo, privacidad y propósito
+
+Un dataset puede representar peor a grupos que usan menos una aplicación, tienen conectividad limitada o no están incluidos en la fuente. Un modelo entrenado con esos datos puede amplificar esa desigualdad. El analista debe declarar cobertura, exclusiones y riesgos, no tratarlos como una nota al pie.
+
+La privacidad comienza antes de abrir un archivo: recoge solo los datos necesarios, evita copiar identificadores personales en notebooks, limita acceso y define cuánto tiempo se conservan. Que un sistema permita acceder a una columna no significa que sea legítimo usarla para cualquier objetivo.
+
+## Caso práctico
+
+Una empresa quiere comparar uso por ciudad, pero el 30 % de usuarios no informa ciudad y ese porcentaje es mayor en móvil. Concluir que “móvil usa menos el producto en ciertas ciudades” sin estudiar la ausencia puede ser falso. Primero se investiga el formulario, la geolocalización, el consentimiento y los segmentos afectados.
+
+## Comprobación
+
+Elige una de las cinco dimensiones de calidad y describe: un error concreto, cómo lo detectarías, qué decisión podría dañar y cuál sería una respuesta prudente.
 
 # Bloque 02 - Python desde cero
 
@@ -391,39 +580,392 @@ Resuelve [la consulta de conversión](../../ejercicios/temario-09/aplicacion/con
 
 # Bloque 10 - Métricas, KPIs y analítica de producto
 
-## Objetivo
+## Propósito del bloque
 
-Diseñar métricas que conecten comportamiento, resultados de negocio y decisiones, en lugar de limitarse a contar eventos.
+Este bloque enseña a construir un sistema de medición para un producto o negocio tecnológico. No se trata de aprender una lista de siglas ni de abrir un dashboard: se trata de decidir qué representa valor, cómo medirlo de forma consistente, qué señales deben activar una investigación y cómo evitar que una métrica optimizada localmente perjudique al producto.
 
-## De objetivo a métrica
+## Resultado de salida
 
-Una métrica es una definición reproducible. Un KPI es una métrica elegida para seguir un objetivo importante. Cada definición debe incluir fórmula, población, periodo, fuente, propietario y limitaciones.
+Al terminar podrás tomar una pregunta como “queremos crecer” y convertirla en un árbol de métricas con definiciones, instrumentación, guardrails, segmentos y una decisión asociada. También sabrás revisar un funnel, una cohorte o un dashboard de Amplitude sin aceptar sus cifras ciegamente.
 
-```mermaid
-flowchart TD
-    A[Objetivo de negocio] --> B[North Star Metric]
-    B --> C[Métricas de entrada]
-    B --> D[Guardrails]
-    C --> E[Experimentos y acciones]
-    D --> E
-    E --> F[Aprendizaje y revisión]
-```
+## Prerrequisitos
 
-## Árboles de métricas
+- Bloque 00: preguntas y decisiones.
+- Bloques 05–08: datos tabulares, exploración y estadística básica.
+- Bloque 09: comprensión básica de fuentes y consultas.
 
-Una North Star Metric resume valor entregado y sostenibilidad, pero no se gestiona sola. Descompónla en métricas controlables: adquisición, activación, engagement, retención y monetización. Añade guardrails para no optimizar crecimiento a costa de fraude, soporte o margen.
+## Lecciones
 
-## Producto digital
-
-DAU, WAU, MAU, stickiness, conversión, adopción de funcionalidades, retención y churn son útiles solo con definiciones consistentes. En Amplitude estas ideas aparecen como eventos, propiedades, funnels, cohorts, retention y dashboards. Aprende primero el concepto; después cualquier herramienta será más fácil de usar.
-
-## Gobierno de métricas
-
-Un catálogo evita que dos equipos calculen "usuarios activos" de forma diferente. Guarda definición, código, fuente, cambios y usos. Este hábito evita discusiones de números y mejora la confianza.
+1. [Dato, medida, métrica, indicador y KPI](lecciones/01-lenguaje-de-medicion.md).
+2. [Contrato de una métrica: definición que otra persona puede repetir](lecciones/02-contrato-de-metrica.md).
+3. [Objetivos, North Star, árboles y guardrails](lecciones/03-arquitectura-de-metricas.md).
+4. [Baselines, objetivos, benchmarks, ratios y comparaciones](lecciones/04-baselines-y-comparaciones.md).
+5. [Funnels: definición, instrumentación y diagnóstico de conversión](lecciones/05-funnels.md).
+6. [Cohortes, retención, churn y segmentación](lecciones/06-cohortes-retencion.md).
+7. [Adquisición, engagement, monetización y métricas de valor](lecciones/07-metricas-de-valor.md).
+8. [Experimentación, Goodhart y decisiones bajo incertidumbre](lecciones/08-experimentacion-y-goodhart.md).
+9. [Catálogo de métricas, tracking plan y Amplitude](lecciones/09-gobierno-y-amplitude.md).
 
 ## Práctica
 
-Diseña [un árbol de métricas](../../ejercicios/temario-10/aplicacion/arbol-metricas.md) y contrástalo con [la propuesta](../../soluciones/temario-10/arbol-metricas.md).
+Cuando termines las tres primeras lecciones, realiza [el ejercicio de árbol de métricas](../../ejercicios/temario-10/aplicacion/arbol-metricas.md). No abras [la solución](../../soluciones/temario-10/arbol-metricas.md) hasta haber definido tus propios supuestos.
+
+# 10.1 Dato, medida, métrica, indicador y KPI
+
+## Objetivos
+
+Al terminar esta lección podrás diferenciar los cinco términos que más se confunden en una conversación de negocio y detectar por qué una frase como “la métrica ha subido” puede ser inútil si no está definida.
+
+## El problema no es contar; es representar una realidad
+
+Una empresa tecnológica produce muchas huellas: eventos de aplicación, pedidos, tickets de soporte, pagos, campañas y cambios de código. Ninguno de esos registros, por sí solo, responde una pregunta de negocio. El trabajo del analista consiste en convertirlos en una representación explícita y limitada de una realidad: quién hizo qué, cuándo, bajo qué condiciones y por qué nos importa.
+
+Un **dato** es un valor registrado: `usuario_id=42`, `evento="checkout_completed"`, `importe=39.90`. Una **medida** es una operación elemental sobre datos, como contar eventos o sumar importes. Una **métrica** añade una definición reutilizable y un propósito: por ejemplo, “usuarios activos semanales”, calculados como usuarios únicos que realizan una acción de valor entre lunes y domingo. Un **indicador** interpreta una métrica respecto a un contexto: “la activación está 2 puntos por debajo del objetivo”. Un **KPI** es el indicador elegido para gobernar una prioridad importante y al que se asigna responsabilidad y seguimiento.
+
+```mermaid
+flowchart TD
+    A[Datos crudos: eventos, pedidos, tickets] --> B[Medida: conteo o suma]
+    B --> C[Métrica: definición reproducible]
+    C --> D[Indicador: valor frente a contexto]
+    D --> E[KPI: señal prioritaria para decidir]
+    E --> F[Acción, aprendizaje y revisión]
+```
+
+La flecha no significa que toda medida acabe siendo un KPI. La mayoría no debería serlo. Si una organización convierte cada número visible en un KPI, nadie sabe qué priorizar y se optimizan cifras irrelevantes.
+
+## Ejemplo: “usuarios activos” no es una métrica hasta que la definas
+
+Supón que tres equipos presentan el mismo dashboard. Producto llama activo a quien abre la aplicación; Marketing llama activo a quien recibe un correo; Finanzas llama activo a quien paga. Los tres pueden estar usando datos correctos y aun así discutir sobre cifras incompatibles. El problema no es una fórmula: es una definición incompleta.
+
+Una definición mínima de “usuario activo semanal” podría ser: “usuario identificado que completa al menos una acción de valor entre las 00:00 del lunes y las 23:59 del domingo, en la zona horaria del producto; se excluyen empleados, cuentas de prueba y eventos enviados por sistemas automáticos”. Ahora se puede calcular, discutir y cambiar de forma controlada.
+
+## La métrica no debe sustituir la pregunta
+
+Una métrica es buena cuando ayuda a tomar una decisión. “Número de clics” rara vez es una decisión completa. “Porcentaje de usuarios nuevos que completa el primer proyecto en 7 días, segmentado por plataforma” puede orientar si hay que revisar onboarding, compatibilidad móvil o adquisición.
+
+Antes de aceptar una métrica, plantea estas preguntas:
+
+1. ¿Qué comportamiento o resultado pretende representar?
+2. ¿Quién entra en la población y quién no?
+3. ¿Qué evento o fuente se considera evidencia?
+4. ¿Qué ventana temporal y zona horaria aplican?
+5. ¿Qué decisión cambiaría si la métrica mejora o empeora?
+
+Si la quinta pregunta no tiene respuesta, probablemente estás ante una cifra decorativa o exploratoria, no ante un KPI.
+
+## Errores frecuentes
+
+- Llamar KPI a todo lo que aparece en un dashboard.
+- Confundir volumen con valor: más registros no implica más clientes satisfechos.
+- Comparar métricas con definiciones o periodos distintos.
+- Usar una media global cuando segmentos diferentes tienen comportamientos opuestos.
+- Olvidar que un dato puede ser correcto técnicamente y engañoso para la decisión.
+
+## Comprobación
+
+Clasifica estas frases: “importe de una transacción”, “ingresos mensuales por cliente activo”, “la retención está por debajo del mínimo aceptable”, “retención a 30 días es un KPI del objetivo de sostenibilidad”. Después explica qué información falta en cada una para que sea reproducible.
+
+# 10.2 Contrato de una métrica: una definición que otra persona puede repetir
+
+## Objetivos
+
+Aprender a especificar una métrica como un contrato: una pieza de documentación y lógica que permite que producto, datos, finanzas y dirección hablen del mismo número.
+
+## Por qué una fórmula no basta
+
+Escribir `conversion = compras / visitas` parece claro hasta que aparecen preguntas reales: ¿visitas de quién? ¿una visita por sesión, dispositivo o usuario? ¿la compra debe ocurrir el mismo día? ¿se cuentan devoluciones? ¿qué ocurre si el tracking se duplicó durante dos horas? La fórmula es solo una parte de la definición.
+
+Un contrato de métrica elimina ambigüedad antes de que el dashboard llegue a una reunión. Debe ser breve, pero suficiente para que otra persona pueda reproducirla sin interpretar intenciones.
+
+```mermaid
+flowchart LR
+    A[Pregunta de negocio] --> B[Contrato de métrica]
+    B --> C[Eventos y fuentes]
+    C --> D[SQL, modelo o dashboard]
+    D --> E[Valor observado]
+    E --> F[Decisión y responsable]
+    F --> B
+```
+
+El último retorno importa: una definición no es eterna. Si cambia el producto, el comportamiento de valor o la fuente, se revisa el contrato y se documenta el cambio. No se sobrescribe silenciosamente la historia.
+
+## Los siete campos mínimos
+
+1. **Nombre y propósito.** “Activación a 7 días” y la decisión que pretende informar.
+2. **Fórmula.** Numerador, denominador, unidades y tratamiento de cero.
+3. **Población.** Quién es elegible, exclusiones y regla de identidad.
+4. **Grano.** Usuario, cuenta, pedido, sesión, evento o día.
+5. **Ventana temporal.** Inicio, fin, zona horaria y posible retraso de datos.
+6. **Fuentes y lógica.** Eventos, tablas, filtros, versión de modelo y reglas de calidad.
+7. **Propietario y límites.** Quién responde por la definición y qué no representa la métrica.
+
+## Ejemplo completo: activación de una aplicación B2B
+
+**Propósito:** saber si usuarios nuevos alcanzan el primer resultado de valor durante su primera semana y decidir qué paso de onboarding debe mejorarse.
+
+**Fórmula:** usuarios únicos que crean un proyecto y ejecutan su primera consulta dentro de los siete días siguientes al registro / usuarios nuevos elegibles registrados en el mismo periodo. La métrica se expresa como porcentaje.
+
+**Población:** usuarios humanos con cuenta verificada; se excluyen empleados, sandboxes internas, bots y migraciones masivas. El identificador estable es `account_user_id`.
+
+**Grano y ventana:** cada usuario aporta una vez a su cohorte de registro. El día cero es el día de registro en UTC. Se esperan siete días completos antes de cerrar una cohorte.
+
+**Fuente:** tabla de usuarios para registro, eventos `project_created` y `query_executed` para el criterio de valor. Validaciones: no más de un 1 % de eventos sin identificador y reconciliación diaria con logs de backend.
+
+**Límites:** medir activación no demuestra retención ni satisfacción. Un usuario puede completar la acción por curiosidad y no volver; por eso se acompaña de retención y métricas de calidad.
+
+## Versionado y cambios
+
+Si el producto cambia y ahora una integración automática crea proyectos por el usuario, la definición anterior deja de medir la misma conducta. Mantener la misma etiqueta sin documentarlo rompe comparaciones históricas. Decide entre conservar la versión antigua, crear una v2 o recalcular el histórico si existe una regla equivalente. La elección debe quedar registrada.
+
+## Comprobación
+
+Escribe el contrato de “tasa de conversión de prueba a pago”. Incluye una exclusión razonable, una decisión que informaría y una limitación que impediría interpretarla como salud total del producto.
+
+# 10.3 Objetivos, North Star, árboles y guardrails
+
+## Objetivos
+
+Relacionar la estrategia de un producto con métricas operables sin caer en la trampa de gestionar una organización con una única cifra.
+
+## De estrategia a sistema de medida
+
+Un objetivo formula una dirección: “hacer que equipos pequeños obtengan valor recurrente del producto”. Una North Star Metric intenta resumir la entrega de valor de ese objetivo. No sustituye a la estrategia ni resume todas las obligaciones de la empresa; sirve como punto de coordinación.
+
+Una North Star útil debe estar relacionada con valor para el cliente, ser medible con suficiente calidad, responder a acciones de equipos y no ser tan fácil de manipular que incentive un comportamiento dañino. “Usuarios registrados” suele ser demasiado superficial; “cuentas que completan un flujo de valor semanal” suele estar más cerca de la experiencia real, aunque exige una definición cuidadosa.
+
+```mermaid
+flowchart TD
+    A[Objetivo: valor recurrente] --> B[North Star: cuentas con valor semanal]
+    B --> C[Activación]
+    B --> D[Adopción de funciones]
+    B --> E[Retención]
+    B --> F[Monetización sostenible]
+    C --> G[Guardrails: calidad, soporte, fraude]
+    D --> G
+    E --> G
+    F --> G
+```
+
+El árbol no es una cadena causal demostrada automáticamente. Es una hipótesis de negocio: debe contrastarse con análisis, experiencia de producto y experimentos. Su valor está en obligar a explicitar cómo se espera que una acción local contribuya al resultado global.
+
+## Métricas de entrada y de resultado
+
+Las métricas de resultado miran el efecto final: ingresos, retención o valor entregado. Son importantes, pero tardan en cambiar. Las métricas de entrada representan comportamientos o condiciones que un equipo puede influir antes: completar onboarding, tiempo hasta primer valor, cobertura de documentación o tasa de errores.
+
+No elijas una métrica de entrada porque sea fácil de mover. El vínculo con el resultado debe ser plausible y medible. Por ejemplo, aumentar notificaciones enviadas puede mejorar una métrica de actividad a corto plazo y empeorar retención por fatiga.
+
+## Guardrails: progreso sin daño oculto
+
+Un guardrail es una métrica que limita una optimización. Si el objetivo es elevar conversión, guardrails habituales son tasa de devoluciones, tickets de soporte, latencia, fraude, cancelación o satisfacción. No son métricas secundarias: definen qué tipo de éxito es aceptable.
+
+El fenómeno de Goodhart resume el riesgo: cuando una medida se convierte en objetivo, las personas encuentran maneras de mejorarla sin mejorar lo que pretendía representar. Un equipo puede impulsar activación añadiendo un paso obligatorio que dispara el evento de valor, aunque el usuario no haya recibido valor alguno. El árbol de métricas y los guardrails ayudan a detectar esta distorsión.
+
+## Ejemplo de decisión
+
+Un equipo observa menor activación en móvil. Su árbol sugiere revisar el tiempo hasta primer proyecto y el abandono en el permiso de notificaciones. Antes de rediseñar, segmenta por versión, dispositivo y canal; comprueba instrumentación; estima el tamaño de la caída; y decide si necesita un experimento o una corrección técnica. El árbol orienta la investigación, no reemplaza el análisis.
+
+## Comprobación
+
+Para una plataforma de cursos, propone una North Star, tres entradas y dos guardrails. Después describe una forma de manipular la North Star sin generar aprendizaje real y cómo lo detectaría un guardrail.
+
+# 10.4 Baselines, objetivos, benchmarks, ratios y comparaciones
+
+## Objetivos
+
+Evitar conclusiones engañosas al comparar una métrica con un periodo, una población o una referencia inadecuados.
+
+## Un número aislado casi nunca informa
+
+Decir “la conversión es 4 %” no permite decidir. ¿Es 4 % frente a un objetivo de 3 % o de 8 %? ¿Sube respecto a la semana anterior? ¿La semana anterior tenía una campaña, una caída de tracking o un festivo? Toda métrica necesita una referencia: baseline histórico, objetivo acordado, benchmark externo comparable o grupo de control.
+
+```mermaid
+flowchart TD
+    A[Valor observado] --> B{Referencia válida}
+    B --> C[Histórico comparable]
+    B --> D[Objetivo acordado]
+    B --> E[Control o experimento]
+    B --> F[Benchmark comparable]
+    C --> G[Interpretación]
+    D --> G
+    E --> G
+    F --> G
+```
+
+Un benchmark externo puede orientar, pero rara vez es una meta automática: modelo de negocio, mercado, madurez, definición y población pueden diferir. Es más riguroso usarlo para plantear preguntas que para declarar éxito o fracaso.
+
+## Absoluto, relativo y normalizado
+
+Una caída de 200 conversiones puede ser enorme para un producto pequeño y trivial para otro. Por eso se combinan recuentos absolutos, tasas, cambios porcentuales y, cuando procede, normalización por población o exposición. La tasa de conversión necesita denominador; los ingresos por usuario necesitan periodo y población; la disponibilidad necesita duración observada.
+
+Evita comparar porcentajes cuando los denominadores son minúsculos. Pasar de 1 a 2 compras es un aumento del 100 %, pero no justifica el mismo lenguaje que pasar de 10 000 a 20 000. Comunica ambos valores.
+
+## Segmentos y paradojas
+
+La media global puede mejorar mientras todos los segmentos relevantes empeoran, si cambió la composición de la población. Divide por canal, plataforma, cohorte, región o plan cuando exista una razón de negocio. Pero no busques segmentos hasta encontrar uno “significativo”: define previamente cuáles son plausibles y documenta exploraciones adicionales.
+
+## Comprobación
+
+Una conversión mensual sube del 3 % al 4 %. Escribe cinco datos que pedirías antes de celebrar la mejora y una manera de comunicarla sin exageración.
+
+# 10.5 Funnels: definición, instrumentación y diagnóstico de conversión
+
+## Objetivos
+
+Construir un funnel que represente un recorrido real del usuario y diagnosticar pérdidas sin confundir eventos técnicos con progreso de valor.
+
+## Qué mide un funnel
+
+Un funnel compara cuántas entidades pasan por una secuencia de pasos definidos. La entidad puede ser usuario, cuenta, pedido o sesión; escogerla cambia la respuesta. Un funnel de onboarding por usuario y un funnel de checkout por pedido no son intercambiables.
+
+```mermaid
+flowchart LR
+    A[Visita elegible] --> B[Registro completado]
+    B --> C[Configuración inicial]
+    C --> D[Primer valor]
+    D --> E[Pago o retención]
+```
+
+Cada flecha es una hipótesis sobre un recorrido. Define orden, ventana máxima, repetición de eventos, exclusiones y tratamiento de usuarios que entran a mitad del proceso. Si una persona completa pasos en varios dispositivos, necesitas una regla de identidad antes de calcular.
+
+## Pérdida no significa causa
+
+Que el mayor abandono ocurra entre B y C no demuestra que el formulario sea el problema. Puede haber tráfico de baja intención, una incompatibilidad de navegador, un cambio de precio o un evento que no se está registrando. El funnel localiza dónde investigar; logs, sesiones, segmentación, cualitativo o experimentos ayudan a explicar por qué.
+
+## Instrumentación mínima
+
+Para cada paso documenta nombre, condición de éxito, propiedades, cuándo se envía el evento y qué sistemas pueden generarlo. Distingue “botón pulsado” de “acción completada en backend”. El primer evento mide intención; el segundo confirma resultado. Ambos pueden ser útiles, pero responden preguntas distintas.
+
+## Ejemplo de diagnóstico
+
+Si la conversión cae solo en Android tras una versión, compara el funnel por versión de app, modelo de dispositivo y error técnico. Si el evento de “registro completado” cae pero las cuentas existen en base de datos, el problema puede ser instrumentación. La investigación responsable informa de ambas posibilidades antes de atribuir culpa al producto.
+
+## Comprobación
+
+Define un funnel de compra de suscripción. Indica entidad, pasos, ventana y un evento técnico que no usarías como criterio final de conversión.
+
+# 10.6 Cohortes, retención, churn y segmentación
+
+## Objetivos
+
+Interpretar cuándo una población vuelve, se mantiene o abandona, y evitar comparar cohortes que no son equivalentes.
+
+## La cohorte da contexto temporal
+
+Una cohorte agrupa entidades que comparten una condición de entrada: por ejemplo, usuarios registrados en la misma semana o cuentas que activaron una funcionalidad. La retención pregunta qué proporción vuelve a realizar una acción definida después de esa entrada. Sin cohorte, una media de usuarios activos mezcla generaciones de producto, campañas y antigüedad.
+
+```mermaid
+flowchart TD
+    A[Cohorte: registro semana 1] --> B[Actividad semana 1]
+    B --> C[Retención semana 2]
+    C --> D[Retención semana 4]
+    D --> E[Investigación por segmento]
+```
+
+Define con precisión evento de entrada, evento de retorno, intervalo y tipo de retención. La retención clásica exige volver en un periodo concreto; la no acotada permite volver en o después de cierto día. Ambas son válidas si se nombran correctamente.
+
+## Churn no es simplemente “no activo”
+
+Churn puede referirse a cancelación contractual, inactividad durante un umbral o pérdida de ingresos. Un SaaS anual y una app gratuita no usan la misma definición. Declara el horizonte y la población: una cuenta que aún no tuvo oportunidad razonable de renovar no debe entrar en una tasa de cancelación.
+
+## Segmentación con propósito
+
+Segmenta cuando exista una hipótesis operativa: canales que traen usuarios de distinto valor, planes con onboarding distinto, países con diferencias regulatorias o cuentas con distintos tamaños. No uses segmentos como excusa para ocultar la métrica global; combina ambos niveles y declara denominadores.
+
+## Comprobación
+
+Compara dos cohortes con retención día 30 del 20 % y 25 %. Enumera información necesaria antes de afirmar que la segunda experiencia de onboarding es mejor.
+
+# 10.7 Adquisición, engagement, monetización y valor
+
+## Objetivos
+
+Relacionar métricas de distintas etapas del producto sin convertirlas en una colección desconectada de siglas.
+
+## El recorrido económico y de valor
+
+Adquisición responde quién llega; activación responde quién obtiene primer valor; engagement responde con qué frecuencia y profundidad se usa; retención responde quién vuelve; monetización responde qué valor económico sostiene el servicio. No existe una secuencia universal, pero dibujar la relación evita optimizar una etapa contra otra.
+
+```mermaid
+flowchart LR
+    A[Adquisición] --> B[Activación]
+    B --> C[Engagement]
+    C --> D[Retención]
+    D --> E[Monetización]
+    E --> F[Capacidad de reinversión]
+```
+
+DAU, WAU y MAU son recuentos de actividad; el cociente DAU/MAU se usa a veces como aproximación a frecuencia, pero solo es interpretable con una definición de actividad estable. ARPU, CAC y LTV ayudan a hablar de economía unitaria, pero dependen de costes, horizontes y atribución. No los presentes como verdades universales.
+
+La métrica de valor más útil no siempre es ingreso. En un producto B2B puede ser informes entregados; en una plataforma educativa, actividades significativas completadas; en una infraestructura, tareas ejecutadas con éxito. El valor debe conectar una necesidad del usuario con una viabilidad de negocio.
+
+## Comprobación
+
+Elige un producto y propone una métrica de valor, una de engagement, una de monetización y una advertencia sobre la relación entre ellas.
+
+# 10.8 Experimentación, Goodhart y decisiones bajo incertidumbre
+
+## Objetivos
+
+Usar métricas para evaluar cambios sin convertir una mejora puntual en una certeza ni incentivar comportamientos que dañen el producto.
+
+## Antes del experimento
+
+Define hipótesis, población, métrica primaria, guardrails, duración y criterio de decisión antes de mirar los resultados. Si la métrica cambia después de conocer los datos, aumentas la probabilidad de encontrar una historia convincente pero falsa.
+
+La estadística ayuda a medir incertidumbre; no decide por sí sola. Una diferencia puede ser compatible con ruido, demasiado pequeña para justificar coste o perjudicial en un segmento. Comunica magnitud absoluta, relativa, intervalo, tamaño de muestra, duración y límites.
+
+```mermaid
+flowchart TD
+    A[Hipótesis] --> B[Métrica primaria y guardrails]
+    B --> C[Diseño y asignación]
+    C --> D[Recogida de datos]
+    D --> E[Estimación e incertidumbre]
+    E --> F{¿Valor neto aceptable?}
+    F -->|Sí| G[Desplegar y monitorizar]
+    F -->|No| H[Aprender o iterar]
+```
+
+## Goodhart en la práctica
+
+Una medida se degrada cuando las personas optimizan el indicador en vez del fenómeno. Ejemplos: forzar clics para elevar engagement, retrasar una cancelación para reducir churn del mes, o dividir un ticket para mejorar tiempo de primera respuesta. Los guardrails, auditorías cualitativas y métricas complementarias no eliminan el riesgo, pero lo hacen visible.
+
+## Comprobación
+
+Propón un experimento para elevar activación. Incluye métrica primaria, dos guardrails, decisión de parada y una posible forma de Goodhart.
+
+# 10.9 Catálogo de métricas, tracking plan y Amplitude
+
+## Objetivos
+
+Comprender que la confianza en un dashboard depende de un sistema de gobierno: definiciones, eventos, propiedad, cambios y calidad.
+
+## Catálogo de métricas
+
+Un catálogo es el lugar donde se encuentran nombre, propósito, definición, fórmula, fuentes, propietario, versiones, dashboards y consumidores de una métrica. Evita que cada equipo reconstruya “usuarios activos” desde cero y permite investigar diferencias de forma trazable.
+
+## Tracking plan
+
+Antes de instrumentar, documenta qué eventos representan interacciones importantes, qué propiedades permiten segmentar y cómo se identifica a usuario, cuenta o dispositivo. Define también eventos prohibidos: no envíes PII innecesaria a herramientas de analítica. El plan debe incluir validación de cobertura y un proceso de cambio cuando el producto evolucione.
+
+```mermaid
+flowchart LR
+    A[Decisión y métrica] --> B[Tracking plan]
+    B --> C[Implementación]
+    C --> D[Validación de eventos]
+    D --> E[Amplitude o BI]
+    E --> F[Dashboard y acción]
+    F --> G[Catálogo y versión]
+```
+
+## Amplitude como ejemplo, no como sustituto del criterio
+
+Amplitude permite trabajar con eventos, propiedades, funnels, cohorts, retención y dashboards. Eso no le concede autoridad sobre la definición: una visualización correcta sobre eventos mal instrumentados sigue siendo engañosa. Valida primero identidad, latencia, duplicados, eventos de servidor frente a cliente y cambios de versión.
+
+Una práctica sana consiste en revisar cada métrica con tres capas: definición de negocio, lógica técnica y comportamiento observado. Si las tres no coinciden, el trabajo no está terminado.
+
+## Comprobación
+
+Escribe tres eventos y dos propiedades para medir activación de un producto. Indica qué dato no recogerías por privacidad y cómo comprobarías que el evento llega correctamente.
 
 # Bloque 11 - Series temporales
 
