@@ -1137,78 +1137,216 @@ Resuelve la [investigación de una caída](../../../ejercicios/temario-06/aplica
 
 # Bloque 07 - Visualización y comunicación
 
-## Objetivo
+## Propósito
 
 Elegir y construir visualizaciones que permitan comprender una decisión con rapidez, sin distorsionar los datos.
 
-## Pregunta antes que gráfico
+## Lecciones
 
-La elección empieza por el mensaje: compara categorías con barras, evolución temporal con líneas, distribución con histogramas o cajas, y relación entre dos variables con dispersión. No hay un gráfico universalmente mejor.
-
-```mermaid
-flowchart LR
-    A[Pregunta] --> B{Tipo de comparación}
-    B -->|Tiempo| C[Líneas]
-    B -->|Categorías| D[Barras]
-    B -->|Distribución| E[Histograma o caja]
-    B -->|Relación| F[Dispersión]
-    C --> G[Mensaje y acción]
-    D --> G
-    E --> G
-    F --> G
-```
-
-## Diseño honesto
-
-Etiqueta ejes y unidades, usa escalas coherentes y evita cortar un eje de barras cuando convierta diferencias pequeñas en aparentes abismos. El color debe reforzar significado, no decorar. Piensa también en contraste y personas con visión reducida del color.
-
-## De exploración a comunicación
-
-Un gráfico exploratorio ayuda a pensar; uno explicativo ayuda a decidir. El segundo elimina elementos irrelevantes, destaca la comparación importante y añade un título que exponga el hallazgo, no solo el nombre de la métrica.
-
-## Entregables profesionales
-
-Un análisis suele terminar en un dashboard, una presentación, un ticket de Jira o una nota ejecutiva. Cada formato necesita contexto, definición de métricas, hallazgo, recomendación y limitaciones.
+1. [De la pregunta al tipo de gráfico](lecciones/01-pregunta-y-tipo-de-grafico.md)
+2. [Diseño honesto y accesible](lecciones/02-diseno-honesto-y-accesible.md)
+3. [De exploración a comunicación](lecciones/03-exploracion-y-narrativa.md)
+4. [Dashboards y entregables profesionales](lecciones/04-dashboards-y-entregables.md)
 
 ## Ejercicio
 
 Haz el [diagnóstico de gráficos](../../ejercicios/temario-07/comprension/elegir-grafico.md) y comprueba [los criterios](../../soluciones/temario-07/elegir-grafico.md).
 
-# Bloque 08 - Estadística para decisiones
+# De la pregunta al tipo de gráfico
 
-## Objetivo
+## Objetivos y prerrequisitos
 
-Medir incertidumbre, evaluar diferencias y comunicar resultados sin convertir el p-valor en una respuesta automática.
+Sabrás escoger una representación según la comparación que una decisión necesita. Requiere EDA básico.
 
-## Población, muestra y variabilidad
-
-La población es el conjunto que te interesa; la muestra es la parte observada. Un estadístico resume una muestra y un parámetro describe la población. Muestras distintas producen resultados distintos: esa variabilidad es parte del problema, no un fallo.
+Un gráfico no es una decoración de una tabla: es una forma de hacer visible una comparación. Pregunta primero si necesitas mostrar evolución, diferencias entre categorías, distribución o relación entre dos medidas.
 
 ```mermaid
-flowchart TD
-    A[Población] --> B[Muestra]
-    B --> C[Estadístico]
-    C --> D[Intervalo de confianza]
-    C --> E[Prueba de hipótesis]
-    D --> F[Decisión con incertidumbre]
-    E --> F
+flowchart LR
+ A[Pregunta] --> B{Comparación}
+ B -->|Tiempo| C[Línea]
+ B -->|Categorías| D[Barras]
+ B -->|Distribución| E[Histograma o caja]
+ B -->|Relación| F[Dispersión]
+ C --> G[Hallazgo y acción]
+ D --> G
+ E --> G
+ F --> G
 ```
 
-## Intervalos y pruebas
+Una línea responde bien a “¿cómo cambió semanalmente la conversión?”. Unas barras ordenadas responden mejor a “¿qué canal tiene más pedidos?”. Un histograma muestra si un promedio es representativo. Un gráfico de dispersión ayuda a explorar asociación, no a afirmar causalidad.
 
-Un intervalo de confianza expresa un rango compatible con el método y los datos. Una prueba de hipótesis compara los datos con una hipótesis nula. Un p-valor pequeño no mide el tamaño del efecto, la importancia de negocio ni la probabilidad de que una hipótesis sea cierta.
+## Error habitual
 
-## Experimentos A/B
+Elegir un gráfico porque “queda profesional”. Un gráfico circular con muchas categorías impide comparar; una línea sobre categorías sin orden temporal inventa continuidad. El gráfico correcto depende de la pregunta y del tipo de dato.
 
-Define antes la métrica principal, métricas de guardrail, duración y criterio de decisión. Evita mirar resultados cada día y declarar ganador en el primer pico: esa práctica aumenta falsos positivos.
+## Resumen
 
-## Tamaño del efecto
+Declara la pregunta antes del gráfico. Continúa con [diseño honesto](02-diseno-honesto-y-accesible.md).
 
-Una diferencia minúscula puede ser estadísticamente detectable con muchos datos y aun así no justificar ninguna acción. Comunica siempre efecto absoluto, efecto relativo, incertidumbre y coste de actuar.
+# Diseño honesto y accesible
+
+## Objetivos y prerrequisitos
+
+Aprenderás a etiquetar, escalar y colorear un gráfico sin exagerar diferencias ni excluir a parte de la audiencia.
+
+Un gráfico honesto declara unidad, periodo, población y fuente cuando son necesarios. En barras que comparan magnitudes, empezar el eje en cero evita que diferencias pequeñas parezcan enormes. En líneas puede usarse otro rango si se explica y se busca estudiar variación, no tamaño absoluto.
+
+El color debe codificar una diferencia con significado: versión A frente a B, cumplimiento frente a riesgo. No hagas que el único mensaje dependa de rojo y verde; añade etiquetas, contraste y patrones si el gráfico se va a reutilizar.
+
+## Límite
+
+La claridad no significa ocultar incertidumbre: si un valor procede de pocos usuarios o una estimación, muestra contexto, intervalo o nota metodológica. Simplificar es retirar ruido, no retirar condiciones que cambiarían una decisión.
+
+## Resumen
+
+Cada elección visual transmite una interpretación. Verifica escalas, etiquetas y accesibilidad antes de presentar.
+
+# De exploración a comunicación
+
+## Objetivos y prerrequisitos
+
+Separarás un gráfico para investigar de uno para recomendar una decisión.
+
+Durante exploración puedes producir muchos gráficos, probar segmentos y descubrir errores. Un gráfico explicativo reduce esa exploración a una afirmación revisable: título con hallazgo, comparación destacada, definición de métrica y límite relevante.
+
+Por ejemplo, “La conversión móvil cayó 1,8 puntos desde la versión 4.2” es más informativo que “Conversión por semana”. Acompáñalo de población, ventana temporal y una nota: “asociación temporal; pendiente validar cambio de tracking”.
+
+## Error habitual
+
+Convertir el dashboard exploratorio en una diapositiva ejecutiva con veinte series y filtros. El receptor no puede saber qué mirar ni qué acción se propone. Una buena narrativa deja clara evidencia, recomendación y grado de confianza.
+
+## Práctica
+
+Reformula el título de un gráfico que solo diga “Ventas mensuales” y explica qué dato necesitas para justificar el nuevo mensaje.
+
+# Dashboards y entregables profesionales
+
+## Objetivos y prerrequisitos
+
+Diseñarás un entregable que responda a una decisión y no solo muestre indicadores.
+
+Un **dashboard** reúne métricas para seguimiento continuo; no sustituye un análisis cuando hay una decisión nueva. Cada panel debe indicar definición, actualización, propietario y acción esperada. Una presentación o ticket de Jira puede ser mejor para explicar una incidencia concreta: contexto, evidencia, recomendación, riesgos y siguiente paso.
+
+Antes de entregar pregunta: ¿quién actúa?, ¿qué cambiaría si el dato varía?, ¿qué limitación debe conocer? Si no hay respuesta, probablemente sobra un gráfico o falta una pregunta.
+
+Completa el [diagnóstico de gráficos](../../../ejercicios/temario-07/comprension/elegir-grafico.md). El bloque siguiente añadirá la incertidumbre que una visualización por sí sola no puede resolver.
+
+# Bloque 08 - Estadística para decisiones
+
+## Propósito
+
+Medir incertidumbre, evaluar diferencias y comunicar resultados sin convertir una prueba estadística en una respuesta automática.
+
+## Lecciones
+
+1. [Describir variabilidad](lecciones/01-describir-variabilidad.md)
+2. [Población, muestra y sesgo](lecciones/02-poblacion-muestra-y-sesgo.md)
+3. [Probabilidad e incertidumbre](lecciones/03-probabilidad-e-incertidumbre.md)
+4. [Intervalos y pruebas de hipótesis](lecciones/04-intervalos-y-pruebas.md)
+5. [Experimentos A/B](lecciones/05-experimentos-ab.md)
+6. [Tamaño de efecto y decisión](lecciones/06-tamano-de-efecto-y-decision.md)
 
 ## Práctica
 
 Analiza [un experimento de onboarding](../../ejercicios/temario-08/aplicacion/experimento-onboarding.md) y revisa [la interpretación](../../soluciones/temario-08/experimento-onboarding.md).
+
+# Describir variabilidad
+
+## Objetivos y prerrequisitos
+
+Sabrás resumir un conjunto sin esconder su dispersión. Requiere promedios y distribuciones.
+
+La media responde “¿cuál es el promedio?”, pero no “¿cuánto varían los casos?”. Mediana, percentiles, rango y desviación estándar describen perspectivas distintas. En tiempos de carga, una media de dos segundos puede convivir con usuarios que esperan veinte; los percentiles altos suelen importar para experiencia real.
+
+No elijas la medida que haga mejor la historia. Declara por qué la métrica representa la decisión: media para coste total esperado, mediana para cliente típico, percentil 95 para un compromiso de rendimiento.
+
+## Resumen
+
+Centro y variabilidad se interpretan juntos. Continúa con [población y muestra](02-poblacion-muestra-y-sesgo.md).
+
+# Población, muestra y sesgo
+
+## Objetivos y prerrequisitos
+
+Distinguirás el conjunto sobre el que quieres decidir de los datos que realmente observaste.
+
+La **población** es el conjunto de interés, por ejemplo todos los nuevos usuarios elegibles. Una **muestra** es una parte observada. Un **estadístico** resume la muestra; un parámetro describe la población. Muestras diferentes producen resultados diferentes: esa variabilidad no es un fallo, es la razón para comunicar incertidumbre.
+
+El problema no se arregla solo con más filas. Si solo respondieron usuarios muy activos a una encuesta, hay **sesgo de selección**: la muestra puede ser grande y seguir sin representar a la población.
+
+## Resumen
+
+Pregunta siempre quién quedó dentro, quién fuera y por qué. Sigue con [probabilidad e incertidumbre](03-probabilidad-e-incertidumbre.md).
+
+# Probabilidad e incertidumbre
+
+## Objetivos y prerrequisitos
+
+Usarás probabilidad como modelo de incertidumbre, no como promesa sobre un caso individual.
+
+Una probabilidad expresa qué tan frecuente sería un resultado dentro de un modelo y unas condiciones. Si una conversión histórica es 10 %, no significa que cada décimo usuario vaya a comprar ni que el siguiente tenga 10 % “garantizado”. Depende de población, periodo, medición y estabilidad del proceso.
+
+La incertidumbre aparece porque observamos una parte del proceso, existe variación y las mediciones pueden tener error. Separar esos componentes evita comunicar una cifra estimada como si fuera exacta.
+
+## Resumen
+
+Un modelo probabilístico necesita supuestos explícitos. Sigue con [intervalos y pruebas](04-intervalos-y-pruebas.md).
+
+# Intervalos y pruebas de hipótesis
+
+## Objetivos y prerrequisitos
+
+Interpretarás un intervalo y un p-valor sin atribuirles un significado que no tienen.
+
+Un intervalo de confianza ofrece un rango de valores compatibles con un método, datos y nivel de confianza bajo sus supuestos. Una prueba compara datos con una **hipótesis nula**, por ejemplo “no hay diferencia de conversión”. Un p-valor pequeño indica que los datos serían poco compatibles con esa hipótesis si el modelo fuera correcto.
+
+No dice la probabilidad de que la hipótesis nula sea cierta, no mide importancia de negocio y no corrige sesgo, medición mala ni pruebas repetidas. Comunica efecto absoluto, relativo, intervalo y decisión propuesta.
+
+```mermaid
+flowchart LR
+ A[Población] --> B[Muestra]
+ B --> C[Estimación]
+ C --> D[Intervalo]
+ C --> E[Prueba]
+ D --> F[Decisión con límite]
+ E --> F
+```
+
+## Resumen
+
+La inferencia cuantifica incertidumbre; no sustituye juicio ni diseño. Continúa con [experimentos A/B](05-experimentos-ab.md).
+
+# Experimentos A/B
+
+## Objetivos y prerrequisitos
+
+Diseñarás la estructura mínima de un experimento antes de mirar su resultado.
+
+Un experimento A/B asigna unidades elegibles a variantes para comparar una métrica. Define antes población, unidad de asignación, métrica principal, guardrails, duración, tamaño necesario y criterio de decisión. Si aleatorizas por usuario pero mides por sesión sin cuidado, puedes contar varias veces una experiencia.
+
+No mires cada día hasta encontrar significación: ese comportamiento eleva falsos positivos. También vigila calidad del tracking, exposición real a la variante y efectos por segmentos relevantes.
+
+## Límite
+
+Un experimento válido estima efecto en la población y periodo estudiados; no garantiza el mismo efecto después de lanzar globalmente ni en otro mercado.
+
+## Práctica
+
+Analiza el [experimento de onboarding](../../../ejercicios/temario-08/aplicacion/experimento-onboarding.md) antes de leer su solución.
+
+# Tamaño de efecto y decisión
+
+## Objetivos y prerrequisitos
+
+Vincularás una diferencia estadística con coste, beneficio, riesgo y recomendación.
+
+Una diferencia minúscula puede resultar “significativa” con millones de usuarios y aun así no pagar el coste de ingeniería. Una diferencia grande con pocos datos puede ser prometedora pero incierta. Por eso una decisión profesional reúne tamaño absoluto, cambio relativo, intervalo, volumen afectado, guardrails y reversibilidad de la acción.
+
+Ejemplo: +0,2 puntos de conversión puede significar miles de pedidos si hay mucho tráfico, pero no conviene lanzar si aumenta reclamaciones o si el intervalo incluye una pérdida importante. La recomendación debe declarar el umbral que hace que actuar merezca la pena.
+
+## Cierre
+
+Estadística no concede permiso automático para afirmar o lanzar. Ayuda a calibrar qué se sabe, qué riesgo queda y qué evidencia faltaría.
 
 # Bloque 09 - SQL, NoSQL y almacenamiento
 
