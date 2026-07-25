@@ -31,7 +31,7 @@ Los diagramas se escriben dentro de la lección con Mermaid y se generan tambié
 | 03. Matemáticas aplicadas | 6 | Interpretar magnitudes, tasas, distribuciones, agregaciones y comparaciones temporales. |
 | 04. NumPy | 3 | Pensar vectorialmente y manipular arrays numéricos. |
 | 05. Pandas | 6 | Preparar y validar datos tabulares con trazabilidad. |
-| 06. EDA | 4 | Investigar patrones y anomalías sin sobrerreclamar causalidad. |
+| 06. EDA | 6 | Investigar patrones y anomalías sin sobrerreclamar causalidad. |
 | 07. Visualización | 4 | Elegir y diseñar gráficos que permitan decidir. |
 | 08. Estadística | 6 | Comunicar incertidumbre y evaluar experimentos. |
 | 09. SQL, NoSQL y almacenamiento | 7 | Consultar datos y entender su arquitectura y límites. |
@@ -73,7 +73,7 @@ Total: **87 lecciones**, que cubren los 161 temas del índice maestro.
 - Matemáticas aplicadas: unidades, porcentajes y tasas; descriptiva y percentiles; ponderación y grano; funciones; vectores y matrices; tiempo, granularidad y ventanas.
 - NumPy: arrays; selección; broadcasting y simulación.
 - Pandas: importación; perfilado; selección; limpieza; agregación; uniones y validación.
-- EDA: preguntas; distribuciones; segmentos; relaciones, outliers y registro de decisiones.
+- EDA: pregunta y perfil reproducible; distribuciones y denominadores; segmentación; outliers y calidad; asociación, causalidad y paradoja de Simpson; registro de decisiones y laboratorio.
 - Visualización: elección de gráfico; diseño honesto; Matplotlib/Seaborn; narrativa ejecutiva.
 - Estadística: descriptiva; probabilidad; muestreo; incertidumbre; hipótesis; experimentos y tamaño de efecto.
 

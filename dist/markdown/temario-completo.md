@@ -2171,87 +2171,353 @@ Después resuelve [la auditoría de pedidos](../../../ejercicios/temario-05/apli
 
 ## Propósito
 
-Explorar datos para descubrir patrones, anomalías y preguntas nuevas sin confundir exploración con demostración causal.
+El análisis exploratorio de datos (EDA, por *exploratory data analysis*) es la investigación inicial antes de explicar, predecir o cambiar algo. Sirve para responder: «¿qué ha ocurrido realmente en los datos, dónde ocurre y qué datos faltan para entenderlo?». No sirve, por sí solo, para afirmar la causa.
 
-## Lecciones
+Al terminar podrás transformar una alerta vaga -por ejemplo, «han bajado las compras»- en un informe reproducible que producto, ingeniería o dirección pueda revisar.
 
-1. [Preguntas y perfil exploratorio](lecciones/01-preguntas-y-perfil-exploratorio.md)
-2. [Distribuciones, segmentos y valores extremos](lecciones/02-distribuciones-segmentos-y-outliers.md)
-3. [Relaciones, correlación y explicaciones rivales](lecciones/03-relaciones-correlacion-y-causalidad.md)
-4. [Registro de hallazgos y decisiones](lecciones/04-registro-de-hallazgos.md)
+## Caso continuo: la incidencia de checkout de Nébula
 
-## Práctica
+Nébula es una aplicación de suscripción. El lunes 12 de mayo el panel muestra que la conversión de visita a compra ha pasado de 5,1 % a 4,4 %. Recibimos un archivo: cada fila resume un día, plataforma y canal. A lo largo del bloque usarás ese mismo archivo para comprobar si la caída es real, localizar segmentos afectados, detectar valores sospechosos y proponer la siguiente comprobación.
 
-Resuelve [la investigación de una caída](../../ejercicios/temario-06/aplicacion/investigar-caida.md) antes de mirar [la guía de solución](../../soluciones/temario-06/investigar-caida.md).
+> **Antes de empezar.** Una *fila* es un registro; aquí representa «un día para una plataforma y un canal». Una *columna* guarda una característica de esas filas, como `visitas` o `compras`. El archivo CSV es texto con valores separados por comas: se parece a una tabla de hoja de cálculo, pero puede abrirse con un editor o con Python. El bloque 05 explica cómo cargarlo con Pandas.
 
-# Preguntas y perfil exploratorio
+## Resultados observables
 
-## Objetivos y prerrequisitos
+- escribir una pregunta exploratoria, su periodo y su unidad de observación;
+- perfilar una fuente: filas, columnas, cobertura, nulos, duplicados, rangos y definiciones;
+- describir distribuciones y segmentos sin ocultar el total ni los denominadores;
+- distinguir un hallazgo, una asociación y una afirmación causal;
+- decidir qué hacer con un valor extremo dejando una regla trazable;
+- entregar una nota de hallazgos, límites y próxima acción junto con código reproducible.
 
-Convertirás un conjunto de datos en preguntas de exploración y comprobarás si la fuente puede responderlas. Requiere manejo básico de Pandas.
+## Prerrequisitos
 
-El análisis exploratorio, o **EDA**, es una investigación abierta pero disciplinada. No empieza con “haz todos los gráficos”; empieza con una pregunta como “¿en qué segmento se concentra la caída de pedidos?” y con un perfil de grano, periodo, cobertura, nulos y duplicados.
+Necesitas los conceptos de tabla, tipos de dato y calidad del bloque 01, Python básico del bloque 02 y carga/manipulación elemental con Pandas del bloque 05. No necesitas estadística inferencial: la aprenderás en el bloque 08.
+
+## Ruta de lecciones
+
+1. [De una alerta a una pregunta y un perfil reproducible](lecciones/01-preguntas-y-perfil-exploratorio.md)
+2. [Distribuciones, denominadores y segmentación](lecciones/02-distribuciones-segmentos-y-outliers.md)
+3. [Valores extremos: investigar antes de borrar](lecciones/03-valores-extremos-y-calidad.md)
+4. [Relaciones, correlación, causalidad y paradoja de Simpson](lecciones/04-relaciones-correlacion-y-causalidad.md)
+5. [Del hallazgo a una decisión responsable](lecciones/05-registro-de-hallazgos-y-decisiones.md)
+6. [Laboratorio: investigar la caída de checkout](lecciones/06-laboratorio-incidencia-checkout.md)
+
+## Material práctico
+
+- [Datos de Nébula](../../datasets/nebula_checkout_mayo.csv)
+- [Laboratorio ejecutable](../../notebooks/practicas/06-eda-incidencia-checkout.py)
+- [Ejercicio aplicado](../../ejercicios/temario-06/aplicacion/investigar-caida.md)
+- [Solución razonada](../../soluciones/temario-06/investigar-caida.md)
+
+## Qué no concluye este bloque
+
+Un patrón descriptivo puede justificar abrir una incidencia, priorizar una comprobación o diseñar un experimento. No demuestra que una versión, un canal o una campaña haya causado el cambio. Esa frontera es la diferencia entre un análisis útil y una decisión precipitada.
+
+# Lección 01 - De una alerta a una pregunta y un perfil reproducible
+
+## Objetivo y prerrequisitos
+
+Convertirás una alerta de negocio en una pregunta que los datos puedan responder parcialmente y crearás el primer perfil de su fuente. Requiere saber leer un CSV con Pandas.
+
+## El problema antes de la técnica
+
+«La conversión ha caído» no basta para analizar. ¿Conversión de qué evento a qué evento? ¿En qué fechas, países o plataformas? Si mezclamos esos significados, podemos comparar semanas incompletas o sumar personas con sesiones y llamar al resultado «conversión».
+
+En Nébula, una fila representa el agregado de un `día`, `plataforma` y `canal`. La métrica de esa fila es `compras / visitas`. La pregunta inicial es: **¿la caída de conversión entre el 5 y el 11 de mayo está concentrada en algún segmento y el archivo permite investigarla?** No pregunta todavía por una causa.
 
 ```mermaid
 flowchart LR
- A[Pregunta] --> B[Perfil de fuente]
- B --> C[Comparar segmentos]
- C --> D[Hallazgo]
- D --> E[Comprobar plausibilidad]
- E --> F[Nueva pregunta o reporte]
+ A[Alerta: conversion baja] --> B[Definir metrica, periodo y grano]
+ B --> C[Perfilar archivo]
+ C --> D[Comparar segmentos]
+ D --> E[Hallazgo descriptivo]
+ E --> F[Comprobar explicaciones rivales]
 ```
 
-El hallazgo genera una hipótesis, no un veredicto. Si faltan datos de dispositivo, no concluyas que no importa: concluye que la fuente no permite evaluarlo.
+El diagrama responde al orden de trabajo: primero definimos qué mide cada fila; después miramos patrones. Un gráfico bonito hecho antes del perfil puede estar describiendo una fuente defectuosa.
+
+## Qué es perfilar una fuente
+
+Un *perfil* es una ficha de salud y significado del conjunto. Antes de calcular medias, revisa:
+
+- **Esquema:** nombres y tipo esperado de cada columna. `fecha` debe ser fecha, `visitas` y `compras` números enteros no negativos; `plataforma` y `canal` categorías.
+- **Grano:** qué representa exactamente una fila. Aquí no es una persona ni una compra: es un resumen diario por segmento.
+- **Cobertura:** primera y última fecha, días ausentes y combinaciones de segmentos que faltan.
+- **Calidad:** nulos, duplicados, valores imposibles y cambios de definición o de tracking.
+- **Semántica:** de dónde procede el dato y qué cuenta como visita o compra.
+
+Un nulo significa que falta un valor; un cero significa que se registró una cantidad cero. Son cosas distintas: cambiar uno por otro sin comprobarlo inventa evidencia.
+
+## Ejemplo trabajado: el primer perfil
+
+```python
+import pandas as pd
+
+datos = pd.read_csv("datasets/nebula_checkout_mayo.csv", parse_dates=["fecha"])
+print(datos.shape)
+print(datos.dtypes)
+print(datos.isna().sum())
+print(datos.duplicated().sum())
+print(datos.groupby("plataforma").size())
+print(datos[["fecha", "visitas", "compras"]].describe())
+```
+
+El resultado no responde aún a la alerta. Sí verifica si podemos confiar en el punto de partida. Además, una clave de unicidad razonable es `(fecha, plataforma, canal)`: si aparece dos veces, no conviene sumar ambas sin saber si son duplicados o correcciones.
+
+## Error habitual: usar el promedio de porcentajes
+
+Si Android tuvo 1 compra de 10 visitas (10 %) y web 10 compras de 1.000 visitas (1 %), el promedio simple es 5,5 %. La conversión real conjunta es 11 / 1.010 = 1,09 %. Para combinar tasas, suma primero numeradores y denominadores; luego divide.
+
+## Resumen y comprobación
+
+Una pregunta útil nombra métrica, población, periodo y comparación. Un perfil documenta si el archivo representa esa pregunta.
+
+1. ¿Qué representa una fila del caso Nébula?
+2. ¿Por qué un valor cero no debe tratarse automáticamente como nulo?
+3. ¿Qué clave usarías para buscar duplicados y por qué?
+
+Sigue con [distribuciones y segmentación](02-distribuciones-segmentos-y-outliers.md).
+
+# Lección 02 - Distribuciones, denominadores y segmentación
+
+## Objetivo
+
+Describirás cómo se reparten los datos y compararás segmentos sin perder de vista cuántas observaciones los sostienen.
+
+## De una cifra a una distribución
+
+La *distribución* muestra qué valores aparecen y con qué frecuencia. La media responde «cuál sería el reparto igualitario»; la mediana es el valor central al ordenar; los percentiles indican umbrales. Si los importes de pedidos son 8, 10, 11, 12 y 800 euros, la media (168,2) describe mal a la mayoría; la mediana (11) la representa mejor. No hay un resumen universal: depende de la pregunta.
+
+Para conversiones diarias conviene observar al menos el mínimo, mediana, máximo y volumen de visitas. Una tasa de 0 % con dos visitas puede ser ruido; una tasa de 0 % con 20.000 visitas exige investigación.
+
+## Segmentar es comparar poblaciones, no decorar una tabla
+
+Un *segmento* es un subconjunto definido antes de mirar el resultado: por plataforma, canal, país o versión. En Nébula, `plataforma` divide los datos entre web y Android. Calculamos una tasa agregada correcta:
+
+```python
+resumen = (
+    datos.groupby("plataforma", as_index=False)
+    .agg(visitas=("visitas", "sum"), compras=("compras", "sum"))
+)
+resumen["conversion"] = resumen["compras"] / resumen["visitas"]
+```
+
+```mermaid
+flowchart TB
+ A[Total: compras / visitas] --> B[Segmentar con una pregunta]
+ B --> C[Web: sumar compras y visitas]
+ B --> D[Android: sumar compras y visitas]
+ C --> E[Comparar tasa y volumen]
+ D --> E
+ E --> F[Preguntar que explicacion distingue el dato]
+```
+
+El diagrama muestra que los segmentos son ramas paralelas: no debemos sumar sus porcentajes ni tratarlos como pasos de una secuencia.
+
+## Ejemplo: caída localizada
+
+Compara el 5-11 de mayo con el periodo anterior, pero mantén los denominadores:
+
+```python
+datos["semana"] = datos["fecha"].between("2025-05-05", "2025-05-11").map(
+    {True: "actual", False: "referencia"}
+)
+tabla = datos.groupby(["semana", "plataforma"]).agg(
+    visitas=("visitas", "sum"), compras=("compras", "sum")
+)
+tabla["conversion"] = tabla["compras"] / tabla["visitas"]
+print(tabla)
+```
+
+Si Android cae y web permanece estable, el hallazgo es «la caída observada se concentra en Android, dentro de este archivo». No es «Android causó la caída»: Android es un lugar donde mirar versión, errores y eventos de tracking.
+
+## Límites y preguntas
+
+Un segmento pequeño puede variar por azar y un segmento grande puede ocultar grupos internos distintos. Evita probar decenas de cortes hasta encontrar uno llamativo: registra qué comparaciones responden a la pregunta inicial. En el bloque 08 aprenderás a cuantificar incertidumbre.
+
+1. ¿Por qué una tasa siempre necesita su denominador?
+2. ¿Cuándo preferirías la mediana a la media?
+3. ¿Qué segmento pedirías antes de concluir que una campaña funcionó?
+
+El siguiente paso es decidir qué hacer con un valor muy raro sin convertirlo automáticamente en un error.
+
+# Lección 03 - Valores extremos: investigar antes de borrar
+
+## Objetivo
+
+Aprenderás a distinguir un valor raro, un error de calidad y un caso de negocio importante, y a dejar una decisión reproducible.
+
+## Un outlier no es un permiso para eliminar
+
+Un *valor extremo* u *outlier* es una observación alejada del patrón de referencia. Puede ser un fallo de medición (visitas negativas), un cambio legítimo (una campaña con mucho tráfico), fraude, una unidad equivocada o un cliente relevante. El dato no trae pegada la etiqueta «error».
+
+En Nébula, un día con muchas visitas y compras cero puede señalar un checkout roto, un evento de compra que dejó de llegar o tráfico no humano. Borrarlo haría el promedio más agradable, pero podría ocultar justo la incidencia que buscamos.
+
+## Protocolo de investigación
+
+```mermaid
+flowchart LR
+ A[Valor inusual] --> B[Comprobar tipo, rango y duplicados]
+ B --> C[Contrastar con fuente y contexto]
+ C --> D[Error confirmado?]
+ D -->|Si| E[Corregir o excluir con regla]
+ D -->|No o duda| F[Conservar y marcar sensibilidad]
+ E --> G[Documentar impacto]
+ F --> G
+```
+
+La decisión tiene dos salidas legítimas. Solo se excluye después de confirmar el motivo; si hay duda, se conserva y se explica cómo cambia el resultado con y sin ese caso.
+
+## Reglas cuantitativas como alarma, no sentencia
+
+El rango intercuartílico (IQR) usa el percentil 25, `Q1`, y el 75, `Q3`: una regla común marca como candidata a revisión una observación menor que `Q1 - 1,5 x IQR` o mayor que `Q3 + 1,5 x IQR`. Es una forma de priorizar una revisión, no una prueba de error. En variables con colas largas -como gasto o tráfico de campañas- marcará muchos casos legítimos.
+
+```python
+q1 = datos["visitas"].quantile(0.25)
+q3 = datos["visitas"].quantile(0.75)
+iqr = q3 - q1
+candidatos = datos[datos["visitas"] > q3 + 1.5 * iqr]
+```
+
+También comprueba reglas de negocio claras: `compras > visitas` es imposible si ambos eventos se miden en la misma población; una fecha futura puede ser un error de carga; una categoría nueva puede ser un cambio de producto, no un valor inválido.
+
+## Registro de una exclusión
+
+Una regla defendible dice: «Se excluye la fila de Android/ads del 08-05 del cálculo de conversión porque el equipo de instrumentación confirmó que `compras` no se exportó ese día. Se conserva en la tabla fuente y se publica el resultado con y sin la corrección». «Quité los datos raros» no es reproducible.
+
+## Comprobación
+
+1. ¿Qué evidencia pedirías antes de borrar un día de conversión cero?
+2. ¿Qué diferencia hay entre una regla de detección y una decisión de exclusión?
+3. ¿Por qué conservarías una fila conocida como errónea en la fuente original?
+
+Sigue con [relaciones, causalidad y paradoja de Simpson](04-relaciones-correlacion-y-causalidad.md).
+
+# Lección 04 - Relaciones, correlación, causalidad y paradoja de Simpson
+
+## Objetivo
+
+Separarás lo que los datos observacionales muestran de lo que sería necesario para atribuir una causa.
+
+## Cuatro afirmaciones que no significan lo mismo
+
+- **Observación:** «La conversión de Android fue menor esta semana». Es una descripción del archivo y su periodo.
+- **Asociación:** «Los días con más errores de pago coinciden con menor conversión». Dos variables cambian juntas.
+- **Predicción:** «Con los datos disponibles, el número de errores ayuda a anticipar conversión». Puede ser útil sin ser causal.
+- **Causalidad:** «Reducir errores de pago aumentará conversión». Requiere un diseño que descarte explicaciones alternativas.
+
+La *correlación* mide una forma de asociación lineal; no es una flecha de causa. Una campaña puede aumentar a la vez visitas y compras. La correlación entre ambas no demuestra que una visita concreta haya causado una compra ni que aumentar tráfico de baja calidad funcione.
+
+```mermaid
+flowchart TB
+ A[Campana] --> B[Visitas]
+ A --> C[Compras]
+ B --> E[Posible efecto real a evaluar]
+ C --> E
+ D[Cambio de tracking] --> B
+ D --> C
+```
+
+El diagrama formula explicaciones rivales: campaña y tracking pueden producir un patrón parecido. El EDA permite encontrarlas; un experimento, un análisis causal o una investigación técnica decide entre ellas.
+
+## Paradoja de Simpson: el total puede engañar
+
+Imagina que la conversión total parece caer. Al dividir por plataforma, web mejora y Android mejora, pero Android recibe una proporción mucho mayor de tráfico que web y normalmente convierte peor. El cambio de mezcla puede hacer que el total baje aun cuando cada plataforma mejore. Esto es una versión de la *paradoja de Simpson*: una tendencia agregada puede invertirse al estratificar por una variable que cambia la composición.
+
+Por eso la pregunta «¿qué segmentos cambian su peso?» acompaña a «¿qué tasa cambia?». No significa segmentar hasta obtener la respuesta deseada; significa elegir variables que representen poblaciones distintas y mostrar siempre el total y los tamaños.
+
+## Comprobación práctica
+
+Para cada explicación rival, escribe qué observación la haría más o menos plausible:
+
+| Explicación | Evidencia que buscar |
+| --- | --- |
+| Checkout roto en Android | errores de pago y abandono aumentan solo tras la versión afectada |
+| Cambio de mezcla de tráfico | cambia el peso de canales/plataformas, con tasas internas estables |
+| Tracking incompleto | caen eventos de compra, pero pagos confirmados en la pasarela no |
 
 ## Resumen
 
-El EDA limita el espacio de dudas con evidencia visible. Sigue con [distribuciones y segmentos](02-distribuciones-segmentos-y-outliers.md).
+El lenguaje responsable dice «consistente con», «concentrado en» o «requiere comprobar». En la siguiente lección convertirás esa prudencia en una recomendación accionable.
 
-# Distribuciones, segmentos y valores extremos
+# Lección 05 - Del hallazgo a una decisión responsable
 
-## Objetivos y prerrequisitos
+## Objetivo
 
-Interpretarás cómo se reparte una medida y decidirás cuándo investigar valores extremos en vez de eliminarlos.
+Producirás un registro que permita repetir el análisis, cuestionar sus límites y decidir la siguiente acción sin exagerar la evidencia.
 
-Una **distribución** muestra cómo se repiten los valores. Además de una media, observa mediana, dispersión, asimetría y percentiles. En importes de pedido, unos pocos pedidos empresariales pueden elevar la media aunque la mayoría de clientes gaste poco.
+## El formato de un hallazgo profesional
 
-Segmentar divide observaciones por una característica relevante: canal, país, dispositivo o cohorte. Una tendencia global puede esconder un canal en caída y otro en crecimiento. El segmento se elige por una hipótesis de negocio, no porque haya columnas disponibles.
+Un análisis no termina al encontrar un número. Debe permitir que otra persona responda «¿de dónde salió?» y «¿qué hacemos mañana?». Para cada hallazgo registra:
 
-Un **outlier** es un valor inusual respecto al resto; no es sinónimo de error. Puede ser una compra fraudulenta, un cliente clave, una moneda mal parseada o una unidad distinta. Conserva la evidencia, clasifica la causa y documenta la regla si decides excluirlo.
+1. Pregunta y decisión a la que aporta evidencia.
+2. Fuente, versión del archivo, periodo y grano.
+3. Filtros, definiciones y código o pasos reproducibles.
+4. Resultado con numerador, denominador y comparación.
+5. Interpretación y explicaciones alternativas.
+6. Límite o riesgo de calidad.
+7. Siguiente acción, responsable y señal que la confirmaría.
 
-## Resumen
+## Ejemplo completo de Nébula
 
-Describe la distribución antes de resumirla y explica cualquier exclusión. Continúa con [relaciones y causalidad](03-relaciones-correlacion-y-causalidad.md).
+> **Hallazgo.** Entre 05-05 y 11-05, la conversión agregada de Android es menor que en el periodo de referencia; web no muestra la misma magnitud de cambio. Se calcula como suma de `compras` dividida por suma de `visitas`, con filas agregadas por día/canal/plataforma. La coincidencia temporal con la versión 4.2 es consistente con una incidencia, pero no demuestra causalidad. Antes de pausar una campaña, ingeniería debe contrastar errores del formulario y pagos confirmados con los eventos exportados. Una fila con compras cero el 08-05 se conserva hasta verificar tracking.
 
-# Relaciones, correlación y explicaciones rivales
+Esta nota dice qué se observó y qué falta. Una mala versión sería «la versión 4.2 rompió Android»: oculta el método, borra incertidumbre y puede hacer actuar al equipo sobre una causa falsa.
 
-## Objetivos y prerrequisitos
+```mermaid
+flowchart LR
+ A[Hallazgo reproducible] --> B[Limites y explicaciones rivales]
+ B --> C[Accion de bajo riesgo]
+ C --> D[Comprobacion tecnica o experimento]
+ D --> E[Actualizar decision]
+```
 
-Distinguirás asociación observada, explicación posible y evidencia causal.
+El flujo no termina en una conclusión tajante. La salida del EDA es una acción proporcional a la evidencia y una forma concreta de aprender más.
 
-Dos medidas pueden moverse juntas. Una **correlación** resume asociación lineal, pero no identifica por qué ocurre. Las visitas y las ventas pueden subir por una campaña; el precio y las devoluciones pueden variar porque se venden productos distintos. Una tercera variable, un cambio de medición o puro azar pueden explicar la relación.
+## Privacidad y comunicación
 
-Antes de recomendar una acción, formula explicaciones rivales y busca qué dato las distinguiría. Un experimento o un diseño causal puede aportar mejor evidencia; el EDA prepara esa investigación.
+Para una incidencia de checkout no necesitas exportar correos, tarjetas ni identificadores personales a un notebook. Minimiza las columnas, agrega donde sea suficiente y usa datos sintéticos para compartir ejemplos. También evita nombrar a una persona o equipo como causa sin evidencia: los registros suelen tener fallos de proceso, no culpables evidentes.
 
-## Error habitual
+## Comprobación
 
-Ordenar una tabla por dos columnas y afirmar una causa porque el patrón “parece claro”. La visualización ayuda a detectar preguntas; no elimina confusión, sesgo de selección ni estacionalidad.
+1. ¿Qué tres elementos hacen reproducible un hallazgo?
+2. ¿Qué acción es razonable con evidencia descriptiva y cuál exigiría evidencia causal?
+3. ¿Cómo comunicarías una limitación de tracking sin bloquear la investigación?
 
-## Resumen
+Continúa con el [laboratorio reproducible](06-laboratorio-incidencia-checkout.md).
 
-Una asociación es un punto de partida. Registra qué observaste y qué sería necesario para sostener una explicación.
+# Lección 06 - Laboratorio: investigar la caída de checkout
 
-# Registro de hallazgos y decisiones
+## Objetivo
 
-## Objetivos y prerrequisitos
+Ejecutarás un análisis exploratorio completo, desde el perfil hasta una nota de decisión, sobre un archivo pequeño y auditable.
 
-Aprenderás a convertir una exploración en un artefacto revisable por producto, ingeniería o dirección.
+## Datos y contrato
 
-Para cada hallazgo anota pregunta, fuente y periodo, filtros, método, resultado, interpretación, límites y siguiente acción. Un ejemplo: “La conversión móvil cayó 1,8 puntos desde la versión 4.2; el patrón aparece en Android y no en web; falta comprobar cambios de tracking y errores del formulario”.
+Abre `datasets/nebula_checkout_mayo.csv`. Cada fila es una combinación diaria de fecha, plataforma y canal. `visitas` cuenta visitas al checkout y `compras` pagos completados atribuidos al mismo corte diario. Es un dataset didáctico: no representa usuarios individuales ni prueba causalidad.
 
-No escribas “la versión causó la caída” si solo existe coincidencia temporal. La precisión del lenguaje protege al equipo de decidir demasiado pronto.
+Ejecuta desde la raíz del repositorio:
 
-Resuelve la [investigación de una caída](../../../ejercicios/temario-06/aplicacion/investigar-caida.md). En el bloque siguiente aprenderás a elegir gráficos que hagan visible esta evidencia sin manipular la percepción.
+```bash
+python notebooks/practicas/06-eda-incidencia-checkout.py
+```
+
+El script usa solo la biblioteca estándar de Python para que pueda correrse sin instalar paquetes. El código muestra el perfil, tasas correctamente ponderadas por visitas, comparaciones por plataforma y una alerta de calidad. Después reescribe una parte con Pandas para quien quiera practicar el flujo habitual.
+
+## Secuencia de trabajo
+
+1. Lee el contrato y comprueba las columnas, fechas, duplicados y rangos.
+2. Calcula la tasa total sumando compras y visitas.
+3. Separa referencia y semana actual; compara total y plataforma.
+4. Examina el día de conversión cero y formula al menos dos explicaciones.
+5. Redacta el hallazgo con una limitación y una siguiente comprobación.
+
+No hay una causa «oculta» que debas adivinar. La respuesta correcta identifica qué muestran los datos y qué información externa sería necesaria para pasar de sospecha a causa.
+
+## Entrega mínima
+
+Tu respuesta al [ejercicio aplicado](../../../ejercicios/temario-06/aplicacion/investigar-caida.md) debe incluir una tabla de tasas con denominadores, dos hipótesis rivales, tratamiento justificado de la observación extrema y una actualización responsable al equipo. Consulta la [solución razonada](../../../soluciones/temario-06/investigar-caida.md) solo después de intentarlo.
 
 # Bloque 07 - Visualización y comunicación
 
