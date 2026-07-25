@@ -35,6 +35,12 @@ pedidos_raw = pd.read_csv(
 
 El diagrama responde a «¿qué debo saber antes de transformar una exportación?»:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Archivo CSV](../../../recursos/diagramas-moviles/curso--05-pandas--lecciones--01-dataframes-importacion-y-perfilado-01-cec72fef.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Archivo CSV] --> B[Parámetros de lectura]
@@ -46,6 +52,7 @@ flowchart LR
  E --> G
  F --> G
 ```
+</details>
 
 La importación no es todavía limpieza. Produce una versión `raw` que se conserva para poder explicar de dónde salió cualquier fila descartada.
 

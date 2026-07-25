@@ -24,6 +24,12 @@ Antes de abrir una herramienta completa esta frase: «cada fila de esta tabla re
 
 ¿Qué camino convierte la pregunta en una cifra defendible?
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta: pedidos pagados ayer](../../../recursos/diagramas-moviles/curso--01-fundamentos-datos--lecciones--01-archivo-tabla-y-grano-01-a86dbda5.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     Q[Pregunta: pedidos pagados ayer] --> F[Localizar tabla de pedidos]
@@ -32,6 +38,7 @@ flowchart TD
     R --> M[Medida: contar pedido_id únicos]
     M --> L[Declarar límites: zona horaria, reintentos y retrasos]
 ```
+</details>
 
 La cifra no es solo un `COUNT`: depende de la definición de «ayer», del estado que cuenta como pago y de que `pedido_id` no esté duplicado.
 

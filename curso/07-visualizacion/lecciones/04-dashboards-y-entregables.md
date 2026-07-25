@@ -8,6 +8,12 @@ Diseñarás un dashboard como un producto de seguimiento y elegirás cuándo una
 
 Un **dashboard** es una interfaz para seguimiento recurrente: alguien vuelve a ella para detectar si una condición merece actuar. Un análisis responde una pregunta nueva con método y conclusión. Si Lumen necesita decidir hoy si revierte la versión 4.2, un ticket con evidencia y recomendación puede ser más útil que añadir veinte gráficos permanentes.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Decisión recurrente](../../../recursos/diagramas-moviles/curso--07-visualizacion--lecciones--04-dashboards-y-entregables-01-b997752a.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Decisión recurrente] --> B[Dashboard]
@@ -16,6 +22,7 @@ flowchart LR
  B --> E[Señal y umbral]
  E --> F[Persona responsable actúa]
 ```
+</details>
 
 La diferencia es operacional: un panel sin responsable, umbral o acción es una pantalla, no un sistema de decisión.
 
@@ -29,6 +36,12 @@ La métrica debe tener enlace a su definición, no depender de un nombre ambiguo
 
 La primera pantalla debe poder leerse en móvil. Un titular con fecha de actualización y estado; una línea de conversión frente a referencia; un pequeño funnel con denominadores; un desglose de segmentos que explica el cambio; y una nota de calidad o incidencia. El detalle va en una segunda vista, no en miniaturas ilegibles.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Estado: ¿hay una señal?](../../../recursos/diagramas-moviles/curso--07-visualizacion--lecciones--04-dashboards-y-entregables-02-24dbd2b1.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
  A[Estado: ¿hay una señal?] --> B[Conversión y referencia temporal]
@@ -36,6 +49,7 @@ flowchart TB
  C --> D[Segmentos: localizar población]
  D --> E[Nota: fuente, n, calidad y acción]
 ```
+</details>
 
 La lectura es deliberada: primero detectar, después localizar y finalmente actuar. Si el funnel indica caída solo en inicio→pago para móvil, la siguiente acción es revisar checkout y eventos, no comprar más tráfico.
 

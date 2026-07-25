@@ -20,12 +20,19 @@ def clasificar_importe(importe, limite=100):
 
 `importe` y `limite` son parámetros. `limite=100` es un argumento opcional: la persona que llama puede usar el valor por defecto o indicar otro. `return` entrega un resultado y termina la función; `print` solo lo muestra en pantalla. Por eso una función analítica debe normalmente devolver datos y dejar que otra parte decida cómo presentarlos.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Entrada: importe y límite](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--04-funciones-y-alcance-01-3eaf1c6e.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Entrada: importe y límite] --> B[Función: regla visible]
   B --> C[Salida: alto, normal o inválido]
   C --> D[Prueba o decisión posterior]
 ```
+</details>
 
 ## Pruebas mínimas: normal, límite y dato inválido
 

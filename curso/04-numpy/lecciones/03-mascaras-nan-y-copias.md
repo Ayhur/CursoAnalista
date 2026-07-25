@@ -58,6 +58,12 @@ No dependas de recordar todas las reglas de indexación avanzada. Si vas a alter
 
 ## Flujo de decisión para un dato sospechoso
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Valor de tiempo](../../../recursos/diagramas-moviles/curso--04-numpy--lecciones--03-mascaras-nan-y-copias-01-3d7c73d8.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Valor de tiempo] --> B[¿Es NaN?]
@@ -67,6 +73,7 @@ flowchart TD
   D -->|Sí| E[Incluir en revisión]
   D -->|No| F[Conservar y documentar]
 ```
+</details>
 
 El flujo separa ausencia de rendimiento bajo: sustituir ambos por cero convertiría problemas distintos en el mismo número.
 

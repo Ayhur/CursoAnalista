@@ -10,6 +10,12 @@ Una **API** es una interfaz mediante la que un programa solicita datos o una acc
 
 La respuesta puede venir en páginas: el servicio entrega, por ejemplo, 1.000 registros y un cursor para solicitar el siguiente lote. La extracción debe guardar cursor, fecha y respuesta cruda o hash para reproducibilidad. Ante `429 Too Many Requests`, espera el tiempo indicado o aplica espera exponencial con límite; no reintentes en bucle ni paralelices hasta derribar el límite. Ante errores 5xx, reintenta un número acotado; ante 4xx de validación, corrige la petición.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Petición con parámetros y versión](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--05-apis-geoespacial-y-datos-externos-01-14be1dea.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Petición con parámetros y versión] --> B[Clasificar respuesta]
@@ -18,12 +24,19 @@ flowchart LR
  B -->|429 o 5xx| E[Backoff acotado y registro]
  B -->|4xx no recuperable| F[Parar y revisar contrato]
 ```
+</details>
 
 El diagrama no es una receta para ignorar términos de uso: cada reintento debe tener límite, registro y dueño. Además, nunca guardes secretos de API en el repositorio; usa un almacén de secretos o variables de entorno autorizadas.
 
 ## Coordenadas: número, lugar y sistema de referencia no son sinónimos
 
 Una coordenada `40.4168, -3.7038` es una posición bajo un **sistema de referencia de coordenadas** (CRS). Antes de unirla a barrios o calcular distancia, declara su CRS. EPSG:4326 suele expresar longitud/latitud en grados; los grados no son metros. Calcular distancia euclídea directamente sobre longitud/latitud da una cifra difícil de interpretar y que varía según ubicación. Para medidas métricas locales, transforma a un CRS proyectado apropiado y documenta la decisión.
+
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Coordenada recibida](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--05-apis-geoespacial-y-datos-externos-02-bf484138.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
 
 ```mermaid
 flowchart LR
@@ -32,6 +45,7 @@ flowchart LR
  C --> D[Unir a zona o calcular distancia]
  D --> E[Agregar y minimizar precisión publicada]
 ```
+</details>
 
 No infieras hogar, salud, renta o comportamiento a partir de una posición de entrega. Para un panel de Lumen, publicar reservas por celda muy pequeña puede reidentificar a una persona incluso sin nombre. Agrega a zonas con suficiente población, aplica mínimos de conteo, limita acceso y conserva solo la precisión necesaria para la decisión.
 

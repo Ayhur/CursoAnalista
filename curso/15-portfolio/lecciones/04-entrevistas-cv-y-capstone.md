@@ -18,6 +18,12 @@ La estructura **STAR** (situacion, tarea, accion, resultado) sirve para contar t
 
 Este diagrama responde a "como se conecta una respuesta oral con evidencia?":
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta de entrevista](../../../recursos/diagramas-moviles/curso--15-portfolio--lecciones--04-entrevistas-cv-y-capstone-01-161b6442.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pregunta de entrevista] --> B[Contrato y contexto]
@@ -26,6 +32,7 @@ flowchart LR
  D --> E[Limite explicito]
  E --> F[Siguiente verificacion]
 ```
+</details>
 
 Una buena respuesta enlaza a un archivo, consulta, metrica o decision registrada; no depende de memorizar una frase brillante.
 

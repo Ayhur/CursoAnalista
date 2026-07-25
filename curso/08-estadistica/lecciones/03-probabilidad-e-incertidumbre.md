@@ -14,6 +14,12 @@ Para una métrica de `0/1`, un modelo simple es una **variable Bernoulli**: cada
 
 Imagina que A y B son idénticas y ambas activan al 20 %. Extraemos 500 usuarios para cada una muchas veces. Algunas repeticiones darán 18,4 % frente a 21,0 % solo por azar. La colección de resultados de esas repeticiones se llama **distribución muestral** de la estimación.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Proceso real: p = 20%](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--03-probabilidad-e-incertidumbre-01-c763e277.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Proceso real: p = 20%] --> B[Muestra de 500]
@@ -24,6 +30,7 @@ flowchart LR
  E --> F
  F --> G[Error estándar]
 ```
+</details>
 
 El diagrama muestra que el error estándar no es el error de un usuario ni un fallo del analista: resume cuánto suele variar el estimador si repitiéramos el muestreo bajo los supuestos del modelo.
 

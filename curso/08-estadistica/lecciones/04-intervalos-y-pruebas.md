@@ -18,6 +18,12 @@ Una **hipótesis nula** es un punto de referencia, normalmente `H0: pB − pA = 
 
 Elegir `α = 0,05` antes de mirar datos fija una tasa de falsos positivos a largo plazo para una familia de decisiones bien especificada. Rechazar H0 con `p < α` es una regla operativa, no una prueba de certeza.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Estimación: B - A](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--04-intervalos-y-pruebas-01-71a6749f.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Estimación: B - A] --> B[Intervalo de confianza]
@@ -27,6 +33,7 @@ flowchart LR
  D --> F[Decisión con guardrails y coste]
  E --> F
 ```
+</details>
 
 El diagrama responde por qué intervalo y prueba no compiten: la prueba compara una referencia; el intervalo muestra magnitudes plausibles. La decisión necesita ambas y el contexto de negocio.
 

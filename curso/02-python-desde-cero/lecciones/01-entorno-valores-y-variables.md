@@ -23,12 +23,19 @@ print(importe_con_iva)
 
 Una **variable** es un nombre que referencia un valor; `=` es una asignación, no una igualdad matemática. La constante en mayúsculas comunica una convención humana: no debería cambiar durante el cálculo. Python no impide modificarla, por lo que la revisión sigue siendo necesaria.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Valor de entrada: 42.50](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--01-entorno-valores-y-variables-01-619142d3.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Valor de entrada: 42.50] --> B[Expresión: importe * 1.21]
   B --> C[Valor calculado: 51.425]
   C --> D[Nombre con significado]
 ```
+</details>
 
 El diagrama recuerda que un nombre no convierte un dato en correcto: solo hace visible qué creemos que representa.
 

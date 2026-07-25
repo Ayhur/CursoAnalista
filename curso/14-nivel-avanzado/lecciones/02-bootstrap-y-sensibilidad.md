@@ -8,6 +8,12 @@ Podrás construir e interpretar una distribución bootstrap para una diferencia 
 
 Lumen observa una diferencia B-A de -0,6 puntos porcentuales. Una muestra alternativa de visitas habría dado una cifra algo distinta. El **bootstrap** aproxima esa variación: toma muchas muestras del mismo tamaño, con reemplazo, de los datos observados; recalcula la estadística en cada una; y usa la distribución resultante para describir estabilidad.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Visitas observadas A y B](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--02-bootstrap-y-sensibilidad-01-a7367495.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Visitas observadas A y B] --> B[Remuestrear con reemplazo]
@@ -16,6 +22,7 @@ flowchart LR
  D --> E[Distribución e intervalo percentil]
  E --> F[Decisión junto a coste y supuestos]
 ```
+</details>
 
 “Con reemplazo” significa que una visita puede aparecer dos veces en una réplica y otra ninguna. No inventa usuarios nuevos ni corrige el sesgo de selección. Si los eventos de una persona están repetidos, la unidad de remuestreo debe ser la persona o el clúster, no cada evento; de lo contrario se finge más información de la que existe.
 

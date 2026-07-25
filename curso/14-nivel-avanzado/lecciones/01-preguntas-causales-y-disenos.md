@@ -16,6 +16,12 @@ Una campaña de pago empezó el mismo día y trae visitas menos propensas a rese
 
 La pregunta es: ¿por qué una comparación bruta puede engañar? El siguiente grafo dirigido acíclico (DAG) no prueba causalidad; obliga a declarar qué caminos se deben bloquear.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Campaña y canal](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--01-preguntas-causales-y-disenos-01-38f7f580.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  C[Campaña y canal] --> F[Formulario mostrado]
@@ -24,6 +30,7 @@ flowchart LR
  D --> R
  F --> R
 ```
+</details>
 
 El camino `Formulario <- Campaña -> Reserva` no representa el efecto del formulario: mezcla audiencia con experiencia. Medir canal y dispositivo puede permitir ajustar; no medir una causa relevante impide prometer que el ajuste “ha eliminado el sesgo”. No controles una variable que ocurre **después** del tratamiento, como “tiempo dentro del nuevo formulario”: podría ser un mediador y cambiar la pregunta.
 

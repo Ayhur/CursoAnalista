@@ -10,6 +10,12 @@ Define hipótesis, población, métrica primaria, guardrails, duración y criter
 
 La estadística ayuda a medir incertidumbre; no decide por sí sola. Una diferencia puede ser compatible con ruido, demasiado pequeña para justificar coste o perjudicial en un segmento. Comunica magnitud absoluta, relativa, intervalo, tamaño de muestra, duración y límites.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Hipótesis](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--08-experimentacion-y-goodhart-01-88650bc7.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Hipótesis] --> B[Métrica primaria y guardrails]
@@ -20,6 +26,7 @@ flowchart TD
     F -->|Sí| G[Desplegar y monitorizar]
     F -->|No| H[Aprender o iterar]
 ```
+</details>
 
 ## Goodhart en la práctica
 

@@ -25,6 +25,12 @@ fig.savefig("salidas/conversion_diaria.png", dpi=160, bbox_inches="tight")
 
 El laboratorio usa 28 días de sesiones agregadas por canal. Primero calcula `conversion_pct = 100 * pago / visitas`, comprobando que `visitas` no es cero. La evolución diaria pregunta si hay cambio y cuándo; un histograma pregunta cómo se reparte la conversión de los segmentos; barras ordenadas comparan canales; el funnel pregunta dónde se pierde el volumen.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Tabla diaria por canal](../../../recursos/diagramas-moviles/curso--07-visualizacion--lecciones--03-exploracion-y-narrativa-01-956ca8a6.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Tabla diaria por canal] --> B[Validar visitas y pagos]
@@ -38,6 +44,7 @@ flowchart LR
  F --> H
  G --> H
 ```
+</details>
 
 La misma tabla admite varias vistas, pero cada vista responde una pregunta diferente. No conviertas las cuatro en una única imagen ilegible.
 

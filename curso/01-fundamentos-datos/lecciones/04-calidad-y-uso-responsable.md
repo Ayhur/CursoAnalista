@@ -24,6 +24,12 @@ El contrato de datos de la lección 02 declara esquema, grano, reglas, propietar
 
 ¿Cómo se gobierna una incidencia sin esconderla bajo una limpieza automática?
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Ingreso de archivo o API](../../../recursos/diagramas-moviles/curso--01-fundamentos-datos--lecciones--04-calidad-y-uso-responsable-01-3c3f7911.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Ingreso de archivo o API] --> B[Validar esquema, grano y reglas]
@@ -36,6 +42,7 @@ flowchart TD
     G --> I[Revalidar y dejar historial]
     H --> I
 ```
+</details>
 
 El flujo enseña que «limpiar» no equivale a borrar. Primero se preserva evidencia; después se decide una corrección reproducible.
 

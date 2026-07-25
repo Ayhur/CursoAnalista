@@ -8,6 +8,12 @@ Distinguirás la base que sostiene una operación de la capa que permite analiza
 
 **OLTP** (procesamiento transaccional en línea) prioriza registrar una operación correcta y rápida: crear pedido, cobrar o mostrar perfil. Sus tablas o ítems suelen estar optimizados para accesos de la aplicación. **OLAP** (procesamiento analítico en línea) prioriza leer muchas observaciones, combinar historia y resumir para responder preguntas. Un análisis de margen trimestral por cohortes no debe competir con la pantalla de pago.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: App Lumen: OLTP](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--07-arquitectura-y-consultas-asistidas-01-c8f3f6f9.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[App Lumen: OLTP] --> B[Extracción o CDC con controles]
@@ -16,6 +22,7 @@ flowchart LR
  D --> E[SQL, Python y BI]
  E -.definiciones y alertas.-> A
 ```
+</details>
 
 El diagrama no afirma que toda empresa tenga las mismas herramientas. Expresa una separación de responsabilidades: la copia analítica recibe datos, los transforma de forma documentada y sirve decisiones sin alterar el registro operacional.
 
@@ -29,6 +36,12 @@ Ejemplo: `fact_pedidos` puede tener una fila por pedido pagado, con `dim_fecha` 
 
 Una herramienta puede transformar «ingresos de julio por país» en SQL o MongoDB. Acelera sintaxis, pero no decide qué significa ingreso ni conoce los permisos. Revisa siempre este flujo:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta humana](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--07-arquitectura-y-consultas-asistidas-02-7d1d36ff.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pregunta humana] --> B[Contrato: población, grano, periodo]
@@ -37,6 +50,7 @@ flowchart LR
  D --> E[Controles: conteos y muestras]
  E --> F[Resultado y limitaciones]
 ```
+</details>
 
 Un checklist mínimo:
 

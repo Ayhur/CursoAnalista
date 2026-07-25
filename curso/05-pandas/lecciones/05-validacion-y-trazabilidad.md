@@ -34,6 +34,12 @@ Un `assert` es adecuado para un pipeline educativo o una comprobación interna. 
 
 El **linaje** registra origen, transformaciones y salida. El diagrama responde esa pregunta para ingresos por canal:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: CSV pedidos v1](../../../recursos/diagramas-moviles/curso--05-pandas--lecciones--05-validacion-y-trazabilidad-01-41616dd8.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[CSV pedidos v1] --> B[Carga raw]
@@ -43,6 +49,7 @@ flowchart LR
  E --> F[Merge clientes]
  F --> G[Resumen por canal]
 ```
+</details>
 
 Junto a cada ejecución conserva: fecha/hora de extracción, ruta o identificador de versión, conteo de entrada, rechazos por motivo, filas de salida y total reconciliado. No guardes datos personales innecesarios en el registro; IDs y muestras deben tratarse según la política de privacidad.
 

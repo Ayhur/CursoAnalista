@@ -10,6 +10,12 @@ Nexo estima minutos de trabajo de reparto como `M(p) = 24 × p`, donde `p` son p
 
 La entrada `p` tiene unidad pedidos; el coeficiente `24` tiene unidad minutos/pedido; la salida tiene minutos. Este chequeo dimensional detecta fórmulas absurdas.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedidos previstos p](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--04-funciones-y-modelos-01-1da8a926.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Pedidos previstos p] --> B[Modelo M(p)=24×p]
@@ -19,6 +25,7 @@ flowchart LR
   E -->|No| F[Reforzar turno o limitar demanda]
   E -->|Sí| G[Monitorizar servicio]
 ```
+</details>
 
 El modelo convierte una previsión en una decisión, no en una verdad. Sus supuestos deben quedar visibles.
 

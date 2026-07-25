@@ -10,6 +10,12 @@ Una empresa tecnológica produce muchas huellas: eventos de aplicación, pedidos
 
 Un **dato** es un valor registrado: `usuario_id=42`, `evento="checkout_completed"`, `importe=39.90`. Una **medida** es una operación elemental sobre datos, como contar eventos o sumar importes. Una **métrica** añade una definición reutilizable y un propósito: por ejemplo, “usuarios activos semanales”, calculados como usuarios únicos que realizan una acción de valor entre lunes y domingo. Un **indicador** interpreta una métrica respecto a un contexto: “la activación está 2 puntos por debajo del objetivo”. Un **KPI** es el indicador elegido para gobernar una prioridad importante y al que se asigna responsabilidad y seguimiento.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Datos crudos: eventos, pedidos, tickets](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--01-lenguaje-de-medicion-01-a522f5fd.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Datos crudos: eventos, pedidos, tickets] --> B[Medida: conteo o suma]
@@ -18,6 +24,7 @@ flowchart TD
     D --> E[KPI: señal prioritaria para decidir]
     E --> F[Acción, aprendizaje y revisión]
 ```
+</details>
 
 La flecha no significa que toda medida acabe siendo un KPI. La mayoría no debería serlo. Si una organización convierte cada número visible en un KPI, nadie sabe qué priorizar y se optimizan cifras irrelevantes.
 

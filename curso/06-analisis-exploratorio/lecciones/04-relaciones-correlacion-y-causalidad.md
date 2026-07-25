@@ -13,6 +13,12 @@ Separarás lo que los datos observacionales muestran de lo que sería necesario 
 
 La *correlación* mide una forma de asociación lineal; no es una flecha de causa. Una campaña puede aumentar a la vez visitas y compras. La correlación entre ambas no demuestra que una visita concreta haya causado una compra ni que aumentar tráfico de baja calidad funcione.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Campana](../../../recursos/diagramas-moviles/curso--06-analisis-exploratorio--lecciones--04-relaciones-correlacion-y-causalidad-01-7b436039.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
  A[Campana] --> B[Visitas]
@@ -22,6 +28,7 @@ flowchart TB
  D[Cambio de tracking] --> B
  D --> C
 ```
+</details>
 
 El diagrama formula explicaciones rivales: campaña y tracking pueden producir un patrón parecido. El EDA permite encontrarlas; un experimento, un análisis causal o una investigación técnica decide entre ellas.
 

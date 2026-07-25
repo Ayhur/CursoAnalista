@@ -16,6 +16,12 @@ Una variable aparentemente inocua puede ser un **proxy**: por ejemplo, horario d
 
 Evalúa al menos por segmentos operativos relevantes: plan, antigüedad, región si es legítima y tamaño de cuenta. Busca diferencias de cobertura (recall), avisos incorrectos (precision) y calidad de datos. Una diferencia no prueba discriminación por sí sola: puede deberse a tamaños pequeños o definición distinta, pero exige investigación y registro.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Modelo y datos versionados](../../../recursos/diagramas-moviles/curso--12-modelos-predictivos--lecciones--05-interpretacion-sesgo-y-uso-responsable-01-979f0db6.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Modelo y datos versionados] --> B[Score semanal]
@@ -26,6 +32,7 @@ flowchart TD
   F --> G[Continuar y registrar]
   F --> H[Investigar, recalibrar o pausar]
 ```
+</details>
 
 El circuito se repite cada semana; se dibuja sin una flecha de vuelta para que el PDF no convierta el ciclo en una secuencia ilegible. Evita el error de «entrenar y olvidar»: las predicciones cambian la atención recibida, y esa atención también puede cambiar los datos con los que evaluamos.
 

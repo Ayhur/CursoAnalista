@@ -20,6 +20,12 @@ Un experimento empieza por la decisión, no por un gráfico. Nexo quiere saber s
 
 La variante es un tratamiento; la activación es el resultado. Para estimar un efecto causal, B debe llegar por asignación aleatoria y la medición ha de ser igual para ambos grupos. “Tener B en el código” no demuestra que el usuario la haya visto: registra una **exposición** cuando la pantalla se renderiza correctamente.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Usuario elegible](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--05-experimentos-ab-01-0b3ad36d.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Usuario elegible] --> B[Asignación estable]
@@ -31,6 +37,7 @@ flowchart LR
  F --> G[Análisis predefinido]
  G --> H[Decisión documentada]
 ```
+</details>
 
 El flujo responde “¿qué datos hacen falta para confiar en la comparación?”. La auditoría va antes del análisis: no se usa la estadística para maquillar una experiencia que no se mostró o se midió de forma desigual.
 

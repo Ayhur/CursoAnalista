@@ -36,6 +36,12 @@ Un contrato transforma una intuición en trabajo verificable. Para Lumen:
 
 La siguiente figura responde a «¿cómo una pregunta termina en una acción controlada?».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta operativa](../../../recursos/diagramas-moviles/curso--12-modelos-predictivos--lecciones--01-caso-de-uso-y-objetivo-01-6eb2eed8.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Pregunta operativa] --> B[Contrato: población, corte y target]
@@ -48,6 +54,7 @@ flowchart LR
   G --> I[Resultado y monitorización]
   H --> I
 ```
+</details>
 
 La flecha hacia revisión humana es deliberada: una puntuación ordena casos, pero la política de atención decide qué se hace con ella.
 

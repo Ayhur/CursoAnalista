@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="864" viewBox="0 0 960 864" role="img">
+<title>Diagrama del curso</title><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#667085"/></marker></defs>
+<rect width="100%" height="100%" rx="12" fill="#ffffff"/>
+<path d="M 480.0 112.0 L 480.0 166.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M 480.0 244.0 L 480.0 298.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M 480.0 376.0 L 480.0 430.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M 480.0 508.0 L 480.0 562.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M 480.0 640.0 L 480.0 694.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<rect x="355.0" y="34.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="73.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Pregunta de entrevista</text>
+<rect x="355.0" y="166.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="205.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Contrato y contexto</text>
+<rect x="355.0" y="298.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="337.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Evidencia reproducible</text>
+<rect x="355.0" y="430.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="469.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Respuesta STAR</text>
+<rect x="355.0" y="562.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="601.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Limite explicito</text>
+<rect x="355.0" y="694.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="733.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Siguiente verificacion</text>
+</svg>

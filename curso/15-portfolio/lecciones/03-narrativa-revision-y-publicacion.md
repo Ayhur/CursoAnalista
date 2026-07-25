@@ -18,6 +18,12 @@ Para *Nimbo*, una presentacion de cinco diapositivas puede ser:
 
 El flujo responde a "que debe sobrevivir a una revision?":
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Hallazgo](../../../recursos/diagramas-moviles/curso--15-portfolio--lecciones--03-narrativa-revision-y-publicacion-01-8ed8ff5a.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Hallazgo] --> B[Fuente y calculo]
@@ -27,6 +33,7 @@ flowchart LR
  E --> F[Publicacion o correccion]
  E --> B
 ```
+</details>
 
 Volver de revision a fuente y calculo es normal: la revision busca descubrir errores, no aprobar una historia ya decidida.
 

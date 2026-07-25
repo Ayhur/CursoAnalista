@@ -58,13 +58,13 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 
 ## Diagramas
 
-Los flujos de la teoría se escriben con Mermaid. GitHub los muestra como diagramas interactivos dentro de cada bloque y el generador de PDFs los transforma en flujos visuales simplificados. Sirven para representar procesos, arquitectura de datos, decisiones y árboles de métricas, como los que se usan en documentación de equipos.
+Los flujos de la teoría se escriben con Mermaid. Cada uno incluye además un SVG estático visible desde la app móvil de GitHub; en web se puede desplegar el código Mermaid editable. El generador de PDFs también los transforma en flujos visuales. Sirven para representar procesos, arquitectura de datos, decisiones y árboles de métricas, como los que se usan en documentación de equipos.
 
 [Ver la guía de diagramas para empresa](recursos/diagramas-para-empresa.md).
 
 ## Estudiar desde móvil
 
-La teoría, los ejercicios de razonamiento y las autoevaluaciones se pueden consultar desde el móvil. Para programar, abre los notebooks en Colab; los proyectos largos son más cómodos desde ordenador.
+La teoría, los ejercicios de razonamiento y las autoevaluaciones se pueden consultar desde el móvil. Para descargar un PDF en la app de GitHub, abre este `README`, entra en **Descargas PDF** y toca el enlace del bloque o del temario completo; después usa el menú de descarga o compartir del visor. Para programar, abre los notebooks en Colab; los proyectos largos son más cómodos desde ordenador.
 
 [Abrir la primera práctica en Google Colab](https://colab.research.google.com/github/Ayhur/CursoAnalista/blob/main/notebooks/practicas/02-gastos-personales.ipynb)
 

@@ -8,6 +8,12 @@ Enriquecerás pedidos con el segmento de cliente sin multiplicar ingresos por ac
 
 `pedidos` contiene muchos pedidos por `cliente_id`; `clientes` debe contener una sola ficha vigente por cliente. Por tanto, la relación esperada es **muchos a uno**: muchos pedidos encuentran un cliente. Una unión combina columnas mediante una clave; no es una prueba de que la clave represente a la misma persona en ambos sistemas.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedidos: muchos por cliente](../../../recursos/diagramas-moviles/curso--05-pandas--lecciones--04-uniones-y-cardinalidad-01-b6551a85.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pedidos: muchos por cliente] --> C[cliente_id]
@@ -16,6 +22,7 @@ flowchart LR
  D --> E[Pedidos enriquecidos]
  D --> F[Auditar sin coincidencia]
 ```
+</details>
 
 `how="left"` conserva todas las filas del lado izquierdo, importante cuando un pedido no encuentra cliente: ocultarlo convertiría un problema de cobertura en una aparente mejora de calidad.
 

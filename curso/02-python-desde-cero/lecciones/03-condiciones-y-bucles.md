@@ -22,6 +22,12 @@ else:
 
 `if` evalúa una condición, `elif` ofrece una alternativa y `else` cubre el resto. La sangría define qué instrucciones pertenecen a cada rama. Los operadores `and`, `or` y `not` combinan condiciones: `and` exige ambas verdaderas; `or` basta con una; `not` invierte. Usa paréntesis cuando mezcles condiciones para que la prioridad sea legible.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedido](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--03-condiciones-y-bucles-01-550d32db.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Pedido] --> B{¿Está confirmado?}
@@ -30,6 +36,7 @@ flowchart TD
   D -->|sí| E[Revisar]
   D -->|no| F[Operación normal]
 ```
+</details>
 
 El orden de las preguntas importa: comparar un importe ausente antes de validar el estado o el tipo puede provocar un error o una decisión falsa.
 

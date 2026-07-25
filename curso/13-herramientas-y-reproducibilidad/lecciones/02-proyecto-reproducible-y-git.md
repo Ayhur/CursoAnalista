@@ -29,6 +29,12 @@ activacion-nebula/
 
 ## Trazabilidad como cadena de custodia analítica
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Extracción: fecha, consulta, fuente](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--02-proyecto-reproducible-y-git-01-81a278fc.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Extracción: fecha, consulta, fuente] --> B[Script y parámetros]
@@ -38,6 +44,7 @@ flowchart LR
  F[Commit y revisión] --> B
  F --> E
 ```
+</details>
 
 Para reproducir una conclusión hay que poder recorrer las flechas hacia atrás. Un número en una diapositiva sin consulta, corte ni definición no es auditable aunque sea cierto.
 

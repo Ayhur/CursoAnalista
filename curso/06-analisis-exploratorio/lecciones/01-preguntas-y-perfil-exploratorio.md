@@ -10,6 +10,12 @@ Convertirás una alerta de negocio en una pregunta que los datos puedan responde
 
 En Nébula, una fila representa el agregado de un `día`, `plataforma` y `canal`. La métrica de esa fila es `compras / visitas`. La pregunta inicial es: **¿la caída de conversión entre el 5 y el 11 de mayo está concentrada en algún segmento y el archivo permite investigarla?** No pregunta todavía por una causa.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Alerta: conversion baja](../../../recursos/diagramas-moviles/curso--06-analisis-exploratorio--lecciones--01-preguntas-y-perfil-exploratorio-01-9c0bfac6.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Alerta: conversion baja] --> B[Definir metrica, periodo y grano]
@@ -18,6 +24,7 @@ flowchart LR
  D --> E[Hallazgo descriptivo]
  E --> F[Comprobar explicaciones rivales]
 ```
+</details>
 
 El diagrama responde al orden de trabajo: primero definimos qué mide cada fila; después miramos patrones. Un gráfico bonito hecho antes del perfil puede estar describiendo una fuente defectuosa.
 

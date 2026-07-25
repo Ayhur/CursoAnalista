@@ -8,6 +8,12 @@ Un **vector** es una lista ordenada de números del mismo tipo conceptual; una *
 
 Para tres zonas, los pedidos son `p = [120, 80, 100]` y los minutos medios por pedido son `t = [22, 30, 26]`. Multiplicar componente a componente produce minutos por zona: `[2640, 2400, 2600]`; sumarlos da 7.640 minutos. El orden importa: la primera posición de ambos vectores debe representar la misma zona. Si una fuente ordena zonas distinto, el resultado parece matemático pero es falso.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Vector de pedidos por zona](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--05-vectores-matrices-y-numpy-01-86a5f5e9.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Vector de pedidos por zona] --> C[Multiplicación elemento a elemento]
@@ -15,6 +21,7 @@ flowchart LR
   C --> D[Minutos requeridos por zona]
   D --> E[Suma: capacidad total]
 ```
+</details>
 
 El diagrama muestra una condición oculta: las posiciones deben estar alineadas por una clave de zona, no solo por su posición.
 

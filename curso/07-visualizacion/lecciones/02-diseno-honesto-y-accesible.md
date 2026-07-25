@@ -20,6 +20,12 @@ El denominador es parte del mensaje. “800 pagos” y “8% de conversión” n
 
 El color debe codificar algo consistente: por ejemplo, azul para escritorio y naranja para móvil en todas las figuras de Lumen. No codifiques éxito/fracaso solo con verde/rojo ni uses arcoíris para datos ordenados: añade etiquetas, línea continua/discontinua o marcadores. Comprueba contraste sobre fondo claro y en escala de grises. Para una audiencia móvil, reduce series, aumenta tamaño de texto, evita leyendas lejanas y prioriza un mensaje por panel.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Dato y pregunta](../../../recursos/diagramas-moviles/curso--07-visualizacion--lecciones--02-diseno-honesto-y-accesible-01-f4502444.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Dato y pregunta] --> B[Escala y denominador correctos]
@@ -28,6 +34,7 @@ flowchart LR
  D --> E[Nota de fuente, n y límite]
  E --> F[Gráfico interpretable]
 ```
+</details>
 
 Cada paso protege una inferencia distinta: una paleta agradable no compensa un denominador equivocado, y una cifra exacta no compensa que el lector no pueda verla.
 
