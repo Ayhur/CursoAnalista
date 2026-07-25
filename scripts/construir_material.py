@@ -13,12 +13,53 @@ from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
-from reportlab.platypus import PageBreak, Paragraph, Preformatted, SimpleDocTemplate, Spacer
+from reportlab.platypus import Flowable, Paragraph, Preformatted, SimpleDocTemplate, Spacer
 
 ROOT = Path(__file__).resolve().parents[1]
 COURSE_DIR = ROOT / "curso"
 DIST_MD = ROOT / "dist" / "markdown"
 DIST_PDF = ROOT / "dist" / "pdf"
+
+
+class MermaidFlow(Flowable):
+    """Dibuja en el PDF los flujos Mermaid sencillos usados por el curso."""
+
+    node_pattern = re.compile(r"[A-Za-z0-9_]+\[([^]]+)\]")
+
+    def __init__(self, source: str):
+        super().__init__()
+        self.nodes: list[str] = []
+        for label in self.node_pattern.findall(source):
+            if label not in self.nodes:
+                self.nodes.append(label)
+        if not self.nodes:
+            self.nodes = ["Diagrama no compatible"]
+        self.height = max(2.4 * cm, len(self.nodes) * 1.25 * cm)
+
+    def wrap(self, available_width, available_height):
+        self.width = available_width
+        return available_width, self.height
+
+    def draw(self):
+        canvas = self.canv
+        box_width = min(self.width * 0.76, 12 * cm)
+        box_height = 0.72 * cm
+        x = (self.width - box_width) / 2
+        y = self.height - box_height
+        for index, label in enumerate(self.nodes):
+            canvas.setFillColor(HexColor("#EAF2F8"))
+            canvas.setStrokeColor(HexColor("#1D5D84"))
+            canvas.roundRect(x, y, box_width, box_height, 4, fill=1, stroke=1)
+            canvas.setFillColor(HexColor("#12355B"))
+            canvas.setFont("Helvetica", 8.5)
+            canvas.drawCentredString(self.width / 2, y + 0.25 * cm, label[:72])
+            if index < len(self.nodes) - 1:
+                center_x = self.width / 2
+                canvas.setStrokeColor(HexColor("#667085"))
+                canvas.line(center_x, y, center_x, y - 0.35 * cm)
+                canvas.line(center_x, y - 0.35 * cm, center_x - 3, y - 0.25 * cm)
+                canvas.line(center_x, y - 0.35 * cm, center_x + 3, y - 0.25 * cm)
+            y -= 1.25 * cm
 
 
 def chapter_paths() -> list[Path]:
@@ -63,6 +104,7 @@ def inline_markdown(value: str) -> str:
 def markdown_to_story(text: str, styles_map: dict[str, ParagraphStyle]) -> list:
     story: list = []
     in_code = False
+    code_language = ""
     code_lines: list[str] = []
     list_buffer: list[str] = []
 
@@ -77,8 +119,15 @@ def markdown_to_story(text: str, styles_map: dict[str, ParagraphStyle]) -> list:
         if line.startswith("```"):
             flush_list()
             if in_code:
-                story.append(Preformatted("\n".join(code_lines), styles_map["code"]))
+                if code_language == "mermaid":
+                    story.append(MermaidFlow("\n".join(code_lines)))
+                    story.append(Spacer(1, 8))
+                else:
+                    story.append(Preformatted("\n".join(code_lines), styles_map["code"]))
                 code_lines = []
+                code_language = ""
+            else:
+                code_language = line[3:].strip().lower()
             in_code = not in_code
             continue
         if in_code:

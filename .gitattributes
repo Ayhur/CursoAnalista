@@ -1,0 +1,2 @@
+# Los PDFs derivados no son texto y no deben pasar validaciones de espacios.
+*.pdf binary

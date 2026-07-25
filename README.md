@@ -18,6 +18,19 @@ Los mismos contenidos se mantienen en Markdown y en PDF. Puedes descargar:
 - [Bloque 00 - Orientación](dist/pdf/00-orientacion.pdf)
 - [Bloque 01 - Fundamentos de datos](dist/pdf/01-fundamentos-datos.pdf)
 - [Bloque 02 - Python desde cero](dist/pdf/02-python-desde-cero.pdf)
+- [Bloque 03 - Matemáticas aplicadas](dist/pdf/03-matematicas-aplicadas.pdf)
+- [Bloque 04 - NumPy](dist/pdf/04-numpy.pdf)
+- [Bloque 05 - Pandas](dist/pdf/05-pandas.pdf)
+- [Bloque 06 - Análisis exploratorio](dist/pdf/06-analisis-exploratorio.pdf)
+- [Bloque 07 - Visualización](dist/pdf/07-visualizacion.pdf)
+- [Bloque 08 - Estadística](dist/pdf/08-estadistica.pdf)
+- [Bloque 09 - SQL y NoSQL](dist/pdf/09-sql-nosql.pdf)
+- [Bloque 10 - Métricas y producto](dist/pdf/10-metricas-y-producto.pdf)
+- [Bloque 11 - Series temporales](dist/pdf/11-series-temporales.pdf)
+- [Bloque 12 - Modelos predictivos](dist/pdf/12-modelos-predictivos.pdf)
+- [Bloque 13 - Herramientas y reproducibilidad](dist/pdf/13-herramientas-y-reproducibilidad.pdf)
+- [Bloque 14 - Nivel avanzado](dist/pdf/14-nivel-avanzado.pdf)
+- [Bloque 15 - Portfolio](dist/pdf/15-portfolio.pdf)
 
 Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el script del repositorio y en GitHub Actions.
 
@@ -28,10 +41,14 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 | 00 | Orientación y pensamiento analítico | Disponible |
 | 01 | Fundamentos de datos | Disponible |
 | 02 | Python desde cero | Disponible |
-| 03 | Matemáticas aplicadas (teoría general opcional) | Próximamente |
-| 04-07 | NumPy, Pandas, EDA y visualización | Próximamente |
-| 08-10 | Estadística, SQL/NoSQL, métricas y producto | Próximamente |
-| 11-15 | Series temporales, ML, herramientas, avanzado y portfolio | Próximamente |
+| 03 | Matemáticas aplicadas (teoría general opcional) | Disponible |
+| 04-07 | NumPy, Pandas, EDA y visualización | Disponible |
+| 08-10 | Estadística, SQL/NoSQL, métricas y producto | Disponible |
+| 11 | Series temporales | Disponible |
+| 12 | Modelos predictivos para analistas | Disponible |
+| 13 | Herramientas y reproducibilidad | Disponible |
+| 14 | Nivel avanzado: causalidad y escala | Disponible |
+| 15 | Portfolio y preparación profesional | Disponible |
 
 ## Cómo se organiza el material
 
@@ -43,6 +60,12 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 - `notebooks/`: prácticas para abrir en Google Colab.
 - `dist/markdown/` y `dist/pdf/`: versiones consolidadas y descargables generadas.
 
+## Diagramas
+
+Los flujos de la teoría se escriben con Mermaid. GitHub los muestra como diagramas interactivos dentro de cada bloque y el generador de PDFs los transforma en flujos visuales simplificados. Sirven para representar procesos, arquitectura de datos, decisiones y árboles de métricas, como los que se usan en documentación de equipos.
+
+[Ver la guía de diagramas para empresa](recursos/diagramas-para-empresa.md).
+
 ## Estudiar desde móvil
 
 La teoría, los ejercicios de razonamiento y las autoevaluaciones se pueden consultar desde el móvil. Para programar, abre los notebooks en Colab; los proyectos largos son más cómodos desde ordenador.
@@ -52,6 +75,10 @@ La teoría, los ejercicios de razonamiento y las autoevaluaciones se pueden cons
 ## Herramientas que aprenderás a entender
 
 Python, Pandas, SQL, MongoDB, DynamoDB, GitHub, Jira, Amplitude y herramientas BI. El objetivo no es memorizar una interfaz: primero se aprende el concepto de análisis y después cómo aplicarlo en cada herramienta.
+
+## Curso completo
+
+Los 16 bloques del itinerario ya están disponibles. La forma recomendada de cerrar el recorrido es completar el [capstone](proyectos/capstone/README.md) y revisarlo con su [rúbrica](evaluaciones/rubricas/capstone.md).
 
 ## Licencia
 
