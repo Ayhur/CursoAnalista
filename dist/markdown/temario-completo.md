@@ -1350,33 +1350,157 @@ Estadística no concede permiso automático para afirmar o lanzar. Ayuda a calib
 
 # Bloque 09 - SQL, NoSQL y almacenamiento
 
-## Objetivo
+## Propósito
 
-Entender cómo viven los datos en una empresa, consultar tablas con SQL y saber cuándo un modelo documental o clave-valor requiere una forma distinta de pensar.
+Entender cómo viven los datos en una empresa, consultar tablas con SQL y saber cuándo un modelo documental o clave-valor exige otro diseño.
 
-## SQL para preguntas de negocio
+## Lecciones
 
-SQL permite seleccionar, filtrar, agrupar, unir y ordenar datos. Para cada consulta define el grano: ¿una fila representa un pedido, un usuario, una sesión o un evento? El grano evita duplicar o perder información al usar `JOIN`.
-
-```mermaid
-flowchart LR
-    A[Fuente operacional] --> B[Extracción]
-    B --> C[Warehouse o lakehouse]
-    C --> D[SQL y modelos]
-    D --> E[Dashboard, Python o informe]
-```
-
-## NoSQL sin mitos
-
-MongoDB almacena documentos flexibles y permite filtros y pipelines de agregación. DynamoDB organiza datos alrededor de claves y patrones de acceso con rendimiento predecible. Son excelentes para algunas aplicaciones operacionales; no reemplazan automáticamente un warehouse orientado a análisis histórico y uniones complejas.
-
-## AI para consultas
-
-MongoDB Atlas puede generar filtros y agregaciones a partir de lenguaje natural. Úsalo como borrador, no como autoridad: revisa semántica, filtros, coste, índices, datos sensibles y resultado. Una consulta que "parece" correcta puede contestar otra pregunta.
+1. [Modelo relacional, tablas y grano](lecciones/01-modelo-relacional-y-grano.md)
+2. [Seleccionar, filtrar y resumir con SQL](lecciones/02-sql-seleccion-filtro-y-agregacion.md)
+3. [JOIN y validación de cardinalidad](lecciones/03-joins-y-cardinalidad.md)
+4. [CTE, ventanas, fechas y nulos](lecciones/04-sql-analitico-y-mantenible.md)
+5. [MongoDB y documentos](lecciones/05-mongodb-y-documentos.md)
+6. [DynamoDB y patrones de acceso](lecciones/06-dynamodb-y-patrones-de-acceso.md)
+7. [Warehouse, lakehouse y consultas asistidas](lecciones/07-arquitectura-y-consultas-asistidas.md)
 
 ## Práctica
 
 Resuelve [la consulta de conversión](../../ejercicios/temario-09/aplicacion/consulta-conversion.md) y compara con [la solución](../../soluciones/temario-09/consulta-conversion.md).
+
+# Modelo relacional, tablas y grano
+
+## Objetivos y prerrequisitos
+
+Comprenderás una base de datos relacional como un conjunto de tablas conectadas, antes de escribir una consulta.
+
+Una base de datos guarda información para que programas y personas puedan consultarla de forma consistente. En el modelo **relacional**, una tabla representa una entidad o hecho: `clientes`, `pedidos` o `eventos`. Una fila es una observación y una clave identifica o conecta filas.
+
+La pregunta principal antes de SQL es el **grano**: ¿una fila de `pedidos` representa un pedido completo o una línea de producto? Sumar importes después de unir tablas sin responderla puede duplicar ingresos.
+
+```mermaid
+flowchart LR
+ A[CLIENTES: un cliente] -->|cliente_id| B[PEDIDOS: un pedido]
+ B -->|pedido_id| C[LINEAS: un producto pedido]
+```
+
+El diagrama muestra relaciones uno a muchos: un cliente puede tener pedidos y un pedido varias líneas. La clave no es una decoración: define qué combinaciones son válidas.
+
+## Resumen
+
+SQL opera sobre tablas, pero el análisis depende de grano y claves. Sigue con [selección, filtro y agregación](02-sql-seleccion-filtro-y-agregacion.md).
+
+# Seleccionar, filtrar y resumir con SQL
+
+## Objetivos y prerrequisitos
+
+Escribirás una consulta legible que responda una pregunta concreta y comprobarás qué filas excluye.
+
+SQL es un lenguaje declarativo: describes qué resultado quieres, no los pasos internos exactos. Para contar pedidos pagados por canal:
+
+```sql
+SELECT canal, COUNT(*) AS pedidos
+FROM pedidos
+WHERE estado = 'pagado'
+GROUP BY canal
+ORDER BY pedidos DESC;
+```
+
+`WHERE` filtra filas antes de agrupar; `GROUP BY` define el nivel del resultado. `COUNT(*)` cuenta filas, pero `COUNT(DISTINCT pedido_id)` cuenta pedidos únicos. Elegir uno es una definición de métrica, no una preferencia sintáctica.
+
+## Error habitual
+
+Filtrar un periodo con texto o sin zona horaria explícita puede incluir o excluir registros inesperados. Inspecciona datos de borde y declara la ventana temporal.
+
+## Resumen
+
+Una consulta profesional hace visibles medida, población y grano. Continúa con [JOIN y cardinalidad](03-joins-y-cardinalidad.md).
+
+# JOIN y validación de cardinalidad
+
+## Objetivos y prerrequisitos
+
+Combinarás tablas sin multiplicar accidentalmente registros.
+
+Un `JOIN` une filas por una clave. `INNER JOIN` conserva coincidencias; `LEFT JOIN` conserva todas las filas izquierdas y muestra ausencia de coincidencia. Antes de unir, declara cardinalidad: uno a uno, uno a muchos o muchos a muchos.
+
+```sql
+SELECT p.pedido_id, c.pais
+FROM pedidos p
+LEFT JOIN clientes c ON p.cliente_id = c.cliente_id;
+```
+
+Si `clientes` contiene dos filas para el mismo `cliente_id`, cada pedido aparecerá dos veces. Comprueba recuento antes y después, claves duplicadas y nulos introducidos por la unión. Un SQL que ejecuta no prueba que el resultado sea válido.
+
+## Resumen
+
+La cardinalidad es un supuesto analítico que debes validar. Sigue con [SQL analítico](04-sql-analitico-y-mantenible.md).
+
+# CTE, ventanas, fechas y nulos
+
+## Objetivos y prerrequisitos
+
+Escribirás consultas por pasos y compararás una fila con su contexto sin destruir el detalle.
+
+Una CTE (`WITH`) da nombre a un resultado intermedio y mejora la revisión. Las funciones de ventana calculan sobre un grupo sin reducirlo: `ROW_NUMBER()` ordena pedidos por cliente, `SUM(...) OVER (...)` construye acumulados y `LAG()` compara con el valor anterior.
+
+Las fechas necesitan una zona y una granularidad; los nulos no equivalen automáticamente a cero. Usa `COALESCE` solo cuando la regla de negocio diga qué significa la ausencia.
+
+## Resumen
+
+La consulta mantenible separa pasos, documenta supuestos y conserva el detalle necesario para validar.
+
+# MongoDB y documentos
+
+## Objetivos y prerrequisitos
+
+Entenderás qué problema resuelve un documento flexible y qué preguntas siguen siendo analíticas.
+
+Un documento puede guardar información anidada de una entidad, por ejemplo un pedido con dirección y líneas. MongoDB almacena colecciones de documentos y permite filtros y pipelines de agregación. Esta flexibilidad ayuda cuando la forma de los datos cambia o una aplicación lee el agregado completo.
+
+No significa “sin modelo”. Debes definir identificadores, campos opcionales, versiones y cómo se agregan importes. Documentos duplicados o esquemas inconsistentes complican análisis histórico y comparaciones.
+
+## AI asistiendo consultas
+
+Una herramienta que genera un filtro o pipeline desde lenguaje natural produce un borrador. Revisa colección, filtros, periodos, campos sensibles, coste e interpretación del resultado antes de ejecutarlo o compartirlo.
+
+## Resumen
+
+NoSQL cambia el modelo de almacenamiento; no elimina definición de métrica ni validación.
+
+# DynamoDB y patrones de acceso
+
+## Objetivos y prerrequisitos
+
+Comprenderás por qué algunas bases clave-valor se diseñan empezando por las consultas que una aplicación necesita.
+
+DynamoDB organiza registros alrededor de una clave de partición y, opcionalmente, una clave de ordenación. Está pensado para accesos predecibles a gran escala: “dame los pedidos de este cliente ordenados por fecha”, no para unir libremente cualquier tabla después.
+
+Antes de modelar, enumera patrones de acceso, volumen, frecuencia y orden requerido. Diseñar solo por “entidades bonitas” puede producir consultas caras o imposibles. Para análisis amplio se suele extraer a un warehouse o lakehouse.
+
+## Resumen
+
+El modelo operativo optimiza accesos conocidos; el modelo analítico optimiza preguntas y historia.
+
+# Warehouse, lakehouse y consultas asistidas
+
+## Objetivos y prerrequisitos
+
+Relacionarás fuentes operacionales con el entorno donde se preparan datos para análisis.
+
+Un sistema operacional registra transacciones para que la aplicación funcione. Un **warehouse** organiza datos históricos y modelados para consulta analítica; un **lakehouse** combina almacenamiento flexible con capacidades analíticas. La arquitectura suele extraer, transformar y documentar datos antes de dashboards, SQL o Python.
+
+```mermaid
+flowchart LR
+ A[Aplicación y fuentes] --> B[Extracción]
+ B --> C[Warehouse o lakehouse]
+ C --> D[Modelos y controles]
+ D --> E[SQL, Python y BI]
+```
+
+La AI puede acelerar un borrador de consulta, pero no conoce por defecto el grano, la semántica, permisos o coste. Contrasta siempre resultado, plan de consulta y definición de métrica.
+
+Resuelve la [consulta de conversión](../../../ejercicios/temario-09/aplicacion/consulta-conversion.md) antes de consultar la solución.
 
 # Bloque 10 - Métricas, KPIs y analítica de producto
 
@@ -1769,35 +1893,84 @@ Escribe tres eventos y dos propiedades para medir activación de un producto. In
 
 # Bloque 11 - Series temporales
 
-## Objetivo
+## Propósito
 
 Analizar datos que cambian con el tiempo, distinguir tendencia de estacionalidad y construir previsiones base honestas.
 
-## Componentes temporales
+## Lecciones
 
-Una serie puede contener tendencia, estacionalidad, ciclos, ruido y cambios de nivel. Antes de modelar, comprueba frecuencia, fechas ausentes, cambios de definición y eventos externos que hayan alterado la métrica.
-
-```mermaid
-flowchart TD
-    A[Serie temporal] --> B[Tendencia]
-    A --> C[Estacionalidad]
-    A --> D[Ruido y anomalías]
-    B --> E[Previsión base]
-    C --> E
-    D --> F[Investigación]
-```
-
-## Validación temporal
-
-No mezcles futuro y pasado al evaluar un modelo. Entrena con periodos anteriores y valida con periodos posteriores. Una previsión ingenua, como repetir el último valor o el mismo día de la semana anterior, es una referencia obligatoria.
-
-## Comunicación
-
-Una previsión es un rango con supuestos, no una cifra mágica. Explica horizonte, error esperado, eventos no incluidos y qué decisión cambia si la previsión falla.
+1. [Índice temporal y calidad de fechas](lecciones/01-indice-temporal-y-calidad.md)
+2. [Tendencia, estacionalidad y cambios](lecciones/02-componentes-de-una-serie.md)
+3. [Lags, referencias y previsiones base](lecciones/03-lags-y-previsiones-base.md)
+4. [Validación temporal y comunicación](lecciones/04-validacion-temporal-y-comunicacion.md)
 
 ## Práctica
 
 Plantea [una previsión de demanda](../../ejercicios/temario-11/aplicacion/prevision-demanda.md) y compara con [la guía](../../soluciones/temario-11/prevision-demanda.md).
+
+# Índice temporal y calidad de fechas
+
+## Objetivos y prerrequisitos
+
+Prepararás una serie temporal antes de buscar patrones o construir previsiones.
+
+Una **serie temporal** es una medida observada en momentos ordenados: pedidos diarios, usuarios semanales o ingresos mensuales. El orden importa. Define frecuencia, zona horaria, periodo de cobertura y qué ocurre con fechas ausentes. Un día sin fila puede significar cero pedidos, una caída del sistema de captura o una fuente incompleta.
+
+Convierte y ordena fechas explícitamente; identifica duplicados y cambios de definición. Si desde julio “usuario activo” se mide de otro modo, una aparente subida puede ser solo cambio de tracking.
+
+## Resumen
+
+Una serie fiable empieza por un calendario y una métrica estable. Continúa con [componentes temporales](02-componentes-de-una-serie.md).
+
+# Tendencia, estacionalidad y cambios
+
+## Objetivos y prerrequisitos
+
+Distinguirás patrones sostenidos de repeticiones de calendario, ruido y cambios de nivel.
+
+Una serie puede contener **tendencia** (movimiento de largo plazo), **estacionalidad** (patrón que se repite por día, semana o año), ruido y rupturas. Una caída de lunes a domingo puede ser normal; una caída frente al mismo lunes de semanas comparables merece investigación.
+
+```mermaid
+flowchart LR
+ A[Serie temporal] --> B[Tendencia]
+ A --> C[Estacionalidad]
+ A --> D[Ruido o anomalía]
+ B --> E[Previsión]
+ C --> E
+ D --> F[Investigación]
+```
+
+Descomponer no prueba causas. Un cambio de nivel puede coincidir con una campaña, una incidencia, un festivo o un error de medición. Cruza eventos y segmentos antes de explicarlo.
+
+## Resumen
+
+Compara contra referencias temporales adecuadas, no solo contra el periodo anterior.
+
+# Lags, referencias y previsiones base
+
+## Objetivos y prerrequisitos
+
+Usarás valores pasados como referencia y evaluarás una previsión contra alternativas simples.
+
+Un **lag** es un valor retrasado: ventas de ayer o del mismo día de la semana anterior. Una previsión ingenua que repite el último valor, o una estacional que repite la semana anterior, es un baseline obligatorio. Si un modelo más complejo no mejora esa referencia, añade coste sin valor.
+
+El horizonte importa: prever mañana y prever seis meses son problemas distintos. Declara qué información estaba disponible en el momento de hacer cada previsión; usar datos futuros por accidente produce resultados irreales.
+
+## Resumen
+
+Una previsión se evalúa frente a un baseline y un horizonte, no por lo convincente que parezca la curva.
+
+# Validación temporal y comunicación
+
+## Objetivos y prerrequisitos
+
+Validarás respetando la flecha del tiempo y comunicarás una previsión como ayuda a una decisión.
+
+Divide en pasado para entrenar y futuro para validar. Puedes repetir ventanas sucesivas para comprobar estabilidad. No barajes filas como en datos independientes: mezclar futuro y pasado filtra información que no existía al predecir.
+
+Comunica horizonte, error histórico, rango plausible, supuestos y eventos no modelados. “Esperamos 1 000 pedidos ± un margen” es más útil que una cifra exacta falsa; enlázalo con capacidad, inventario o presupuesto que cambiarían si la previsión falla.
+
+Plantea la [previsión de demanda](../../../ejercicios/temario-11/aplicacion/prevision-demanda.md). En modelos posteriores aprenderás predicción supervisada, pero conservarás esta regla: validación coherente con el momento de decisión.
 
 # Bloque 12 - Modelos predictivos para analistas
 
