@@ -1,0 +1,5 @@
+linea_id;pedido_id;producto_id;cantidad;precio_unitario_eur
+L-1;P-100;PR-7;1;20,00
+L-2;P-100;PR-9;1;20,00
+L-3;P-102;PR-7;2;32,50
+L-4;P-103;PR-4;1;12,50

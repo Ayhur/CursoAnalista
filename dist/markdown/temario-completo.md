@@ -256,236 +256,326 @@ Después de completar el ejercicio, continúa con el [bloque 01](../../01-fundam
 
 Pregúntate: ¿qué tendría que escribir Lumen en el brief si el sistema deja de registrar `reserva_completada`? ¿Por qué un número calculado correctamente podría seguir siendo una mala base para decidir?
 
-# Bloque 01 - Fundamentos de datos: desde archivos hasta calidad
+# Bloque 01 — Fundamentos de datos
 
 ## Propósito
 
-Antes de programar o abrir una base de datos, Leo debe entender qué representa un dato, cómo se organiza la información y por qué una cifra aparentemente correcta puede conducir a una decisión equivocada. Este bloque no presupone que sepas qué es CSV, JSON, una tabla o una clave.
+Antes de programar, Leo necesita aprender a mirar un conjunto de datos como una representación limitada de una operación real. Usaremos durante todo el bloque el caso de **Mercado Faro**, un marketplace con una web y una app: usuarios crean cuentas, hacen pedidos compuestos por líneas de producto y generan eventos de uso.
 
 ## Resultado de salida
 
-Al terminar podrás abrir un archivo sencillo y explicar qué información contiene, distinguir una tabla de un documento JSON, identificar el grano de un conjunto de datos, proponer controles de calidad y reconocer límites de privacidad y sesgo.
+Al acabar podrás explicar qué representa cada archivo y cada fila; elegir el grano adecuado; relacionar usuarios, pedidos, líneas y eventos sin multiplicar resultados; leer CSV y JSON con precaución; y documentar controles de calidad, privacidad y trazabilidad antes de recomendar una decisión.
+
+## Prerrequisitos
+
+Ninguno. Los términos archivo, tabla, CSV, JSON, clave y relación se construyen desde cero.
+
+## Caso continuo
+
+La dirección pregunta: «¿cuántos pedidos pagados tuvimos ayer y qué canal conviene mejorar?». Esta pregunta parece simple, pero obliga a distinguir personas de pedidos, pedidos de líneas de producto y acciones dentro de una app. Cada lección añade una pieza al mismo mapa.
+
+```mermaid
+flowchart LR
+    U[Usuarios: una fila por persona registrada] -->|usuario_id| P[Pedidos: una fila por pedido]
+    P -->|pedido_id| L[Lineas: una fila por articulo del pedido]
+    U -->|usuario_id opcional| E[Eventos: una fila por acción en web o app]
+    P --> R[Pregunta: pedidos pagados por canal]
+```
+
+El diagrama no dice que todas las tablas puedan sumarse entre sí: muestra qué identificador permite conectar cada hecho sin cambiar su significado.
 
 ## Lecciones
 
-1. [Qué es un dato, un archivo y una tabla](lecciones/01-archivo-tabla-y-grano.md).
-2. [Filas, columnas, tipos y relaciones](lecciones/02-filas-columnas-y-relaciones.md).
-3. [CSV, JSON, Excel, Parquet y bases de datos](lecciones/03-formatos-y-almacenamiento.md).
-4. [Calidad, ausencia, sesgo, privacidad y ética](lecciones/04-calidad-y-uso-responsable.md).
+1. [Archivo, tabla, observación y grano](lecciones/01-archivo-tabla-y-grano.md).
+2. [Entidades, eventos, claves, relaciones y joins](lecciones/02-filas-columnas-y-relaciones.md).
+3. [CSV, JSON y conversión a tablas analizables](lecciones/03-formatos-y-almacenamiento.md).
+4. [Contrato, calidad, privacidad y trazabilidad](lecciones/04-calidad-y-uso-responsable.md).
 
-## Práctica
+## Práctica y laboratorio
 
-Realiza [la auditoría de calidad](../../ejercicios/temario-01/comprension/auditoria-calidad.md) después de la lección 4 y compárala con [la solución razonada](../../soluciones/temario-01/auditoria-calidad.md).
+- Resuelve [la auditoría del marketplace](../../ejercicios/temario-01/comprension/auditoria-marketplace.md) y consulta después [la solución razonada](../../soluciones/temario-01/auditoria-marketplace.md).
+- Ejecuta [`notebooks/practicas/01-fundamentos-marketplace.py`](../../notebooks/practicas/01-fundamentos-marketplace.py). No requiere instalar librerías: lee los archivos de ejemplo, verifica reglas y demuestra cómo un join mal planteado cambia una cifra.
+- Los archivos mínimos del caso están en [`datasets/temario-01/`](../../datasets/temario-01/).
 
-# 01.1 Qué es un dato, un archivo y una tabla
+## Criterio de dominio
 
-## Objetivos
+No sigas al bloque de Python hasta poder completar, para cada tabla: «cada fila representa…», «su identificador es…», «esta métrica se calcula contando/sumando…» y «estos datos no permiten concluir…».
 
-Entender qué es un dato antes de hablar de herramientas; distinguir una información suelta de un conjunto organizado; y reconocer qué representa una fila de una tabla.
+# 01.1 Archivo, tabla, observación y grano
 
-## Empieza por una situación cotidiana
+## Objetivos y prerrequisitos
 
-Imagina una tienda que quiere saber qué productos se venden más. Cada vez que una persona compra algo, la tienda puede guardar información: fecha, producto, importe y forma de pago. Cada una de esas piezas es un **dato**: una representación de algo que ocurrió en el mundo real.
+Al terminar podrás distinguir archivo, tabla, fila, columna y celda; escribir el **grano** de una fuente; y explicar por qué contar filas no siempre equivale a contar personas. No se presupone vocabulario técnico.
 
-La información se guarda en un **archivo**, igual que una fotografía o una nota de texto. Un archivo tiene nombre, contenido y un formato que indica cómo se organiza. No hay magia: un archivo de datos es una manera de guardar información para poder leerla, compartirla o analizarla después.
+## Una pregunta cotidiana antes de la jerga
 
-Una de las formas más comunes de organizar datos es una **tabla**. Una tabla se parece a una hoja de cálculo: tiene columnas que describen qué tipo de información guardamos y filas que recogen casos concretos.
+Mercado Faro quiere saber cuántos pedidos pagados recibió ayer. El sistema no guarda «la respuesta»; guarda huellas de cosas que ocurrieron: una persona se registró, pulsó un botón, creó un pedido o añadió dos artículos. Un **dato** es una representación registrada de una parte de la realidad, no la realidad completa.
 
-```text
-fecha       | producto | importe | canal
-2026-01-03  | teclado  | 45.99   | web
-2026-01-04  | ratón    | 19.90   | tienda
-2026-01-04  | teclado  | 45.99   | web
-```
+Un **archivo** es una unidad con nombre y contenido que se puede guardar, copiar y abrir, como una foto o una nota. Si el contenido sigue filas y columnas, puede representar una **tabla**. Una tabla organiza observaciones comparables: una **fila** contiene un caso; una **columna** describe la misma propiedad para todos los casos; una **celda** es el cruce de ambas.
 
-En este ejemplo, la primera fila de datos representa una compra concreta. La columna `producto` responde qué se compró; `importe`, cuánto costó. La tabla no “sabe” qué significa un teclado: nosotros le damos significado a las columnas.
+| pedido_id | usuario_id | creado_en | estado | total_eur |
+| --- | --- | --- | --- | ---: |
+| P-100 | U-10 | 2026-07-24 09:14 | pagado | 42.00 |
+| P-101 | U-10 | 2026-07-24 18:05 | cancelado | 18.00 |
+| P-102 | U-24 | 2026-07-24 20:22 | pagado | 65.00 |
 
-## El grano: la pregunta que evita errores grandes
+Aquí cada fila es una observación de **un pedido**, no de un usuario. U-10 aparece dos veces porque hizo dos pedidos. El nombre técnico de esta precisión es el **grano**: la unidad que representa exactamente una fila.
 
-El **grano** indica qué representa exactamente una fila. Aquí, una fila representa una compra, no un cliente ni un producto. Esta frase parece pequeña, pero evita errores muy caros: si se cuenta una fila como si fuera una persona, un cliente que compra tres veces se contará como tres clientes.
+## El grano determina qué cálculo responde a qué pregunta
+
+Antes de abrir una herramienta completa esta frase: «cada fila de esta tabla representa ___». Si la respuesta es «un pedido», contar tres filas responde «tres pedidos»; no «tres clientes». Para clientes únicos se cuentan valores distintos de `usuario_id`; para facturación pagada se suman `total_eur` solo donde `estado = pagado`.
+
+¿Qué camino convierte la pregunta en una cifra defendible?
 
 ```mermaid
 flowchart TD
-    A[Pregunta: qué se quiere analizar] --> B[Definir qué representa una fila]
-    B --> C[Elegir columnas necesarias]
-    C --> D[Construir o leer la tabla]
-    D --> E[Calcular sin confundir entidades]
+    Q[Pregunta: pedidos pagados ayer] --> F[Localizar tabla de pedidos]
+    F --> G[Declarar grano: un pedido por fila]
+    G --> R[Regla: fecha de creación y estado pagado]
+    R --> M[Medida: contar pedido_id únicos]
+    M --> L[Declarar límites: zona horaria, reintentos y retrasos]
 ```
 
-Antes de cualquier análisis, completa siempre esta frase: “cada fila de este conjunto representa…”. Si no puedes completarla, no empieces a sumar ni a calcular promedios.
+La cifra no es solo un `COUNT`: depende de la definición de «ayer», del estado que cuenta como pago y de que `pedido_id` no esté duplicado.
 
-## Ejemplo IT
+## Cuatro granos que no se pueden intercambiar
 
-Una aplicación registra eventos. Una tabla puede tener una fila por clic, otra por sesión y otra por usuario. Son tablas distintas con granos distintos. Contar clics no responde cuántos usuarios usaron la aplicación; contar sesiones tampoco responde directamente cuántas personas pagaron.
+| Fuente | Cada fila representa | Pregunta adecuada | Error si se trata como pedido |
+| --- | --- | --- | --- |
+| `usuarios` | una cuenta registrada | ¿Cuántas cuentas nuevas? | ignora compras y sesiones |
+| `pedidos` | un pedido iniciado | ¿Cuántos pedidos pagados? | puede incluir varios artículos |
+| `lineas_pedido` | un artículo dentro de un pedido | ¿Qué unidades se vendieron? | cuenta artículos como pedidos |
+| `eventos` | una acción con hora | ¿Dónde abandona la app? | un usuario puede generar cientos |
 
-## Error frecuente
+Una **entidad** es algo relativamente estable que queremos identificar, como usuario o producto. Un **evento** es algo que ocurre en un momento, como `checkout_iniciado`. Un pedido es una **transacción**: registra un intercambio u operación de negocio. En la siguiente lección se afina esta distinción.
 
-Pensar que una tabla es “la realidad”. Una tabla es un modelo parcial. Puede no incluir compras hechas por teléfono, usuarios anónimos o devoluciones. Siempre pregunta qué no está en los datos.
+## Ejemplo trabajado: un total que parece correcto y no lo es
 
-## Comprobación
+El pedido P-100 tiene dos líneas: camiseta (20 €) y envío (2 €); P-102 tiene tres líneas por 65 €. Si unimos pedidos con líneas y después contamos filas, veremos cinco filas y podríamos decir «cinco pedidos». Es falso: hay dos pedidos. La suma de `pedidos.total_eur` tras ese join también se repetirá una vez por línea, inflando los ingresos.
 
-Para una academia online, escribe el grano de tres tablas posibles: una de alumnos, una de inscripciones y una de visualizaciones de vídeo. ¿Por qué no deben mezclarse sin una relación explícita?
+El problema no es el software: es haber olvidado el grano al cambiar de tabla. Conserva siempre una nota junto al análisis: fuente, grano, filtro, periodo y unidad.
 
-# 01.2 Filas, columnas, tipos y relaciones
+## Límites y error frecuente
 
-## Objetivos
+No asumas que una tabla contiene todo. Los eventos pueden faltar si una persona usa bloqueador; un pedido puede estar pendiente de pago; la hora puede venir en UTC mientras la dirección habla de Madrid. Una tabla es evidencia parcial y debe leerse junto con su cobertura y reglas.
 
-Aprender a leer una tabla con precisión: distinguir filas y columnas, reconocer tipos básicos de datos y entender por qué una clave permite relacionar tablas sin duplicar significado.
+## Resumen y comprobación
 
-## Filas y columnas no son solo una forma visual
+- Archivo: contenido guardado con un nombre y un formato.
+- Tabla: organización en filas y columnas.
+- Grano: lo que representa una fila; dicta qué se puede contar o sumar.
 
-Una **fila** contiene información de un caso. Una **columna** guarda el mismo tipo de atributo para muchos casos. En una tabla de compras, `importe` debería contener números; en una tabla de usuarios, `fecha_registro` debería contener fechas. El tipo de información determina qué operaciones tienen sentido.
+1. Escribe el grano de una tabla de sesiones y otro de una tabla de usuarios.
+2. ¿Por qué tres filas con el mismo `usuario_id` no son necesariamente un error?
+3. Para «productos vendidos», ¿usarías pedidos o líneas de pedido? Justifica la elección.
 
-No tiene sentido calcular la media de `ciudad`; sí puede tener sentido contar cuántos usuarios hay por ciudad. No tiene sentido ordenar alfabéticamente un importe para encontrar la venta mayor; sí tiene sentido convertirlo a número y compararlo.
+Aplica estas ideas en [la práctica del marketplace](../../../ejercicios/temario-01/comprension/auditoria-marketplace.md).
+
+# 01.2 Entidades, eventos, claves, relaciones y joins
+
+## Objetivos y prerrequisitos
+
+Aprenderás a diseñar y leer relaciones entre tablas, distinguir clave primaria y foránea, comprobar cardinalidades 1:1, 1:N y N:M, y detectar un join que multiplica filas. Parte de la lección 01: ya sabes que cada tabla tiene grano.
+
+## Del mundo real a varias tablas pequeñas
+
+Guardar nombre, dirección y producto repetidos en cada pedido vuelve los datos difíciles de corregir y de analizar. Separamos la información según lo que representa: `usuarios` para personas registradas, `pedidos` para transacciones y `lineas_pedido` para artículos del pedido. Una **dimensión** suele describir una entidad (por ejemplo, producto o usuario); una tabla de hechos registra eventos o transacciones medibles.
+
+También existe un **snapshot**: una fotografía de estado en un instante. Una tabla con una fila por producto y día que guarda su stock al cierre no es un evento de cambio de stock: es el estado observado a esa fecha. Confundir ambos altera tendencias y acumulados.
+
+## Claves: etiquetas para reconocer y conectar
+
+Una **clave primaria** identifica de manera única una fila dentro de su tabla: `usuarios.usuario_id` o `pedidos.pedido_id`. Una **clave foránea** guarda la referencia a otra tabla: `pedidos.usuario_id` apunta al usuario que hizo el pedido. Que sea numérica o de texto no la convierte en medida: no tiene sentido promediar identificadores.
+
+¿Cómo se conectan las piezas del caso sin inventar relaciones?
 
 ```mermaid
 flowchart LR
-    A[Fila: una compra] --> B[fecha]
-    A --> C[producto]
-    A --> D[importe]
-    A --> E[cliente_id]
-    E --> F[Relación con tabla de clientes]
+    U[usuarios: clave usuario_id] -->|1 a N mediante usuario_id| P[pedidos: clave pedido_id]
+    P -->|1 a N mediante pedido_id| L[lineas_pedido: clave linea_id]
+    P -->|1 a 1 o 0 a 1| F[pagos: clave pedido_id]
+    U -->|1 a N; usuario puede ser nulo| E[eventos_app]
 ```
 
-## Tipos que encontrarás al empezar
+Un usuario puede tener muchos pedidos (1:N); cada pedido pertenece a un usuario si el negocio lo exige. Un pago puede ser 0:1 con pedido si hay pedidos iniciados pero no cobrados. Las relaciones describen una regla de negocio, no una forma de dibujo.
 
-- **Texto:** nombre de producto, ciudad, comentario.
-- **Número:** importe, cantidad, edad, latencia.
-- **Fecha y hora:** momento de registro, compra o despliegue.
-- **Booleano:** verdadero/falso; por ejemplo, `es_cliente`.
-- **Categoría:** conjunto limitado de etiquetas, como plan `gratis`, `pro` o `empresa`.
+## Cardinalidad y tabla puente
 
-Un número puede representar cosas distintas: un identificador `cliente_id=1042` parece número, pero no debes calcular su media. Es una etiqueta técnica, no una cantidad.
+- **1:1:** una fila A se asocia como máximo a una fila B; por ejemplo, pedido y comprobante de pago final si el sistema lo garantiza.
+- **1:N:** un usuario puede tener N pedidos; cada pedido tiene un usuario.
+- **N:M:** un pedido puede incluir N productos y un producto aparece en M pedidos. No se conecta directamente: `lineas_pedido` actúa como **tabla puente** con `pedido_id`, `producto_id`, cantidad y precio.
 
-## Claves y relaciones
+| pedido_id | producto_id | cantidad | precio_unitario_eur |
+| --- | --- | ---: | ---: |
+| P-100 | PR-7 | 1 | 20.00 |
+| P-100 | PR-9 | 1 | 20.00 |
+| P-102 | PR-7 | 2 | 32.50 |
 
-Una **clave** es una columna que permite identificar o conectar información. Si `cliente_id` identifica de forma única a cada cliente, se llama clave primaria de la tabla de clientes. La misma columna puede aparecer en la tabla de compras para indicar quién realizó cada compra; allí actúa como clave foránea o referencia.
+La tabla puente no es una molestia técnica: conserva el grano «un artículo de un pedido» y permite responder unidades por producto sin repetir atributos del pedido.
 
-```mermaid
-flowchart LR
-    A[CLIENTES: cliente_id, nombre, ciudad] -->|un cliente realiza muchas compras| B[COMPRAS: compra_id, cliente_id, importe, fecha]
-```
+## Join: combinar solo con una hipótesis verificable
 
-La relación dice: un cliente puede realizar muchas compras; una compra pertenece a un cliente. Esta información es esencial al combinar tablas. Si una tabla de clientes tiene accidentalmente dos filas para el mismo `cliente_id`, una unión puede duplicar importes sin que el error sea evidente.
+Un **join** combina filas según una clave. Antes de ejecutarlo escribe: (1) grano de la tabla izquierda, (2) grano de la derecha, (3) cardinalidad esperada, (4) qué métrica se mantendrá. Si `pedidos` (uno por pedido) se une a `lineas_pedido` (varias por pedido), el resultado tendrá grano de línea, no de pedido.
 
-## Error frecuente
+Ejemplo: P-100 total 42 € y dos líneas. Tras el join aparecerá dos veces con 42 €. Sumar `total_eur` da 84 € para ese pedido: una multiplicación silenciosa. Para facturación, agrega las líneas por pedido primero o calcula la métrica en `pedidos` antes de unir dimensiones.
 
-Confundir un identificador con una medida. `pedido_id` y `cliente_id` sirven para identificar; no para hacer promedios. También es un error asumir que una columna “única” realmente lo es sin comprobar duplicados y nulos.
+Un caso especialmente peligroso es unir dos tablas que tienen varias filas por `usuario_id` (eventos y pedidos). Si U-10 tiene 3 eventos y 2 pedidos, el join produce 6 filas. Esa tabla no representa ni eventos ni pedidos originales.
 
-## Comprobación
+## Diccionario y contrato de datos
 
-Diseña las columnas mínimas de una tabla de tickets de soporte. ¿Qué representa cada fila? ¿Qué columna conectaría un ticket con un cliente? ¿Cuál parece numérica pero no debe tratarse como medida?
+El **diccionario de datos** define el significado de cada columna. Un **contrato de datos** además expresa reglas compartidas entre quien produce y quien consume la fuente: esquema, grano, claves, actualización, valores válidos y responsable.
 
-# 01.3 CSV, JSON, Excel, Parquet y bases de datos
+| Campo | Definición | Regla | Propietario |
+| --- | --- | --- | --- |
+| `pedido_id` | identificador estable de pedido | único, no nulo | Checkout |
+| `creado_en_utc` | instante de creación en UTC | ISO 8601, no nulo | Plataforma |
+| `total_eur` | importe cobrado, IVA incluido | >= 0; devolución separada | Pagos |
+| `canal` | origen atribuido al pedido | `web`, `app`, `partner` | Growth |
 
-## Objetivos
+Un contrato evita que «total» cambie de incluir a excluir IVA sin aviso. También permite investigar una incidencia: versión de fuente, momento de carga y responsable dejan **trazabilidad**.
 
-Saber qué problema resuelve cada formato básico y elegir una forma razonable de guardar o recibir información sin memorizar una lista de siglas.
+## Error frecuente, resumen y comprobación
 
-## CSV: una tabla escrita como texto
+No des por única una clave por el nombre ni des por válida una relación por tener la misma columna. Comprueba nulos, duplicados y número de filas antes y después de cada join.
 
-Un archivo **CSV** significa *Comma-Separated Values*: valores separados por comas. Es un archivo de texto que representa una tabla. La primera línea suele contener los nombres de las columnas; cada línea posterior es una fila.
+1. ¿Cuál es el grano del resultado de unir `pedidos` con `lineas_pedido`?
+2. Da un ejemplo realista de relación N:M distinta de productos y pedidos.
+3. ¿Qué regla del contrato impediría contar dos veces el mismo pedido?
+
+Resuelve las preguntas de joins en [la práctica](../../../ejercicios/temario-01/comprension/auditoria-marketplace.md).
+
+# 01.3 CSV, JSON y conversión a tablas analizables
+
+## Objetivos y prerrequisitos
+
+Sabrás leer un CSV y un JSON como archivos de texto, explicar sus diferencias operativas, reconocer separador, codificación y fechas, y convertir un JSON de pedidos en tablas con grano claro. Se parte de archivo y tabla, no de experiencia con programación.
+
+## CSV: una tabla escrita línea a línea
+
+Un **CSV** (*comma-separated values*) guarda una tabla como texto. La primera línea suele ser el encabezado; cada línea posterior, una fila. El nombre es histórico: en España es frecuente usar punto y coma para no confundir la coma decimal con el separador.
 
 ```text
-fecha,producto,importe
-2026-01-03,teclado,45.99
-2026-01-04,ratón,19.90
+pedido_id;creado_en_utc;total_eur;canal
+P-100;2026-07-24T07:14:00Z;42,00;web
+P-102;2026-07-24T18:22:00Z;65,00;app
 ```
 
-CSV es sencillo de abrir, compartir y leer con Python, Excel o un editor de texto. Su simplicidad también tiene límites: no guarda bien tipos complejos, fórmulas, varias hojas ni una estructura dentro de otra. Además, hay que acordar separador, codificación, formato de fecha y separador decimal.
+Antes de tratarlo como tabla hay que acordar el **dialecto**: separador `;`, decimal `,`, codificación de caracteres (preferiblemente UTF-8), comillas para texto con separadores y formato de fecha. Si una herramienta espera coma como separador, puede leer toda la línea como una sola columna; si interpreta `42,00` en otro contexto, puede dejarlo como texto.
 
-## JSON: una ficha que puede contener otras fichas
+La fecha `2026-07-24T07:14:00Z` sigue ISO 8601: `Z` significa UTC. No la cambies a «hora local» sin declarar zona y regla de conversión.
 
-**JSON** significa *JavaScript Object Notation*. Es texto estructurado mediante pares `campo: valor`. A diferencia de un CSV, puede guardar objetos dentro de objetos y listas. Es frecuente en APIs, configuraciones y eventos de aplicaciones.
+## JSON: una ficha con estructura interna
+
+Un archivo **JSON** (*JavaScript Object Notation*) también es texto, pero puede contener objetos y listas. Es habitual al recibir datos de una API: un servicio responde con una ficha de pedido que incluye al usuario y sus artículos.
 
 ```json
 {
-  "pedido_id": 1001,
-  "cliente": {
-    "nombre": "Leo",
-    "ciudad": "Madrid"
-  },
-  "productos": ["teclado", "ratón"],
-  "importe": 65.89
+  "pedido_id": "P-100",
+  "usuario": {"usuario_id": "U-10", "pais": "ES"},
+  "items": [
+    {"producto_id": "PR-7", "cantidad": 1, "precio_eur": 20.0},
+    {"producto_id": "PR-9", "cantidad": 1, "precio_eur": 20.0}
+  ],
+  "total_eur": 42.0
 }
 ```
 
-El JSON anterior es una ficha de pedido. No es una tabla, aunque se pueda transformar en una. Para analizar muchos pedidos, normalmente tendrás que decidir qué campos extraer y cómo convertir listas u objetos anidados en columnas o tablas relacionadas.
+No hay una única conversión correcta de JSON a CSV. El objeto principal se puede convertir en una fila de `pedidos`; `usuario.usuario_id` se extrae como una columna; cada elemento de `items` debe crear una fila de `lineas_pedido`. Repetir el pedido en cada línea es válido solo si declaramos que el resultado tiene grano de línea y no reutilizamos `total_eur` como si fuera un importe por línea.
 
 ```mermaid
 flowchart LR
-    A[Archivo CSV] --> B[Tabla plana: filas y columnas]
-    C[Archivo JSON] --> D[Ficha con objetos y listas]
-    B --> E[Python, Excel o SQL]
-    D --> F[Leer y normalizar antes de analizar]
+    J[JSON: un pedido con lista items] --> P[Tabla pedidos: una fila por pedido]
+    J --> L[Tabla lineas_pedido: una fila por item]
+    P -->|pedido_id| L
+    L --> A[Analizar unidades y productos]
+    P --> I[Analizar pedidos e ingreso]
 ```
 
-## Excel, Parquet y bases de datos
+El objetivo de la conversión no es «aplanar todo»: es conservar significado y poder analizar cada pregunta con el grano correspondiente.
 
-**Excel** es una aplicación y un formato de libro de trabajo; es útil para revisión manual, cálculos ligeros y comunicación. No es ideal como fuente única de procesos repetibles si múltiples personas lo editan sin control.
+## Otros medios y elección razonada
 
-**Parquet** es un formato optimizado para datos tabulares grandes. Guarda columnas de forma eficiente y conserva tipos mejor que CSV. Normalmente lo usarás mediante Python, Spark, DuckDB o un warehouse, no editándolo a mano.
+Excel es una aplicación y un formato útil para revisión humana y casos pequeños, pero varias ediciones manuales sin historial dificultan reproducir un análisis. Parquet guarda datos por columnas y tipos de forma eficiente; suele usarse con herramientas de datos, no editándose a mano. Una base de datos mantiene datos compartidos con consultas, permisos y reglas; SQL, MongoDB o DynamoDB se verán más adelante con profundidad.
 
-Una **base de datos** organiza información para que aplicaciones y personas puedan consultarla con reglas de acceso, relaciones y actualizaciones. SQL es un lenguaje para consultar muchas bases relacionales; MongoDB almacena documentos similares a JSON; DynamoDB se diseña alrededor de claves y patrones de acceso.
+La elección responde a una necesidad: CSV para intercambio de tabla simple; JSON para respuestas estructuradas; Parquet para volúmenes tabulares y procesos analíticos; base de datos para operación concurrente. Ningún formato arregla un grano o una definición defectuosos.
 
-## Cómo elegir sin obsesionarte
+## Contraejemplos y comprobación
 
-Empieza preguntando: ¿necesito una tabla simple que cualquiera pueda abrir? CSV. ¿Recibo una respuesta con estructuras anidadas de una API? JSON. ¿Trabajo con muchos datos tabulares repetidamente? Parquet o una base de datos. ¿Necesito revisar manualmente algo pequeño? Excel puede ser adecuado.
+No abras un CSV «a doble clic» y des por hecho que se interpretó bien. Verifica columnas, filas, tipos, caracteres como `ñ` y fechas. No conviertas una lista JSON en una sola celda para luego intentar contar productos.
 
-La elección no elimina el deber de conocer grano, calidad y significado.
+1. ¿Qué separador y decimal usa el CSV del ejemplo?
+2. ¿Qué dos tablas crearías a partir del JSON y cuál sería su clave de unión?
+3. ¿Por qué `total_eur` no se debe sumar sin cuidado tras expandir `items`?
 
-## Comprobación
+El laboratorio ejecutable muestra una conversión deliberadamente pequeña y auditable.
 
-Explica a otra persona la diferencia entre CSV y JSON sin usar las palabras “plano” ni “anidado”. Después indica cuál esperarías recibir de una API meteorológica y por qué.
+# 01.4 Contrato, calidad, privacidad y trazabilidad
 
-# 01.4 Calidad, ausencia, sesgo, privacidad y uso responsable
+## Objetivos y prerrequisitos
 
-## Objetivos
+Aprenderás a convertir «revisar datos» en reglas observables, clasificar incidencias por severidad, investigar ausencias sin borrarlas por costumbre y limitar el uso de información personal. Requiere comprender grano, claves y formatos de las lecciones anteriores.
 
-Revisar un conjunto de datos antes de analizarlo, interpretar ausencias sin borrarlas por costumbre y reconocer que una decisión basada en datos también puede causar daño.
+## Calidad no significa perfección
 
-## Calidad como condición de confianza
+Un conjunto es de calidad suficiente si sirve para una decisión concreta con límites conocidos. Los pedidos de Mercado Faro pueden ser aptos para planificar empaquetado diario y no para estudiar satisfacción, porque no contienen opiniones. Antes de calcular una métrica, documenta qué debe ser cierto.
 
-La calidad no significa que un dataset sea perfecto. Significa que conocemos si es adecuado para una decisión concreta. Una tabla de compras puede ser suficiente para estimar ingresos diarios y no serlo para saber satisfacción de clientes.
+| Dimensión | Pregunta operativa | Regla de ejemplo |
+| --- | --- | --- |
+| Completitud | ¿faltan campos necesarios? | `pedido_id`, fecha y estado no nulos |
+| Validez | ¿respetan formato y rango? | importe >= 0; fecha ISO 8601 |
+| Consistencia | ¿la misma idea se codifica igual? | canal solo `web`, `app`, `partner` |
+| Unicidad | ¿se repite indebidamente el hecho? | `pedido_id` único en pedidos |
+| Actualidad | ¿llega a tiempo? | carga antes de 09:00 del día siguiente |
+
+La calidad necesita responsable y reacción, no solo una lista. Una regla fallida se registra con fecha, fuente, número de filas afectadas, severidad, decisión y seguimiento: eso es **trazabilidad**.
+
+## De regla a decisión: severidad y contrato
+
+El contrato de datos de la lección 02 declara esquema, grano, reglas, propietario y frecuencia. Ahora añadimos severidad. Un `pedido_id` duplicado que infla ingresos es **crítico**: se bloquea el reporte. Un canal nuevo `affiliate` puede ser una advertencia: se aísla, se consulta a Growth y no se adivina a qué categoría pertenece. Una descripción de producto vacía quizá sea informativa y no impida el cálculo de pedidos.
+
+¿Cómo se gobierna una incidencia sin esconderla bajo una limpieza automática?
 
 ```mermaid
 flowchart TD
-    A[Pregunta de negocio] --> B[Datos disponibles]
-    B --> C[Comprobar grano y cobertura]
-    C --> D[Validar valores y relaciones]
-    D --> E[Investigar ausencias y sesgos]
-    E --> F{¿Apto para esta decisión?}
-    F -->|Sí, con límites| G[Analizar y comunicar]
-    F -->|No| H[Corregir, obtener datos o cambiar pregunta]
+    A[Ingreso de archivo o API] --> B[Validar esquema, grano y reglas]
+    B --> C[¿Falla alguna regla?]
+    C -->|No| D[Publicar dataset con versión]
+    C -->|Sí| E[Registrar evidencia y severidad]
+    E --> F[¿Afecta una métrica o privacidad?]
+    F -->|Sí, crítico| G[Bloquear uso y avisar propietario]
+    F -->|No, advertencia| H[Aislar, documentar límite y corregir]
+    G --> I[Revalidar y dejar historial]
+    H --> I
 ```
 
-Cinco controles iniciales son especialmente útiles:
+El flujo enseña que «limpiar» no equivale a borrar. Primero se preserva evidencia; después se decide una corrección reproducible.
 
-- **Completitud:** ¿faltan valores necesarios para la pregunta?
-- **Validez:** ¿los valores respetan reglas, unidades y formatos?
-- **Consistencia:** ¿la misma idea está registrada de la misma forma?
-- **Unicidad:** ¿existen duplicados indebidos?
-- **Actualidad:** ¿el dato llega a tiempo para la decisión?
+## Ausencias, sesgo y cobertura
 
-## Los nulos cuentan una historia
+Un vacío puede significar «no aplica», «no se capturó», «falló el tracking» o «la persona no quiso responder». Si `pais` falta sobre todo en usuarios de la app antigua, eliminar esas filas altera la población y puede esconder un fallo técnico. Mide ausencia por fecha, versión, canal y segmento; declara quién queda fuera antes de concluir que un canal rinde peor.
 
-Un valor ausente no es automáticamente un error. Puede significar “no se aplica”, “no se midió”, “falló el sistema” o “la persona prefirió no responder”. Borrar todas las filas con nulos puede eliminar justo a la población con la que tienes un problema.
+El **sesgo de cobertura** aparece cuando la fuente representa peor a parte de la población. Observar que quienes activaron notificaciones compran más no prueba que activar notificaciones cause compras: pueden ser usuarios ya más interesados. Un analista separa observación, explicación posible y decisión que aún requiere evidencia.
 
-Por ejemplo, si el campo `ingresos` falta sobre todo en usuarios que abandonan un formulario, la ausencia es información sobre fricción. Antes de imputar o eliminar, mide dónde faltan datos, desde cuándo y en qué segmentos.
+## Privacidad: finalidad, minimización y retención
 
-## Sesgo, privacidad y propósito
+Los datos personales identificables (**PII**, por *personally identifiable information*) son datos que identifican o pueden ayudar a identificar a una persona, como correo, teléfono, dirección o combinaciones poco frecuentes. Para contar pedidos por canal no necesitamos el correo. Aplicamos:
 
-Un dataset puede representar peor a grupos que usan menos una aplicación, tienen conectividad limitada o no están incluidos en la fuente. Un modelo entrenado con esos datos puede amplificar esa desigualdad. El analista debe declarar cobertura, exclusiones y riesgos, no tratarlos como una nota al pie.
+- **Finalidad:** define para qué se usa cada campo antes de recogerlo o consultarlo.
+- **Minimización:** usa solo los campos necesarios; sustituye identificadores por un ID interno cuando sea posible.
+- **Acceso:** limita quién puede ver PII y no copies datos reales en notebooks, ejercicios o capturas.
+- **Retención:** fija cuánto tiempo se conserva y cómo se elimina o anonimiza según la política y normativa aplicables.
 
-La privacidad comienza antes de abrir un archivo: recoge solo los datos necesarios, evita copiar identificadores personales en notebooks, limita acceso y define cuánto tiempo se conservan. Que un sistema permita acceder a una columna no significa que sea legítimo usarla para cualquier objetivo.
+Pseudonimizar no vuelve un conjunto automáticamente anónimo: un identificador sustituido aún puede relacionarse con una persona si existe la tabla de correspondencia o combinaciones reidentificables. Para decisiones legales o de tratamiento real, intervienen responsables de privacidad y la normativa vigente; el analista no debe improvisar permisos.
 
-## Caso práctico
+## Resumen y comprobación
 
-Una empresa quiere comparar uso por ciudad, pero el 30 % de usuarios no informa ciudad y ese porcentaje es mayor en móvil. Concluir que “móvil usa menos el producto en ciertas ciudades” sin estudiar la ausencia puede ser falso. Primero se investiga el formulario, la geolocalización, el consentimiento y los segmentos afectados.
+Una métrica defendible exige grano, contrato y controles. La ausencia es un resultado que se investiga; calidad y privacidad son condiciones del análisis, no una fase administrativa final.
 
-## Comprobación
+1. Clasifica como crítica, advertencia o informativa una fecha nula en un pedido pagado y justifica.
+2. ¿Por qué borrar todos los nulos de `pais` puede sesgar una comparación por canal?
+3. Para un dashboard de pedidos por canal, ¿qué PII puedes excluir?
 
-Elige una de las cinco dimensiones de calidad y describe: un error concreto, cómo lo detectarías, qué decisión podría dañar y cuál sería una respuesta prudente.
+Completa [la auditoría](../../../ejercicios/temario-01/comprension/auditoria-marketplace.md) y ejecuta el laboratorio antes de pasar a Python.
 
 # Bloque 02 - Python desde cero
 
