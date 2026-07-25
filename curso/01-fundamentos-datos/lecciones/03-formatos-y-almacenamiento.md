@@ -1,61 +1,64 @@
-# 01.3 CSV, JSON, Excel, Parquet y bases de datos
+# 01.3 CSV, JSON y conversión a tablas analizables
 
-## Objetivos
+## Objetivos y prerrequisitos
 
-Saber qué problema resuelve cada formato básico y elegir una forma razonable de guardar o recibir información sin memorizar una lista de siglas.
+Sabrás leer un CSV y un JSON como archivos de texto, explicar sus diferencias operativas, reconocer separador, codificación y fechas, y convertir un JSON de pedidos en tablas con grano claro. Se parte de archivo y tabla, no de experiencia con programación.
 
-## CSV: una tabla escrita como texto
+## CSV: una tabla escrita línea a línea
 
-Un archivo **CSV** significa *Comma-Separated Values*: valores separados por comas. Es un archivo de texto que representa una tabla. La primera línea suele contener los nombres de las columnas; cada línea posterior es una fila.
+Un **CSV** (*comma-separated values*) guarda una tabla como texto. La primera línea suele ser el encabezado; cada línea posterior, una fila. El nombre es histórico: en España es frecuente usar punto y coma para no confundir la coma decimal con el separador.
 
 ```text
-fecha,producto,importe
-2026-01-03,teclado,45.99
-2026-01-04,ratón,19.90
+pedido_id;creado_en_utc;total_eur;canal
+P-100;2026-07-24T07:14:00Z;42,00;web
+P-102;2026-07-24T18:22:00Z;65,00;app
 ```
 
-CSV es sencillo de abrir, compartir y leer con Python, Excel o un editor de texto. Su simplicidad también tiene límites: no guarda bien tipos complejos, fórmulas, varias hojas ni una estructura dentro de otra. Además, hay que acordar separador, codificación, formato de fecha y separador decimal.
+Antes de tratarlo como tabla hay que acordar el **dialecto**: separador `;`, decimal `,`, codificación de caracteres (preferiblemente UTF-8), comillas para texto con separadores y formato de fecha. Si una herramienta espera coma como separador, puede leer toda la línea como una sola columna; si interpreta `42,00` en otro contexto, puede dejarlo como texto.
 
-## JSON: una ficha que puede contener otras fichas
+La fecha `2026-07-24T07:14:00Z` sigue ISO 8601: `Z` significa UTC. No la cambies a «hora local» sin declarar zona y regla de conversión.
 
-**JSON** significa *JavaScript Object Notation*. Es texto estructurado mediante pares `campo: valor`. A diferencia de un CSV, puede guardar objetos dentro de objetos y listas. Es frecuente en APIs, configuraciones y eventos de aplicaciones.
+## JSON: una ficha con estructura interna
+
+Un archivo **JSON** (*JavaScript Object Notation*) también es texto, pero puede contener objetos y listas. Es habitual al recibir datos de una API: un servicio responde con una ficha de pedido que incluye al usuario y sus artículos.
 
 ```json
 {
-  "pedido_id": 1001,
-  "cliente": {
-    "nombre": "Leo",
-    "ciudad": "Madrid"
-  },
-  "productos": ["teclado", "ratón"],
-  "importe": 65.89
+  "pedido_id": "P-100",
+  "usuario": {"usuario_id": "U-10", "pais": "ES"},
+  "items": [
+    {"producto_id": "PR-7", "cantidad": 1, "precio_eur": 20.0},
+    {"producto_id": "PR-9", "cantidad": 1, "precio_eur": 20.0}
+  ],
+  "total_eur": 42.0
 }
 ```
 
-El JSON anterior es una ficha de pedido. No es una tabla, aunque se pueda transformar en una. Para analizar muchos pedidos, normalmente tendrás que decidir qué campos extraer y cómo convertir listas u objetos anidados en columnas o tablas relacionadas.
+No hay una única conversión correcta de JSON a CSV. El objeto principal se puede convertir en una fila de `pedidos`; `usuario.usuario_id` se extrae como una columna; cada elemento de `items` debe crear una fila de `lineas_pedido`. Repetir el pedido en cada línea es válido solo si declaramos que el resultado tiene grano de línea y no reutilizamos `total_eur` como si fuera un importe por línea.
 
 ```mermaid
 flowchart LR
-    A[Archivo CSV] --> B[Tabla plana: filas y columnas]
-    C[Archivo JSON] --> D[Ficha con objetos y listas]
-    B --> E[Python, Excel o SQL]
-    D --> F[Leer y normalizar antes de analizar]
+    J[JSON: un pedido con lista items] --> P[Tabla pedidos: una fila por pedido]
+    J --> L[Tabla lineas_pedido: una fila por item]
+    P -->|pedido_id| L
+    L --> A[Analizar unidades y productos]
+    P --> I[Analizar pedidos e ingreso]
 ```
 
-## Excel, Parquet y bases de datos
+El objetivo de la conversión no es «aplanar todo»: es conservar significado y poder analizar cada pregunta con el grano correspondiente.
 
-**Excel** es una aplicación y un formato de libro de trabajo; es útil para revisión manual, cálculos ligeros y comunicación. No es ideal como fuente única de procesos repetibles si múltiples personas lo editan sin control.
+## Otros medios y elección razonada
 
-**Parquet** es un formato optimizado para datos tabulares grandes. Guarda columnas de forma eficiente y conserva tipos mejor que CSV. Normalmente lo usarás mediante Python, Spark, DuckDB o un warehouse, no editándolo a mano.
+Excel es una aplicación y un formato útil para revisión humana y casos pequeños, pero varias ediciones manuales sin historial dificultan reproducir un análisis. Parquet guarda datos por columnas y tipos de forma eficiente; suele usarse con herramientas de datos, no editándose a mano. Una base de datos mantiene datos compartidos con consultas, permisos y reglas; SQL, MongoDB o DynamoDB se verán más adelante con profundidad.
 
-Una **base de datos** organiza información para que aplicaciones y personas puedan consultarla con reglas de acceso, relaciones y actualizaciones. SQL es un lenguaje para consultar muchas bases relacionales; MongoDB almacena documentos similares a JSON; DynamoDB se diseña alrededor de claves y patrones de acceso.
+La elección responde a una necesidad: CSV para intercambio de tabla simple; JSON para respuestas estructuradas; Parquet para volúmenes tabulares y procesos analíticos; base de datos para operación concurrente. Ningún formato arregla un grano o una definición defectuosos.
 
-## Cómo elegir sin obsesionarte
+## Contraejemplos y comprobación
 
-Empieza preguntando: ¿necesito una tabla simple que cualquiera pueda abrir? CSV. ¿Recibo una respuesta con estructuras anidadas de una API? JSON. ¿Trabajo con muchos datos tabulares repetidamente? Parquet o una base de datos. ¿Necesito revisar manualmente algo pequeño? Excel puede ser adecuado.
+No abras un CSV «a doble clic» y des por hecho que se interpretó bien. Verifica columnas, filas, tipos, caracteres como `ñ` y fechas. No conviertas una lista JSON en una sola celda para luego intentar contar productos.
 
-La elección no elimina el deber de conocer grano, calidad y significado.
+1. ¿Qué separador y decimal usa el CSV del ejemplo?
+2. ¿Qué dos tablas crearías a partir del JSON y cuál sería su clave de unión?
+3. ¿Por qué `total_eur` no se debe sumar sin cuidado tras expandir `items`?
 
-## Comprobación
-
-Explica a otra persona la diferencia entre CSV y JSON sin usar las palabras “plano” ni “anidado”. Después indica cuál esperarías recibir de una API meteorológica y por qué.
+El laboratorio ejecutable muestra una conversión deliberadamente pequeña y auditable.

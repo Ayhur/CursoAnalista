@@ -1,0 +1,11 @@
+{
+  "pedido_id": "P-100",
+  "usuario": {"usuario_id": "U-10", "pais": "ES"},
+  "creado_en_utc": "2026-07-24T07:14:00Z",
+  "estado": "pagado",
+  "items": [
+    {"producto_id": "PR-7", "cantidad": 1, "precio_eur": 20.0},
+    {"producto_id": "PR-9", "cantidad": 1, "precio_eur": 20.0}
+  ],
+  "total_eur": 42.0
+}

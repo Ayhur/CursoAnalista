@@ -1,0 +1,6 @@
+pedido_id;usuario_id;creado_en_utc;estado;total_eur;canal
+P-100;U-10;2026-07-24T07:14:00Z;pagado;42,00;web
+P-101;U-10;2026-07-24T16:05:00Z;cancelado;18,00;web
+P-102;U-24;2026-07-24T18:22:00Z;pagado;65,00;app
+P-102;U-24;2026-07-24T18:22:00Z;pagado;65,00;app
+P-103;U-31;;pagado;12,50;affiliate
