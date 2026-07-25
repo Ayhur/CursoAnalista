@@ -1,27 +1,70 @@
-# Selección, máscaras y forma
+# Forma, ejes e indexación
 
 ## Objetivos y prerrequisitos
 
-Aprenderás a elegir elementos por posición o condición y a interpretar la forma de un array. Requiere arrays básicos.
+Aprenderás a leer una matriz como filas y columnas, resumir por la dirección correcta y seleccionar posiciones sin alterar su significado. Requiere arrays y operaciones vectorizadas del tema anterior.
 
-## Preguntar una condición a cada elemento
+## Una matriz necesita un contrato
 
-Una **máscara booleana** contiene `True` o `False` para cada posición. Es la traducción de una pregunta: “¿esta venta supera 100?”
+Una lista de números no indica por sí sola qué representa cada posición. En NexoCloud registraremos cuatro días (filas) y tres canales (columnas: web, chat y correo). Cada celda es el número de solicitudes resueltas ese día por ese canal:
 
 ```python
-ventas = np.array([80, 125, 210])
-es_alta = ventas > 100
-ventas[es_alta]  # array([125, 210])
+import numpy as np
+
+canales = np.array(["web", "chat", "correo"])
+resueltas = np.array([
+    [12, 8, 4],
+    [15, 7, 5],
+    [11, 9, 6],
+    [13, 10, 4],
+])
+print(resueltas.shape)  # (4, 3): 4 días, 3 canales
+print(resueltas.ndim)   # 2 dimensiones
 ```
 
-La máscara es valiosa porque hace visible el criterio. Antes de filtrar pedidos “altos”, define por qué 100 es el límite y revisa cuántos elementos quedan fuera.
+`shape` es una tupla que enumera el tamaño de cada dimensión. No dice «días» ni «canales»: eso es parte del contrato que acabamos de escribir. Una matriz con forma `(4, 3)` también podría significar cuatro tiendas y tres productos. `ndim` cuenta dimensiones y `size` cuenta celdas: aquí `4 * 3 = 12`.
 
-La **forma** (`shape`) describe dimensiones. Un array de tres ventas tiene forma `(3,)`; una matriz de dos días y tres métricas puede tener `(2, 3)`. La forma no da significado a filas y columnas: debes documentarlo.
+## Ejes: resumir hacia una dirección
 
-## Error habitual
+En una matriz bidimensional, `axis=0` reduce las filas y conserva columnas; `axis=1` reduce las columnas y conserva filas. Es más seguro describirlo como «lo que queda» que memorizar una frase:
 
-Una máscara de longitud distinta al array no se puede aplicar correctamente. Más grave aún: una máscara correcta técnicamente puede estar desalineada conceptualmente si proviene de otro periodo o de clientes ordenados de forma distinta.
+```python
+por_canal = resueltas.sum(axis=0)  # [51, 34, 19], un total por canal
+por_dia = resueltas.sum(axis=1)    # [24, 27, 26, 27], un total por día
+```
 
-## Resumen
+La relación visual responde a «¿qué etiqueta conserva cada suma?»:
 
-Seleccionar es formular un criterio. Comprueba siempre forma, orden y significado antes de combinar arrays.
+```mermaid
+flowchart TB
+  A[Matriz: días por canales] --> B[sum axis=0]
+  B --> C[Un total por canal]
+  A --> D[sum axis=1]
+  D --> E[Un total por día]
+```
+
+`axis=0` no significa «mejor» ni «vertical» en abstracto; solo resulta correcto porque el contrato asignó filas a días y columnas a canales. Verifica la forma del resultado antes de asignarle un nombre.
+
+## Índices y cortes
+
+Python empieza a contar en cero. La sintaxis `[fila, columna]` selecciona una celda; los cortes `inicio:fin` incluyen el inicio y excluyen el final:
+
+```python
+primer_dia = resueltas[0, :]   # [12, 8, 4]
+chat = resueltas[:, 1]         # [8, 7, 9, 10]
+dos_primeros_dias = resueltas[:2, :]
+```
+
+La posición `1` solo significa chat porque `canales[1]` lo documenta. Si se reordena `canales` sin reordenar las columnas, el código seguirá funcionando y la conclusión será errónea. En tablas de producción, Pandas reduce este riesgo al usar etiquetas; aun así hay que validar las claves.
+
+## Error habitual: forma válida, comparación inválida
+
+Dos arrays pueden tener misma forma y referirse a períodos distintos. Restar las solicitudes de lunes a jueves a las de viernes a lunes entrega cuatro números, pero no mide una evolución comparable si los días no representan la misma condición. La forma comprueba compatibilidad técnica; no comprueba comparabilidad de negocio.
+
+## Resumen y comprobación
+
+- Documenta qué representa cada dimensión antes de usar `shape`.
+- `axis=0` devuelve una medida por columna; `axis=1`, una medida por fila en este contrato.
+- Los índices son posiciones, no etiquetas con significado propio.
+
+Pregunta: si `resueltas.mean(axis=0)` tiene forma `(3,)`, ¿qué representa cada resultado? Continúa con máscaras para seleccionar por una condición explícita.
