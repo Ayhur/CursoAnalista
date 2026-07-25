@@ -2183,39 +2183,101 @@ Completa el [ticket analítico](../../../ejercicios/temario-13/aplicacion/ticket
 
 # Bloque 14 - Nivel avanzado: causalidad, escala y criterio
 
-## Objetivo
+## Propósito
 
-Reconocer problemas avanzados que aparecen al analizar productos y operaciones reales: causalidad, anomalías, datos grandes y datos con estructura espacial o externa.
+Reconocer problemas avanzados que aparecen al analizar productos y operaciones reales: causalidad, anomalías, datos grandes y datos externos.
 
-## Causalidad
+## Lecciones
 
-Cuando la pregunta es "qué ocurriría si cambiamos X", una correlación no basta. Los experimentos aleatorizados son la referencia cuando son posibles. Cuando no lo son, considera diseños cuasiexperimentales, diferencias en diferencias, regresión discontinua o matching con gran cautela y supuestos explícitos.
-
-```mermaid
-flowchart TD
-    A[Pregunta causal] --> B{¿Experimento posible?}
-    B -->|Sí| C[A/B con guardrails]
-    B -->|No| D[Diseño cuasiexperimental]
-    C --> E[Estimación y sensibilidad]
-    D --> E
-    E --> F[Decisión con límites]
-```
-
-## Escala y rendimiento
-
-Cuando un dataset no cabe cómodamente en memoria, empieza por reducir columnas y filas, filtrar antes de transferir y usar formatos columnares. DuckDB y Polars son herramientas útiles; no sustituyen un modelado correcto ni la definición clara de la pregunta.
-
-## Anomalías y monitorización
-
-Una anomalía es una observación inesperada respecto a un patrón, no necesariamente un incidente. Comprueba primero cambios de tracking, calendario, despliegues y calidad de datos. Diseña alertas con umbrales y responsables para evitar fatiga de alertas.
-
-## APIs y datos externos
-
-Documenta procedencia, licencia, frecuencia y sesgo de cada fuente. Una API puede cambiar sus campos o límites; la reproducibilidad exige guardar fecha de extracción, versión y transformaciones.
+1. [Preguntas causales y diseños posibles](lecciones/01-preguntas-causales-y-disenos.md)
+2. [Bootstrap y sensibilidad](lecciones/02-bootstrap-y-sensibilidad.md)
+3. [Anomalías, monitorización y alertas](lecciones/03-anomalias-monitorizacion-y-alertas.md)
+4. [Escala, formatos y motores analíticos](lecciones/04-escala-formatos-y-motores.md)
+5. [APIs, geoespacial y datos externos](lecciones/05-apis-geoespacial-y-datos-externos.md)
 
 ## Práctica
 
 Evalúa [un supuesto causal](../../ejercicios/temario-14/aplicacion/supuesto-causal.md).
+
+# Preguntas causales y diseños posibles
+
+## Objetivos y prerrequisitos
+
+Distinguirás “qué ocurrió” de “qué habría ocurrido si cambiamos algo” y elegirás evidencia proporcional a la decisión.
+
+Una pregunta causal compara escenarios que no se observan a la vez: “¿reducir el formulario aumentaría reservas?”. La correlación entre formularios cortos y más reservas no basta; quizá los usuarios o campañas eran distintos. Un experimento aleatorizado aproxima una comparación justa al asignar variantes de forma controlada.
+
+```mermaid
+flowchart LR
+ A[Pregunta causal] --> B{¿Experimento posible?}
+ B -->|Sí| C[A/B y guardrails]
+ B -->|No| D[Diseño cuasiexperimental]
+ C --> E[Estimación y sensibilidad]
+ D --> E
+ E --> F[Decisión con límites]
+```
+
+Cuando no hay experimento, diferencias en diferencias, regresión discontinua o matching pueden aportar evidencia, pero cada uno necesita supuestos verificables y análisis de sensibilidad. No son “botones de causalidad”.
+
+## Resumen
+
+Declara el cambio, la población, el contrafactual y los supuestos. Continúa con [bootstrap y sensibilidad](02-bootstrap-y-sensibilidad.md).
+
+# Bootstrap y sensibilidad
+
+## Objetivos y prerrequisitos
+
+Usarás remuestreo para entender estabilidad de una estimación y variarás supuestos para comprobar si una conclusión depende de una decisión frágil.
+
+El **bootstrap** crea muchas muestras al volver a seleccionar, con reemplazo, observaciones de los datos disponibles. Al recalcular una métrica se obtiene una distribución de estimaciones. Es útil cuando la fórmula analítica es complicada, pero no corrige una muestra sesgada ni convierte datos insuficientes en evidencia sólida.
+
+Un análisis de sensibilidad cambia decisiones razonables: ventana temporal, tratamiento de outliers, umbral o definición de métrica. Si una recomendación se invierte con cambios pequeños, comunícalo y evita una afirmación tajante.
+
+## Resumen
+
+Incertidumbre no es solo un intervalo: también es dependencia de datos y supuestos.
+
+# Anomalías, monitorización y alertas
+
+## Objetivos y prerrequisitos
+
+Construirás una respuesta ordenada ante un valor inesperado sin confundir señal con incidente.
+
+Una **anomalía** es una observación que se aparta de un patrón esperado. Antes de alertar a negocio, comprueba tracking, frescura de datos, calendario, despliegues y cambios de definición. Una caída de eventos puede ser un fallo de instrumentación; una subida de ventas, una campaña legítima.
+
+Una alerta necesita métrica, referencia, umbral, ventana, responsable y runbook: qué comprobar y cuándo escalar. Umbrales demasiado sensibles producen fatiga de alertas; demasiado laxos detectan tarde. Ajusta con historial y coste de no detectar.
+
+## Resumen
+
+Monitorizar es diseñar una decisión operativa, no solo pintar una línea roja.
+
+# Escala, formatos y motores analíticos
+
+## Objetivos y prerrequisitos
+
+Elegirás una estrategia cuando los datos superen la memoria o el tiempo de una herramienta local.
+
+Primero reduce el problema: selecciona columnas, filtra antes de transferir, agrega cerca de la fuente y evita duplicaciones. Los formatos columnares como Parquet permiten leer solo campos necesarios. DuckDB consulta archivos y tablas localmente; Polars procesa datos de manera eficiente. Son herramientas, no excusas para ignorar grano, calidad o coste.
+
+Cuando el equipo usa warehouse, lakehouse o procesamiento distribuido, mueve cómputo cerca de los datos y controla permisos, gasto y particiones. Una consulta rápida pero semánticamente errónea sigue siendo errónea.
+
+## Resumen
+
+Escalar empieza por una pregunta más precisa y un modelo de datos correcto.
+
+# APIs, geoespacial y datos externos
+
+## Objetivos y prerrequisitos
+
+Integrarás datos externos sin perder trazabilidad, licencias ni contexto geográfico.
+
+Una API permite que programas soliciten datos a otro servicio. Antes de usarla, registra proveedor, permiso, licencia, fecha, versión, límites, campos y transformaciones. Una fuente externa puede cambiar sin avisar o medir una población distinta a la tuya.
+
+Los datos geoespaciales añaden ubicación, pero una coordenada no siempre indica residencia, tienda o zona de entrega. Agregar por áreas puede ocultar diferencias internas o crear riesgos de privacidad. Minimiza precisión cuando no sea necesaria y evita inferencias sensibles sobre personas.
+
+## Cierre
+
+Evalúa el [supuesto causal](../../../ejercicios/temario-14/aplicacion/supuesto-causal.md). El último bloque convertirá el recorrido en pruebas de competencia y portfolio defendible.
 
 # Bloque 15 - Portfolio y preparación profesional
 

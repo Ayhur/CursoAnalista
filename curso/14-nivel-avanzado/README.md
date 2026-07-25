@@ -1,34 +1,16 @@
 # Bloque 14 - Nivel avanzado: causalidad, escala y criterio
 
-## Objetivo
+## Propósito
 
-Reconocer problemas avanzados que aparecen al analizar productos y operaciones reales: causalidad, anomalías, datos grandes y datos con estructura espacial o externa.
+Reconocer problemas avanzados que aparecen al analizar productos y operaciones reales: causalidad, anomalías, datos grandes y datos externos.
 
-## Causalidad
+## Lecciones
 
-Cuando la pregunta es "qué ocurriría si cambiamos X", una correlación no basta. Los experimentos aleatorizados son la referencia cuando son posibles. Cuando no lo son, considera diseños cuasiexperimentales, diferencias en diferencias, regresión discontinua o matching con gran cautela y supuestos explícitos.
-
-```mermaid
-flowchart TD
-    A[Pregunta causal] --> B{¿Experimento posible?}
-    B -->|Sí| C[A/B con guardrails]
-    B -->|No| D[Diseño cuasiexperimental]
-    C --> E[Estimación y sensibilidad]
-    D --> E
-    E --> F[Decisión con límites]
-```
-
-## Escala y rendimiento
-
-Cuando un dataset no cabe cómodamente en memoria, empieza por reducir columnas y filas, filtrar antes de transferir y usar formatos columnares. DuckDB y Polars son herramientas útiles; no sustituyen un modelado correcto ni la definición clara de la pregunta.
-
-## Anomalías y monitorización
-
-Una anomalía es una observación inesperada respecto a un patrón, no necesariamente un incidente. Comprueba primero cambios de tracking, calendario, despliegues y calidad de datos. Diseña alertas con umbrales y responsables para evitar fatiga de alertas.
-
-## APIs y datos externos
-
-Documenta procedencia, licencia, frecuencia y sesgo de cada fuente. Una API puede cambiar sus campos o límites; la reproducibilidad exige guardar fecha de extracción, versión y transformaciones.
+1. [Preguntas causales y diseños posibles](lecciones/01-preguntas-causales-y-disenos.md)
+2. [Bootstrap y sensibilidad](lecciones/02-bootstrap-y-sensibilidad.md)
+3. [Anomalías, monitorización y alertas](lecciones/03-anomalias-monitorizacion-y-alertas.md)
+4. [Escala, formatos y motores analíticos](lecciones/04-escala-formatos-y-motores.md)
+5. [APIs, geoespacial y datos externos](lecciones/05-apis-geoespacial-y-datos-externos.md)
 
 ## Práctica
 
