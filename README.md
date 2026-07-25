@@ -41,9 +41,9 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 | 00 | Orientación y pensamiento analítico | Desarrollado: 3 lecciones |
 | 01 | Fundamentos de datos | Desarrollado: 4 lecciones |
 | 02 | Python desde cero | Desarrollado: 6 lecciones |
-| 03 | Matemáticas aplicadas (teoría general opcional) | Desarrollado: 4 lecciones |
-| 04-09 | NumPy, Pandas, EDA, visualización, estadística y datos | Desarrollados: 32 lecciones |
-| 10 | Métricas y producto | Desarrollado: 9 lecciones |
+| 03 | Matemáticas aplicadas (teoría general opcional) | Desarrollado: 6 lecciones |
+| 04-09 | NumPy, Pandas, EDA, visualización, estadística y datos | Desarrollados: 34 lecciones |
+| 10 | Métricas y producto | Desarrollado: 10 lecciones |
 | 11-15 | Especialización y portfolio | Desarrollados: 29 lecciones |
 
 ## Cómo se organiza el material
@@ -74,7 +74,7 @@ Python, Pandas, SQL, MongoDB, DynamoDB, GitHub, Jira, Amplitude y herramientas B
 
 ## Estado del curso
 
-Los 16 bloques están desarrollados como **87 lecciones** y se pueden leer en Markdown o descargar por bloque y como temario consolidado en PDF. El criterio docente, la auditoría de reconstrucción y el mapa de cobertura están documentados en el [programa docente](docs/programa-docente.md) y la [auditoría docente](docs/auditoria-docente-2026-07.md).
+Los 16 bloques están desarrollados como **92 lecciones** y se pueden leer en Markdown o descargar por bloque y como temario consolidado en PDF. El criterio docente, la auditoría de reconstrucción y el mapa de cobertura están documentados en el [programa docente](docs/programa-docente.md) y la [auditoría docente](docs/auditoria-docente-2026-07.md).
 
 ## Licencia
 

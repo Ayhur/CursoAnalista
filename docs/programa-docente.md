@@ -29,20 +29,20 @@ Los diagramas se escriben dentro de la lección con Mermaid y se generan tambié
 | 01. Fundamentos de datos | 4 | Entender grano, tipos, calidad, privacidad y fuentes. |
 | 02. Python | 6 | Escribir, leer y depurar código básico reproducible. |
 | 03. Matemáticas aplicadas | 6 | Interpretar magnitudes, tasas, distribuciones, agregaciones y comparaciones temporales. |
-| 04. NumPy | 3 | Pensar vectorialmente y manipular arrays numéricos. |
+| 04. NumPy | 5 | Pensar vectorialmente y manipular arrays numéricos. |
 | 05. Pandas | 6 | Preparar y validar datos tabulares con trazabilidad. |
 | 06. EDA | 6 | Investigar patrones y anomalías sin sobrerreclamar causalidad. |
 | 07. Visualización | 4 | Elegir y diseñar gráficos que permitan decidir. |
 | 08. Estadística | 6 | Comunicar incertidumbre y evaluar experimentos. |
 | 09. SQL, NoSQL y almacenamiento | 7 | Consultar datos y entender su arquitectura y límites. |
-| 10. Métricas y producto | 9 | Diseñar un sistema de métricas gobernado y accionable. |
+| 10. Métricas y producto | 10 | Diseñar un sistema de métricas gobernado y accionable. |
 | 11. Series temporales | 9 | Analizar evolución, validar previsiones y operar bajo incertidumbre. |
 | 12. Modelos predictivos | 5 | Aplicar predicción con validación, interpretación y ética. |
 | 13. Herramientas y reproducibilidad | 6 | Entregar análisis colaborables y mantenibles. |
 | 14. Nivel avanzado | 5 | Abordar causalidad, escala, anomalías y fuentes externas. |
 | 15. Portfolio | 4 | Demostrar competencias mediante proyectos defendibles. |
 
-Total: **87 lecciones**, que cubren los 161 temas del índice maestro.
+Total: **92 lecciones**, que cubren los 161 temas del índice maestro.
 
 ## Mapa de lecciones por bloque
 
