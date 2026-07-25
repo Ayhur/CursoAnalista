@@ -1,37 +1,17 @@
 # Bloque 05 - Pandas: manipulación de datos
 
-## Objetivo
+## Propósito
 
-Importar, limpiar, transformar y combinar tablas de datos con Pandas.
+Preparar datos tabulares con trazabilidad. Pandas no “arregla” datos por sí solo: permite expresar y validar decisiones sobre ellos.
 
-## El ciclo de preparación
+## Lecciones
 
-Un DataFrame representa una tabla con filas y columnas etiquetadas. La primera tarea no es transformar: es inspeccionar tamaño, tipos, nulos, duplicados, rangos y ejemplos reales.
-
-```mermaid
-flowchart TD
-    A[Importar datos] --> B[Perfilar y entender]
-    B --> C[Limpiar y tipar]
-    C --> D[Transformar]
-    D --> E[Validar resultados]
-    E --> F[Análisis o exportación]
-```
-
-## Operaciones esenciales
-
-- Seleccionar columnas y filtrar filas con condiciones.
-- Convertir fechas, números y categorías explícitamente.
-- Crear columnas derivadas con operaciones vectorizadas.
-- Agrupar con `groupby` para resumir por segmento.
-- Combinar fuentes con `merge`, verificando la cardinalidad de las claves.
-
-## Uniones sin sorpresas
-
-Antes de unir tablas identifica la clave y pregunta si es uno a uno, uno a muchos o muchos a muchos. Una unión inesperadamente muchos a muchos multiplica filas y puede inflar ingresos, usuarios o eventos.
-
-## Validación
-
-Después de una transformación compara número de filas, nulos y totales relevantes. Las validaciones simples son una red de seguridad más valiosa que un notebook elegante.
+1. [DataFrames, importación y perfilado](lecciones/01-dataframes-importacion-y-perfilado.md)
+2. [Selección, tipos y limpieza](lecciones/02-seleccion-tipos-y-limpieza.md)
+3. [Columnas derivadas y agregaciones](lecciones/03-transformacion-y-agregacion.md)
+4. [Uniones y cardinalidad](lecciones/04-uniones-y-cardinalidad.md)
+5. [Validación y trazabilidad](lecciones/05-validacion-y-trazabilidad.md)
+6. [Caso integrado de pedidos](lecciones/06-caso-integrado-pedidos.md)
 
 ## Práctica
 

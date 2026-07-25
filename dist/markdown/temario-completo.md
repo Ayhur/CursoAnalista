@@ -904,78 +904,236 @@ NumPy permite transformar, seleccionar y resumir números de forma concisa. Ante
 
 # Bloque 05 - Pandas: manipulación de datos
 
-## Objetivo
+## Propósito
 
-Importar, limpiar, transformar y combinar tablas de datos con Pandas.
+Preparar datos tabulares con trazabilidad. Pandas no “arregla” datos por sí solo: permite expresar y validar decisiones sobre ellos.
 
-## El ciclo de preparación
+## Lecciones
 
-Un DataFrame representa una tabla con filas y columnas etiquetadas. La primera tarea no es transformar: es inspeccionar tamaño, tipos, nulos, duplicados, rangos y ejemplos reales.
-
-```mermaid
-flowchart TD
-    A[Importar datos] --> B[Perfilar y entender]
-    B --> C[Limpiar y tipar]
-    C --> D[Transformar]
-    D --> E[Validar resultados]
-    E --> F[Análisis o exportación]
-```
-
-## Operaciones esenciales
-
-- Seleccionar columnas y filtrar filas con condiciones.
-- Convertir fechas, números y categorías explícitamente.
-- Crear columnas derivadas con operaciones vectorizadas.
-- Agrupar con `groupby` para resumir por segmento.
-- Combinar fuentes con `merge`, verificando la cardinalidad de las claves.
-
-## Uniones sin sorpresas
-
-Antes de unir tablas identifica la clave y pregunta si es uno a uno, uno a muchos o muchos a muchos. Una unión inesperadamente muchos a muchos multiplica filas y puede inflar ingresos, usuarios o eventos.
-
-## Validación
-
-Después de una transformación compara número de filas, nulos y totales relevantes. Las validaciones simples son una red de seguridad más valiosa que un notebook elegante.
+1. [DataFrames, importación y perfilado](lecciones/01-dataframes-importacion-y-perfilado.md)
+2. [Selección, tipos y limpieza](lecciones/02-seleccion-tipos-y-limpieza.md)
+3. [Columnas derivadas y agregaciones](lecciones/03-transformacion-y-agregacion.md)
+4. [Uniones y cardinalidad](lecciones/04-uniones-y-cardinalidad.md)
+5. [Validación y trazabilidad](lecciones/05-validacion-y-trazabilidad.md)
+6. [Caso integrado de pedidos](lecciones/06-caso-integrado-pedidos.md)
 
 ## Práctica
 
 Resuelve [la limpieza de pedidos](../../ejercicios/temario-05/aplicacion/limpieza-pedidos.md) y después consulta [la solución razonada](../../soluciones/temario-05/limpieza-pedidos.md).
 
-# Bloque 06 - Análisis exploratorio de datos
+# DataFrames, importación y perfilado
 
-## Objetivo
+## Objetivos y prerrequisitos
 
-Explorar datos de manera rigurosa para descubrir patrones, anomalías y preguntas nuevas sin confundir exploración con demostración causal.
+Sabrás abrir una tabla con Pandas e inspeccionarla antes de modificarla. Requiere los bloques de datos y Python.
 
-## Preguntas antes de gráficos
+Un **DataFrame** es una tabla en memoria: filas (observaciones) y columnas (variables) con nombres. Un archivo CSV puede guardar una tabla, pero abrirlo no garantiza que cada columna tenga el tipo ni el significado esperado.
 
-Empieza por una hipótesis o pregunta: "¿qué segmento ha cambiado?", "¿dónde se concentran los valores atípicos?", "¿hay estacionalidad?". Un gráfico sin pregunta puede ser interesante, pero no necesariamente útil.
-
-```mermaid
-flowchart TD
-    A[Pregunta] --> B[Perfil de datos]
-    B --> C[Distribuciones y segmentos]
-    C --> D[Hallazgo]
-    D --> E{¿Es plausible?}
-    E -->|Sí| F[Validar y comunicar]
-    E -->|No| G[Revisar datos y supuestos]
+```python
+import pandas as pd
+pedidos = pd.read_csv("pedidos.csv")
+pedidos.head()
+pedidos.info()
 ```
 
-## Distribución y segmentos
+`head()` muestra ejemplos; `info()` enseña número de filas, columnas, tipos y valores no nulos. Compleméntalos con `describe()`, revisión de categorías y comprobación del grano: ¿una fila representa un pedido, una línea de pedido o un usuario?
 
-Observa centro, dispersión, asimetría y valores extremos. Compara siempre segmentos relevantes: una media global puede ocultar que un canal crece mientras otro cae. No borres outliers sin investigar si representan un error, un caso importante o una población distinta.
+Este flujo responde a “¿qué debe ocurrir antes de calcular?”
 
-## Correlación y causalidad
+```mermaid
+flowchart LR
+ A[Importar] --> B[Ver ejemplos]
+ B --> C[Comprobar grano y tipos]
+ C --> D[Medir nulos y duplicados]
+ D --> E[Decidir transformación]
+```
 
-Dos variables pueden moverse juntas por azar, por una tercera causa o porque una afecta a la otra. El EDA genera hipótesis; experimentos, diseños causales o conocimiento del proceso ayudan a evaluar explicaciones.
+Un error habitual es llamar “ventas” a una columna sin verificar moneda, impuestos o devoluciones. El perfilado abre preguntas; no las responde automáticamente.
 
-## Registro de decisiones
+Sigue con [selección, tipos y limpieza](02-seleccion-tipos-y-limpieza.md).
 
-Anota filtros, exclusiones, transformaciones y limitaciones. Un buen análisis permite responder no solo "qué encontraste", sino "cómo llegaste ahí".
+# Selección, tipos y limpieza
+
+## Objetivos y prerrequisitos
+
+Seleccionarás columnas y filas, convertirás tipos explícitamente y tratarás problemas sin borrar información a ciegas.
+
+Seleccionar una columna responde una pregunta concreta: `pedidos["importe"]`. Filtrar filas aplica un criterio visible: `pedidos[pedidos["estado"] == "pagado"]`. Antes de filtrar, cuenta qué se excluye y por qué; “pagado” puede ser una definición distinta a “pedido creado”.
+
+Los valores importados como texto requieren conversión controlada:
+
+```python
+pedidos["importe"] = pd.to_numeric(pedidos["importe"], errors="coerce")
+pedidos["fecha"] = pd.to_datetime(pedidos["fecha"], errors="coerce")
+```
+
+`coerce` convierte valores inválidos en ausentes. Es útil porque no inventa una cifra, pero obliga a medir y decidir qué hacer con esos ausentes. No elimines nulos por costumbre: pueden concentrarse en un canal y sesgar el resultado.
+
+## Resumen
+
+Limpiar es convertir una regla de calidad en código verificable. Continúa con [transformación y agregación](03-transformacion-y-agregacion.md).
+
+# Columnas derivadas y agregaciones
+
+## Objetivos y prerrequisitos
+
+Crearás medidas derivadas y resumirás una tabla sin perder de vista el grano.
+
+Una columna derivada expresa una regla: `importe_neto = importe - descuento`. Documenta si el descuento ya incluye impuestos y qué sucede cuando falta. `groupby` agrupa filas y aplica una agregación:
+
+```python
+ventas_canal = pedidos.groupby("canal", as_index=False).agg(
+    pedidos=("pedido_id", "nunique"),
+    ingresos=("importe_neto", "sum")
+)
+```
+
+`nunique` cuenta identificadores únicos; `count` cuenta valores no nulos. Elegir uno u otro cambia la métrica. Un promedio de importe también puede ocultar la distribución, por lo que conviene acompañarlo de volumen y percentiles cuando la decisión lo requiera.
+
+## Límite
+
+Agregar convierte muchas filas en pocas. Es útil para comparar canales, pero puede ocultar diferencias por país, dispositivo o periodo. Conserva la tabla de origen y registra cada agregación.
+
+Sigue con [uniones y cardinalidad](04-uniones-y-cardinalidad.md).
+
+# Uniones y cardinalidad
+
+## Objetivos y prerrequisitos
+
+Combinarás tablas comprobando qué clave conecta las filas y cuántas coincidencias son válidas.
+
+Una unión (`merge`) cruza dos tablas mediante una **clave**, por ejemplo `cliente_id`. Antes de ejecutarla declara la cardinalidad: uno a uno, uno a muchos o muchos a uno. Muchos a muchos puede ser correcto, pero multiplica combinaciones y requiere una justificación explícita.
+
+```python
+pedidos_con_clientes = pedidos.merge(
+    clientes, on="cliente_id", how="left", validate="many_to_one"
+)
+```
+
+`validate="many_to_one"` convierte un supuesto en una comprobación: muchos pedidos pueden corresponder a un cliente, pero cada pedido no debe encontrar dos fichas de cliente. Tras unir, compara filas, claves sin coincidencia y totales monetarios.
+
+## Error habitual
+
+Ver una columna nueva y asumir que la unión funcionó. Si `clientes` tiene duplicados por error, cada pedido puede repetirse y los ingresos se inflan. La sintaxis válida no demuestra una relación válida.
+
+Continúa con [validación y trazabilidad](05-validacion-y-trazabilidad.md).
+
+# Validación y trazabilidad
+
+## Objetivos y prerrequisitos
+
+Definirás controles simples que convierten una transformación en un paso revisable.
+
+Tras cada paso relevante guarda observaciones: número de filas, claves únicas, porcentaje de nulos y totales de negocio. Una validación puede ser una aserción:
+
+```python
+assert pedidos["pedido_id"].is_unique
+assert pedidos["importe_neto"].notna().all()
+```
+
+No uses una aserción para ocultar un problema. Si falla, inspecciona los registros y decide si el supuesto era incorrecto o si hay un defecto de datos. Registra filtros, versión de la fuente y fecha de extracción: ese rastro permite reproducir el análisis.
+
+## Resumen
+
+Validar no es un último adorno; acompaña a cada transformación. Aplica ahora todo el ciclo en el [caso integrado](06-caso-integrado-pedidos.md).
+
+# Caso integrado de pedidos
+
+## Objetivos y prerrequisitos
+
+Usarás el flujo completo para responder una pregunta simple: “¿qué canal aporta ingresos netos y cuántos pedidos válidos hay?”.
+
+Primero formula el contrato: una fila es un pedido; solo se incluyen estados pagados; importe neto excluye descuento; el periodo es el mes analizado. Después perfila, convierte tipos, mide registros inválidos, crea la columna neta y agrupa por canal. Finalmente compara el total agrupado con el total de pedidos filtrados.
+
+El resultado debe incluir una limitación: si hay pedidos devueltos después de la extracción, los ingresos no representan todavía margen final. Ese tipo de frase es parte del análisis, no una excusa.
+
+Resuelve la [limpieza de pedidos](../../../ejercicios/temario-05/aplicacion/limpieza-pedidos.md) y revisa la solución razonada. El siguiente bloque explorará lo que estos resúmenes sugieren, sin convertirlos de inmediato en causalidad.
+
+# Bloque 06 - Análisis exploratorio de datos
+
+## Propósito
+
+Explorar datos para descubrir patrones, anomalías y preguntas nuevas sin confundir exploración con demostración causal.
+
+## Lecciones
+
+1. [Preguntas y perfil exploratorio](lecciones/01-preguntas-y-perfil-exploratorio.md)
+2. [Distribuciones, segmentos y valores extremos](lecciones/02-distribuciones-segmentos-y-outliers.md)
+3. [Relaciones, correlación y explicaciones rivales](lecciones/03-relaciones-correlacion-y-causalidad.md)
+4. [Registro de hallazgos y decisiones](lecciones/04-registro-de-hallazgos.md)
 
 ## Práctica
 
 Resuelve [la investigación de una caída](../../ejercicios/temario-06/aplicacion/investigar-caida.md) antes de mirar [la guía de solución](../../soluciones/temario-06/investigar-caida.md).
+
+# Preguntas y perfil exploratorio
+
+## Objetivos y prerrequisitos
+
+Convertirás un conjunto de datos en preguntas de exploración y comprobarás si la fuente puede responderlas. Requiere manejo básico de Pandas.
+
+El análisis exploratorio, o **EDA**, es una investigación abierta pero disciplinada. No empieza con “haz todos los gráficos”; empieza con una pregunta como “¿en qué segmento se concentra la caída de pedidos?” y con un perfil de grano, periodo, cobertura, nulos y duplicados.
+
+```mermaid
+flowchart LR
+ A[Pregunta] --> B[Perfil de fuente]
+ B --> C[Comparar segmentos]
+ C --> D[Hallazgo]
+ D --> E[Comprobar plausibilidad]
+ E --> F[Nueva pregunta o reporte]
+```
+
+El hallazgo genera una hipótesis, no un veredicto. Si faltan datos de dispositivo, no concluyas que no importa: concluye que la fuente no permite evaluarlo.
+
+## Resumen
+
+El EDA limita el espacio de dudas con evidencia visible. Sigue con [distribuciones y segmentos](02-distribuciones-segmentos-y-outliers.md).
+
+# Distribuciones, segmentos y valores extremos
+
+## Objetivos y prerrequisitos
+
+Interpretarás cómo se reparte una medida y decidirás cuándo investigar valores extremos en vez de eliminarlos.
+
+Una **distribución** muestra cómo se repiten los valores. Además de una media, observa mediana, dispersión, asimetría y percentiles. En importes de pedido, unos pocos pedidos empresariales pueden elevar la media aunque la mayoría de clientes gaste poco.
+
+Segmentar divide observaciones por una característica relevante: canal, país, dispositivo o cohorte. Una tendencia global puede esconder un canal en caída y otro en crecimiento. El segmento se elige por una hipótesis de negocio, no porque haya columnas disponibles.
+
+Un **outlier** es un valor inusual respecto al resto; no es sinónimo de error. Puede ser una compra fraudulenta, un cliente clave, una moneda mal parseada o una unidad distinta. Conserva la evidencia, clasifica la causa y documenta la regla si decides excluirlo.
+
+## Resumen
+
+Describe la distribución antes de resumirla y explica cualquier exclusión. Continúa con [relaciones y causalidad](03-relaciones-correlacion-y-causalidad.md).
+
+# Relaciones, correlación y explicaciones rivales
+
+## Objetivos y prerrequisitos
+
+Distinguirás asociación observada, explicación posible y evidencia causal.
+
+Dos medidas pueden moverse juntas. Una **correlación** resume asociación lineal, pero no identifica por qué ocurre. Las visitas y las ventas pueden subir por una campaña; el precio y las devoluciones pueden variar porque se venden productos distintos. Una tercera variable, un cambio de medición o puro azar pueden explicar la relación.
+
+Antes de recomendar una acción, formula explicaciones rivales y busca qué dato las distinguiría. Un experimento o un diseño causal puede aportar mejor evidencia; el EDA prepara esa investigación.
+
+## Error habitual
+
+Ordenar una tabla por dos columnas y afirmar una causa porque el patrón “parece claro”. La visualización ayuda a detectar preguntas; no elimina confusión, sesgo de selección ni estacionalidad.
+
+## Resumen
+
+Una asociación es un punto de partida. Registra qué observaste y qué sería necesario para sostener una explicación.
+
+# Registro de hallazgos y decisiones
+
+## Objetivos y prerrequisitos
+
+Aprenderás a convertir una exploración en un artefacto revisable por producto, ingeniería o dirección.
+
+Para cada hallazgo anota pregunta, fuente y periodo, filtros, método, resultado, interpretación, límites y siguiente acción. Un ejemplo: “La conversión móvil cayó 1,8 puntos desde la versión 4.2; el patrón aparece en Android y no en web; falta comprobar cambios de tracking y errores del formulario”.
+
+No escribas “la versión causó la caída” si solo existe coincidencia temporal. La precisión del lenguaje protege al equipo de decidir demasiado pronto.
+
+Resuelve la [investigación de una caída](../../../ejercicios/temario-06/aplicacion/investigar-caida.md). En el bloque siguiente aprenderás a elegir gráficos que hagan visible esta evidencia sin manipular la percepción.
 
 # Bloque 07 - Visualización y comunicación
 
