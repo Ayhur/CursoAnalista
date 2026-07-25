@@ -1,0 +1,38 @@
+name: Construir PDFs del curso
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "curso/**"
+      - "scripts/construir_material.py"
+      - ".github/workflows/construir-pdfs.yml"
+  pull_request:
+    paths:
+      - "curso/**"
+      - "scripts/construir_material.py"
+      - ".github/workflows/construir-pdfs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar dependencia de PDF
+        run: pip install reportlab
+      - name: Generar Markdown consolidado y PDFs
+        run: python scripts/construir_material.py --all
+      - name: Publicar descargas como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: curso-analista-pdfs
+          path: |
+            dist/pdf/
+            dist/markdown/
