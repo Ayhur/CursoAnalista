@@ -25,7 +25,8 @@ Al terminar podrás tomar una pregunta como “queremos crecer” y convertirla 
 7. [Adquisición, engagement, monetización y métricas de valor](lecciones/07-metricas-de-valor.md).
 8. [Experimentación, Goodhart y decisiones bajo incertidumbre](lecciones/08-experimentacion-y-goodhart.md).
 9. [Catálogo de métricas, tracking plan y Amplitude](lecciones/09-gobierno-y-amplitude.md).
+10. [Caso continuo: operar las métricas de un SaaS B2B](lecciones/10-caso-b2b-operacion.md).
 
 ## Práctica
 
-Cuando termines las tres primeras lecciones, realiza [el ejercicio de árbol de métricas](../../ejercicios/temario-10/aplicacion/arbol-metricas.md). No abras [la solución](../../soluciones/temario-10/arbol-metricas.md) hasta haber definido tus propios supuestos.
+Cuando termines las tres primeras lecciones, realiza [el ejercicio de árbol de métricas](../../ejercicios/temario-10/aplicacion/arbol-metricas.md). Después trabaja el caso completo de [funnel, cohorte y decisión](../../ejercicios/temario-10/aplicacion/funnel-cohorte-y-decision.md) con el [script reproducible](../../notebooks/practicas/10-metricas-producto-b2b.py). No abras [las soluciones](../../soluciones/temario-10/aplicacion/) hasta haber fijado tus propios supuestos.
