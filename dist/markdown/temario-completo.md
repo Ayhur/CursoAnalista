@@ -2,47 +2,166 @@
 
 # Bloque 00 - Orientación y pensamiento analítico
 
-## Objetivo
+## Propósito
 
-Entender qué hace un analista de datos, cómo se formula una pregunta útil y cómo aprovechar este curso sin depender siempre de un ordenador.
+Este bloque enseña a pensar antes de abrir una hoja de cálculo, Python o una herramienta de BI. El resultado esperado es poder convertir una petición vaga en una pregunta analítica que otra persona pueda revisar y usar para decidir.
 
-## Qué hace un analista
+## Lecciones
 
-Un analista convierte una necesidad de decisión en evidencia comprensible. No consiste en hacer gráficos bonitos ni en ejecutar consultas aisladas. El trabajo habitual sigue un ciclo:
+1. [El rol del analista y el ciclo de decisión](lecciones/01-rol-y-ciclo-de-decision.md)
+2. [Preguntas, hipótesis, evidencia y métricas](lecciones/02-preguntas-hipotesis-y-evidencia.md)
+3. [Cómo estudiar y trabajar de forma reproducible](lecciones/03-metodo-de-estudio-y-diagnostico.md)
 
-1. Aclarar la decisión que se quiere tomar.
-2. Definir una pregunta medible y las métricas relevantes.
-3. Localizar, comprender y preparar los datos.
-4. Analizar, comprobar supuestos y comunicar límites.
-5. Recomendar una acción y medir qué ocurrió después.
+## Prerrequisitos
 
-## De una petición vaga a una pregunta analítica
-
-Una frase como "las ventas van mal" no es todavía una pregunta analítica. Hay que concretar periodo, segmento, referencia y decisión. Por ejemplo: "¿Qué canales explican la caída del 12 % de ventas de junio frente al promedio de marzo a mayo, y qué acción puede recuperar margen sin aumentar el gasto total?".
-
-Una buena pregunta incluye población, métrica, periodo y comparación. Si falta uno de esos elementos, pide contexto antes de calcular.
-
-## Métricas desde el primer día
-
-Una métrica es una medida definida de forma reproducible. Un KPI es una métrica elegida para seguir un objetivo importante. Antes de aceptar una cifra pregunta:
-
-- ¿Cuál es la fórmula exacta?
-- ¿Qué población incluye y excluye?
-- ¿Qué intervalo temporal usa?
-- ¿De qué fuente procede y cuándo se actualizó?
-- ¿Qué decisión cambiaría si el valor sube o baja?
-
-## Herramientas y modo de estudio
-
-La teoría se lee desde GitHub o en PDF. Los notebooks se pueden abrir con Google Colab desde navegador. Para un trabajo profesional también necesitarás aprender a documentar decisiones, trabajar con tickets y colaborar mediante GitHub o Jira; se abordará más adelante.
-
-## Resumen
-
-El análisis empieza por una decisión, no por una herramienta. Define la pregunta y la métrica antes de abrir Python.
+Ninguno. No hace falta saber programación ni conocer vocabulario técnico.
 
 ## Ejercicios
 
 Realiza [los ejercicios de comprensión](../../ejercicios/temario-00/comprension/preguntas.md) antes de consultar [las soluciones](../../soluciones/temario-00/preguntas.md).
+
+# El rol del analista y el ciclo de decisión
+
+## Objetivos y punto de partida
+
+Al terminar podrás distinguir una decisión de un cálculo y describir el trabajo de un analista sin reducirlo a “hacer gráficos”. No necesitas saber qué es una base de datos ni programar.
+
+## El problema que resuelve el análisis
+
+Una empresa de reparto observa menos pedidos que el mes anterior. La directora debe decidir si cambia una campaña, corrige una incidencia en la aplicación o no hace nada porque la variación es normal. Mirar un número aislado no responde esa decisión: hace falta saber **qué cambió, para quién, respecto a qué referencia y con qué confianza**.
+
+Un **analista de datos** transforma una necesidad de decisión en evidencia revisable. Su producto final no es una tabla ni un gráfico: es una recomendación que explica qué se sabe, qué no se sabe y qué conviene comprobar después.
+
+## Del encargo a la acción
+
+Antes de hablar de herramientas, mira este recorrido. Responde a la pregunta: “¿cómo se evita saltar de una impresión a una conclusión?”
+
+```mermaid
+flowchart LR
+  A[Decisión pendiente] --> B[Pregunta concreta]
+  B --> C[Datos y comprobaciones]
+  C --> D[Interpretación]
+  D --> E[Recomendación]
+  E --> F[Medir resultado]
+  F --> A
+```
+
+El ciclo es deliberadamente circular. Una recomendación no cierra el trabajo: genera una acción cuya consecuencia debe medirse. Si la campaña cambia, habrá que volver a comprobar pedidos, margen y posibles efectos no deseados.
+
+## Ejemplo trabajado
+
+Petición inicial: “las ventas van mal”.
+
+Una respuesta precipitada sería abrir un gráfico mensual y proponer bajar precios. Una respuesta analítica empieza preguntando: “¿qué decisión está sobre la mesa?”. Supongamos que la decisión es redistribuir 20 000 euros de publicidad. Entonces la pregunta puede ser: “¿Qué canal explica la caída de pedidos de junio frente al promedio de marzo a mayo, y cuál mantiene margen suficiente para recibir inversión?”
+
+La pregunta obliga a definir después “pedido”, “canal”, “margen” y los periodos. Aún no demuestra que un canal **cause** la caída; solo delimita qué evidencia buscar.
+
+## Límite importante: describir no es explicar causas
+
+Que los pedidos hayan bajado después de una campaña no prueba que la campaña sea la causa. Puede haber estacionalidad, un fallo técnico, cambios de precio o clientes distintos. El análisis descriptivo dice qué ocurrió; una explicación causal exige comparaciones y diseño más cuidadoso, que se estudiará más adelante.
+
+## Resumen y comprobación
+
+- El analista ayuda a decidir con evidencia trazable.
+- Una cifra es un indicio, no una conclusión.
+- El trabajo continúa después de recomendar: hay que medir el resultado.
+
+Pregúntate: ¿qué decisión cambiaría si el análisis mostrara que la caída procede solo de usuarios nuevos? ¿Qué dato adicional pedirías antes de recomendar bajar precios?
+
+Sigue con [preguntas, hipótesis, evidencia y métricas](02-preguntas-hipotesis-y-evidencia.md) y después resuelve el [ejercicio del bloque](../../../ejercicios/temario-00/comprension/preguntas.md).
+
+# Preguntas, hipótesis, evidencia y métricas
+
+## Objetivos y prerrequisitos
+
+Aprenderás a convertir una petición ambigua en una pregunta medible, a separar una hipótesis de un hecho y a pedir una métrica bien definida. Parte de la lección anterior; no requiere matemáticas avanzadas.
+
+## Una pregunta que se pueda comprobar
+
+“Queremos que más personas usen la aplicación” expresa un deseo, no una pregunta. Para que un equipo pueda investigar necesita concretar cuatro piezas: la **población** (quiénes), el **resultado** que se observa, el **periodo** y la **comparación**.
+
+Ejemplo: “Entre quienes instalaron la aplicación en mayo, ¿qué porcentaje completó su primera reserva en siete días, frente a quienes la instalaron en abril?”. Ya se puede buscar evidencia, y también se puede discutir si siete días es una ventana razonable.
+
+## Hecho, hipótesis y evidencia
+
+Una **hipótesis** es una explicación provisional que podría ser falsa: “el formulario largo reduce las reservas”. La **evidencia** es la información que apoya o cuestiona esa explicación: registros de pasos completados, una comparación entre versiones o entrevistas. Un resultado observado es: “solo el 42 % llega al último paso”. No confundas el resultado con su causa.
+
+Este mapa responde a “¿qué hay que mantener separado para razonar con rigor?”
+
+```mermaid
+flowchart TB
+  A[Decisión: simplificar formulario] --> B[Pregunta medible]
+  B --> C[Hecho observado]
+  C --> D[Hipótesis explicativa]
+  D --> E[Evidencia para contrastar]
+  E --> F[Decisión revisada]
+```
+
+La flecha no convierte una hipótesis en verdad. La evidencia puede hacerla más plausible, descartarla o mostrar que faltan datos.
+
+## Qué significa “métrica”
+
+Una **métrica** es una medida cuya regla se puede repetir. “Usuarios activos” no basta si nadie sabe si cuenta una apertura de la app, una reserva, un día o un mes. Una definición mínima incluye fórmula, población, periodo, fuente y responsable.
+
+Por ejemplo: “tasa de primera reserva a siete días = personas que reservan en los siete días posteriores a instalar / personas que instalan, para instalaciones de mayo, excluyendo cuentas de prueba”. Otra persona debe llegar al mismo número al aplicar la misma regla.
+
+Un **KPI** es una métrica elegida para seguir un objetivo importante. No todo número es KPI: si una métrica no orienta una decisión, quizá es ruido o contexto, no una prioridad.
+
+## Error habitual: optimizar el número equivocado
+
+Si se premia solo “reservas creadas”, un equipo podría facilitar reservas que luego se cancelan. Por eso una métrica principal suele necesitar una métrica de protección: junto a reservas, vigilar cancelaciones, reclamaciones o margen. Este riesgo se retomará al diseñar árboles de métricas.
+
+## Resumen y práctica
+
+- Una pregunta comprobable delimita población, resultado, periodo y comparación.
+- Una hipótesis explica provisionalmente; la evidencia la contrasta.
+- Una métrica reproducible tiene una definición, no solo un nombre.
+
+Redacta una pregunta sobre el uso de una app y añade una hipótesis alternativa que también pudiera explicar el resultado. Después completa [los ejercicios](../../../ejercicios/temario-00/comprension/preguntas.md).
+
+# Cómo estudiar y trabajar de forma reproducible
+
+## Objetivos y prerrequisitos
+
+Sabrás organizar una sesión de estudio desde el móvil o un ordenador, usar ayuda de AI sin delegar el razonamiento y dejar rastro de tus decisiones. No hace falta instalar nada.
+
+## Teoría, práctica y recuperación
+
+Leer una explicación da familiaridad, pero no garantiza que puedas aplicarla. Alterna tres acciones: comprender un ejemplo, resolver uno parecido sin mirar y explicar con tus palabras por qué la respuesta tiene sentido. Ese último paso descubre lagunas antes de que se conviertan en hábitos.
+
+Una sesión mínima desde el móvil puede consistir en leer una lección, responder dos preguntas de comprobación en notas y revisar la solución solo después. Cuando tengas navegador con teclado, abre el notebook de práctica en Google Colab: un **notebook** es una página que mezcla texto, código ejecutable y resultados; lo estudiarás desde cero en Python.
+
+## Reproducibilidad: poder revisar el camino
+
+Un análisis es **reproducible** si otra persona puede entender qué datos se usaron, qué reglas se aplicaron y cómo se llegó a una conclusión. No requiere una herramienta sofisticada al principio: basta con anotar la pregunta, la fecha, los supuestos y los cambios.
+
+El siguiente flujo responde a “¿qué debe conservarse para que una conclusión sea revisable?”
+
+```mermaid
+flowchart LR
+  A[Pregunta y decisión] --> B[Datos usados]
+  B --> C[Pasos y supuestos]
+  C --> D[Resultado]
+  D --> E[Recomendación y límite]
+```
+
+Si falta un eslabón, alguien puede ver un número final pero no comprobar si era apropiado. Más adelante Git, tickets de Jira y documentación permitirán hacer este proceso colaborativo.
+
+## Usar AI como tutor, no como piloto automático
+
+Una buena petición a una AI incluye contexto: “No sé qué es una lista en Python; explícame este error con un ejemplo de gastos y pregúntame después”. Pide que explique cada línea y cambia un valor para comprobar que entiendes el efecto. Nunca des por correcta una consulta, gráfico o conclusión solo porque suena convincente: ejecútala, verifica los supuestos y conserva la fuente.
+
+## Diagnóstico inicial y ruta adaptable
+
+Si ya manejas porcentajes, medias o álgebra, puedes leer el bloque de matemáticas como repaso y dedicar más atención a sus aplicaciones analíticas. No conviene saltarse la definición de métricas, incertidumbre o sesgo: conocer la fórmula no garantiza interpretar bien un dato empresarial.
+
+## Resumen y siguiente paso
+
+- Estudiar implica recuperar y aplicar, no solo leer.
+- Reproducibilidad conserva pregunta, datos, pasos, resultado y límites.
+- AI acelera la práctica si puedes explicar y verificar su respuesta.
+
+Completa el [diagnóstico inicial](../../../evaluaciones/diagnosticos/diagnostico-inicial.md). Después continúa con el [bloque 01](../../01-fundamentos-datos/README.md): allí se explicará primero qué es un archivo, una tabla y una observación.
 
 # Bloque 01 - Fundamentos de datos: desde archivos hasta calidad
 
@@ -277,126 +396,511 @@ Elige una de las cinco dimensiones de calidad y describe: un error concreto, có
 
 # Bloque 02 - Python desde cero
 
-## Objetivo
+## Propósito
 
-Aprender a leer, escribir y depurar pequeños programas de Python orientados a datos.
+Aprender a leer, escribir y depurar programas pequeños antes de usar bibliotecas de análisis. El objetivo no es memorizar sintaxis: es expresar una regla de negocio de forma clara y verificable.
 
-## Ejecutar Python
+## Lecciones
 
-Un notebook mezcla texto, código y resultados. Puedes ejecutarlo en Google Colab desde el navegador. Ejecuta una celda, observa el resultado y cambia una sola cosa cada vez cuando estés aprendiendo.
+1. [Ejecutar código, valores y variables](lecciones/01-entorno-valores-y-variables.md)
+2. [Listas, diccionarios y datos sencillos](lecciones/02-colecciones-y-datos-sencillos.md)
+3. [Decisiones y repeticiones](lecciones/03-condiciones-y-bucles.md)
+4. [Funciones y alcance](lecciones/04-funciones-y-alcance.md)
+5. [Errores y depuración](lecciones/05-errores-y-depuracion.md)
+6. [Estilo y práctica guiada](lecciones/06-estilo-y-practica-gastos.md)
 
-## Valores y variables
+## Prerrequisitos
 
-Python trabaja con números, texto, booleanos y el valor especial `None`. Una variable da un nombre a un valor:
-
-```python
-ventas = 1200
-objetivo = 1500
-cumplimiento = ventas / objetivo
-```
-
-Usa nombres descriptivos. `importe_total` comunica más que `x`.
-
-## Colecciones
-
-Las listas guardan una secuencia ordenada y modificable. Los diccionarios relacionan claves con valores. Para un analista, ambos aparecen con frecuencia al recibir respuestas de APIs o preparar datos antes de pasarlos a Pandas.
-
-```python
-canales = ["web", "tienda", "partners"]
-venta = {"canal": "web", "importe": 42.50}
-```
-
-## Condiciones, bucles y funciones
-
-Una condición selecciona una acción. Un bucle repite una operación. Una función encapsula una tarea reutilizable. Prioriza claridad sobre trucos cortos: tu código debe poder explicarse a otra persona.
-
-```python
-def clasificar_venta(importe):
-    if importe >= 100:
-        return "alta"
-    return "normal"
-```
-
-## Errores y depuración
-
-Los errores son información. Lee primero la última línea: indica el tipo de error y la causa inmediata. Después comprueba los valores, tipos y nombres de las variables implicadas. No copies una solución de AI sin ejecutar y entender el resultado.
-
-## Resumen
-
-Python permite expresar cálculos de forma reproducible. Primero dominarás piezas pequeñas y después usarás NumPy y Pandas para trabajar con tablas reales.
+Haber leído los bloques 00 y 01. Basta con saber que un dato debe tener significado y que una regla analítica debe poder revisarse.
 
 ## Práctica
 
 Abre el [notebook de gastos personales](../../notebooks/practicas/02-gastos-personales.ipynb) o [ejecútalo en Google Colab](https://colab.research.google.com/github/Ayhur/CursoAnalista/blob/main/notebooks/practicas/02-gastos-personales.ipynb). También puedes resolver [el ejercicio](../../ejercicios/temario-02/aplicacion/gastos-personales.md). Las [soluciones](../../soluciones/temario-02/gastos-personales.md) se consultan al terminar.
 
-# Bloque 03 - Matemáticas aplicadas al análisis
+# Ejecutar código, valores y variables
 
-## Objetivo
+## Objetivos y prerrequisitos
 
-Conectar las herramientas matemáticas con decisiones de negocio y análisis. La teoría general es opcional para quien ya tenga una base universitaria sólida; las aplicaciones sí forman parte del oficio de analista.
+Aprenderás qué hace un programa, cómo ejecutar una celda de notebook y cómo guardar un resultado con un nombre. No necesitas experiencia previa.
 
-## Diagnóstico rápido
+## Código que transforma valores
 
-Puedes avanzar directamente si manejas porcentajes, tasas de variación, medias ponderadas, funciones y vectores. Si algo resulta familiar pero oxidado, repásalo aquí antes de entrar en estadística.
+Un programa es una lista de instrucciones que transforma información. En un análisis, esa información puede ser el importe de una compra, una fecha o una respuesta de usuario. Un **valor** es una pieza concreta de información: `1200`, `"web"` o `True` (verdadero).
 
-## Porcentajes y tasas
+En Google Colab, un notebook muestra una celda de código y su resultado. Ejecuta primero esto y cambia después un único valor:
 
-Un cambio de 100 a 120 es un aumento del 20 %. Un descenso posterior del 20 % no devuelve el valor al origen: 120 x 0,8 = 96. Este detalle importa al comunicar crecimiento, conversión o churn.
-
-La media ponderada evita dar el mismo peso a grupos de tamaño muy distinto. Si dos países convierten al 80 % y 10 %, pero tienen 10 y 10 000 visitantes, la media simple sería engañosa.
-
-```mermaid
-flowchart TD
-    A[Valor inicial] --> B[Valor final]
-    B --> C[Variación absoluta]
-    B --> D[Variación porcentual]
-    D --> E[Decisión comparativa]
+```python
+ventas = 1200
+objetivo = 1500
+cumplimiento = ventas / objetivo
+print(cumplimiento)
 ```
 
-## Funciones, vectores y matrices
+Una **variable** es un nombre que referencia un valor. Aquí `cumplimiento` guarda el resultado `0.8`. El signo `=` no pregunta si dos cosas son iguales: asigna el valor de la derecha al nombre de la izquierda.
 
-Una función transforma una entrada en una salida: por ejemplo, `ingresos(clientes, precio)`. Un vector reúne medidas de una observación y una matriz reúne muchas observaciones. NumPy y Pandas usarán estas ideas para calcular sobre miles de filas a la vez.
+## Tipos: la forma del dato importa
 
-## Crecimiento y tiempo
+Python distingue números enteros (`3`), decimales (`3.5`), texto (`"Madrid"`), booleanos (`True` o `False`) y ausencia representada por `None`. El tipo condiciona qué operaciones tienen sentido: sumar `3 + 5` es válido; sumar `"3" + "5"` une texto y produce `"35"`.
 
-Separa nivel, cambio absoluto, cambio porcentual y crecimiento compuesto. Si una métrica tiene estacionalidad, comparar solo con el mes anterior puede ser una mala referencia; compara también con el mismo periodo del año anterior.
-
-## Resumen
-
-Las matemáticas no son un bloque aislado: sirven para definir métricas, detectar comparaciones injustas y explicar magnitudes con precisión.
-
-# Bloque 04 - NumPy y cálculo vectorizado
-
-## Objetivo
-
-Usar arrays para representar datos numéricos y aplicar cálculos de forma rápida, clara y reproducible.
-
-## Arrays y vectorización
-
-Un array almacena valores del mismo tipo en una estructura con forma definida. La vectorización aplica una operación a todos los elementos sin escribir un bucle explícito. Es útil porque expresa mejor la intención y suele ser más eficiente.
+Esta secuencia responde a “¿por qué revisar el tipo antes de calcular?”
 
 ```mermaid
 flowchart LR
-    A[Array de ventas] --> B[Operación vectorizada]
-    B --> C[Array transformado]
-    C --> D[Agregación: media o suma]
+  A[Valor recibido] --> B[Comprobar tipo]
+  B --> C[Aplicar operación]
+  C --> D[Revisar resultado]
 ```
 
-## Selección y máscaras
+El paso de comprobar evita, por ejemplo, tratar un importe escrito como texto como si fuera dinero calculable.
 
-Una máscara booleana responde una pregunta para cada fila: `ventas > 100`. Después sirve para seleccionar solo los elementos que cumplen la condición. Esta idea reaparecerá en Pandas al filtrar DataFrames.
+## Error habitual
 
-## Forma y broadcasting
+`ventas = ventas + 100` parece una igualdad matemática imposible. En programación significa “toma el valor actual de ventas, súmale 100 y guarda el nuevo resultado bajo el mismo nombre”. Usarlo sin cuidado puede ocultar el valor original; cuando importe, conserva ambos nombres: `ventas_iniciales` y `ventas_actualizadas`.
 
-La forma indica dimensiones: una serie puede tener forma `(n,)`, una tabla `(filas, columnas)`. Broadcasting permite combinar arrays compatibles, por ejemplo restar la media de cada columna a una matriz sin repetir la media manualmente.
+## Resumen y comprobación
 
-## Reproducibilidad
+- Una celda ejecuta instrucciones y muestra un resultado.
+- Una variable etiqueta un valor; no es una caja mágica independiente.
+- El tipo determina qué cálculo es válido.
 
-Al simular datos aleatorios, fija una semilla. Así otra persona puede repetir el mismo experimento y comprobar el resultado.
+Prueba `type(ventas)` y `type("1200")`. Explica por qué se diferencian. Continúa con [colecciones](02-colecciones-y-datos-sencillos.md).
+
+# Listas, diccionarios y datos sencillos
+
+## Objetivos y prerrequisitos
+
+Sabrás agrupar varios valores y representar una compra sencilla antes de conocer las tablas de Pandas. Requiere variables y tipos básicos.
+
+## Cuando un valor no basta
+
+Una lista guarda una secuencia ordenada. Por ejemplo, los importes de tres pedidos:
+
+```python
+importes = [12.50, 18.00, 7.20]
+primer_importe = importes[0]
+```
+
+Los corchetes indican una **lista** y el índice empieza en cero: `importes[0]` es el primer elemento. Esto sorprende al principio, así que no intentes “corregirlo”: compruébalo imprimiendo el resultado.
+
+Un **diccionario** asocia una clave con un valor. Es útil para una observación con campos nombrados:
+
+```python
+pedido = {"canal": "web", "importe": 42.50, "pagado": True}
+print(pedido["importe"])
+```
+
+La clave evita depender de una posición. Una lista de diccionarios puede representar varias compras pequeñas; más adelante Pandas convertirá esa estructura en una tabla.
+
+## Relación con datos reales
+
+Una API —un mecanismo para que programas intercambien información— suele devolver listas y diccionarios similares. Eso no elimina la necesidad de validar: que un campo se llame `importe` no garantiza que sea numérico, completo o esté expresado en la misma moneda.
+
+## Límite y práctica
+
+`pedido["descuento"]` provoca un error si esa clave no existe. No inventes un cero sin preguntar qué significa que falte: podría significar “sin descuento”, “dato desconocido” o “campo no recogido”.
+
+Resume con tus palabras la diferencia entre lista y diccionario y continúa con [condiciones y bucles](03-condiciones-y-bucles.md).
+
+# Decisiones y repeticiones
+
+## Objetivos y prerrequisitos
+
+Aplicarás una regla distinta según un dato y repetirás una comprobación sobre varios pedidos. Requiere listas y diccionarios.
+
+## Condiciones: expresar una regla
+
+Una condición permite que el programa elija. `if` pregunta por una expresión que da `True` o `False`:
+
+```python
+importe = 120
+if importe >= 100:
+    categoria = "pedido alto"
+else:
+    categoria = "pedido habitual"
+```
+
+La sangría no es decoración: las líneas desplazadas pertenecen a la rama de la condición. La regla debe coincidir con una definición de negocio. Pregunta si exactamente 100 debe contarse como alto antes de decidir entre `>` y `>=`.
+
+## Bucles: repetir sin copiar código
+
+Un bucle `for` visita cada elemento de una colección. El siguiente acumula importes y muestra la idea de agregación que luego hará Pandas:
+
+```python
+total = 0
+for importe in [12.5, 18.0, 7.2]:
+    total = total + importe
+print(total)
+```
+
+Este flujo responde a “¿qué ocurre para cada dato de entrada?”
+
+```mermaid
+flowchart LR
+  A[Un importe] --> B[Comprobar regla]
+  B --> C[Actualizar resultado]
+  C --> D[Siguiente importe]
+```
+
+El programa repite el mismo criterio; no decide de forma inteligente qué regla usar. La calidad de la conclusión depende de que la regla y los datos sean apropiados.
+
+## Error habitual
+
+No modifiques una lista mientras la recorres salvo que entiendas las consecuencias: puedes saltarte elementos. Para aprender, crea una lista nueva para los resultados o revisa primero el tamaño y contenido de la original.
 
 ## Resumen
 
-Piensa en operaciones sobre colecciones completas, no en una fila cada vez. NumPy prepara el modelo mental para análisis tabular a escala.
+Las condiciones expresan criterios y los bucles los aplican repetidamente. Sigue con [funciones](04-funciones-y-alcance.md).
+
+# Funciones y alcance
+
+## Objetivos y prerrequisitos
+
+Aprenderás a encapsular una regla reutilizable, diferenciar entrada y salida y evitar depender de variables ocultas. Requiere condiciones y bucles.
+
+## Dar nombre a una transformación
+
+Una **función** es un fragmento de código con un nombre, entradas y una salida. Evita copiar la misma regla en diez lugares y hace que el análisis se pueda revisar por partes.
+
+```python
+def clasificar_importe(importe):
+    if importe >= 100:
+        return "alto"
+    return "habitual"
+
+clasificar_importe(120)
+```
+
+`importe` es un **parámetro**: el nombre que la función usa para recibir un dato. `return` devuelve un resultado. Una función útil responde una pregunta concreta: “dado un importe, ¿qué etiqueta corresponde según esta regla?”.
+
+## Alcance: qué nombres existen dónde
+
+Los nombres creados dentro de una función normalmente solo existen durante esa llamada. Esto se llama **alcance**. Es una protección: una función debería depender de sus entradas, no de una variable lejana cuyo valor puede cambiar sin avisar.
+
+```python
+limite = 100
+
+def es_alto(importe, limite):
+    return importe >= limite
+```
+
+Aunque parece repetitivo pasar `limite`, deja visible el supuesto. En un análisis, los supuestos invisibles son difíciles de auditar.
+
+## Caso IT y límite
+
+Una función puede estandarizar una comprobación de eventos: clasificar una duración de carga como lenta o aceptable. Pero no convierte el umbral en verdad universal: 2 segundos puede ser aceptable en una página y grave durante un pago. Documenta de dónde sale el umbral.
+
+## Resumen y práctica
+
+- Las funciones nombran transformaciones repetibles.
+- Parámetros hacen visibles las entradas; `return` entrega la salida.
+- Evitar dependencias ocultas facilita revisar y probar.
+
+Reescribe el cálculo de “pedido alto” como función y pruébalo con 99, 100 y 101. Después estudia [errores y depuración](05-errores-y-depuracion.md).
+
+# Errores y depuración
+
+## Objetivos y prerrequisitos
+
+Sabrás leer el mensaje de error, formular una hipótesis mínima y comprobarla sin cambiar diez cosas a la vez. Requiere haber ejecutado código sencillo.
+
+## Un error también es evidencia
+
+Cuando Python no puede continuar, muestra un mensaje con una última línea relevante. `NameError` suele indicar que un nombre no existe; `TypeError`, que se intentó una operación incompatible; `KeyError`, que falta una clave del diccionario. El mensaje no sustituye la comprensión, pero delimita qué revisar.
+
+Ejemplo:
+
+```python
+importe = "42.50"
+importe + 10
+```
+
+El problema no es que Python “falle”: `importe` contiene texto, no un número. La corrección solo debe hacerse si la regla de origen confirma que ese texto representa un importe válido:
+
+```python
+importe_numerico = float(importe)
+```
+
+## Método de depuración
+
+Este flujo responde a “¿cómo investigar sin adivinar?”
+
+```mermaid
+flowchart TB
+  A[Leer última línea del error] --> B[Reducir a ejemplo pequeño]
+  B --> C[Inspeccionar valor y tipo]
+  C --> D[Formular una causa]
+  D --> E[Aplicar un cambio y volver a ejecutar]
+```
+
+Reducir el ejemplo evita mezclar varios problemas. Usa `print(valor)` y `type(valor)` antes de cambiar código. Si la causa es un dato inesperado, no la tapes con una conversión automática: registra cuántos casos hay y decide qué significan.
+
+## Error habitual: silenciar en lugar de entender
+
+`try/except` permite manejar errores, pero capturarlos todos y continuar puede ocultar importes inválidos o pedidos perdidos. Úsalo para casos esperados y registra qué ocurrió. Un análisis correcto que descarta silenciosamente el 20 % de los datos no es fiable.
+
+## Resumen
+
+Depurar es un proceso de evidencia: leer, aislar, inspeccionar, probar. Continúa con [estilo y práctica](06-estilo-y-practica-gastos.md).
+
+# Estilo y práctica guiada
+
+## Objetivos y prerrequisitos
+
+Aplicarás las piezas del bloque en un problema pequeño y aprenderás a escribir código que otra persona pueda leer. Requiere todas las lecciones anteriores.
+
+## Legibilidad es una propiedad analítica
+
+Un programa de análisis no se evalúa solo por “funciona hoy”. Debe dejar claro qué representa cada valor y qué regla se aplicó. Usa nombres como `gasto_por_categoria`, no `x`; evita repetir números mágicos como `100` sin explicar su significado; separa carga de datos, transformación y resultado.
+
+Un ejemplo legible:
+
+```python
+LIMITE_REVISAR = 100
+
+def categorias_sobre_limite(movimientos, limite):
+    total_por_categoria = {}
+    for movimiento in movimientos:
+        categoria = movimiento["categoria"]
+        importe = movimiento["importe"]
+        total_por_categoria[categoria] = total_por_categoria.get(categoria, 0) + importe
+    return [categoria for categoria, total in total_por_categoria.items() if total > limite]
+```
+
+Antes de reutilizarlo en una empresa, define cómo se tratan devoluciones, moneda, movimientos duplicados y valores ausentes. El código implementa una decisión; no decide por ti qué es correcto.
+
+## Comprobaciones mínimas
+
+Prueba casos normales y casos límite: lista vacía, importe exactamente 100, importe negativo y un texto donde debería haber número. Escribir esos ejemplos antes de confiar en el resultado es una forma simple de prueba.
+
+## Ejercicio de cierre
+
+Resuelve la [práctica de gastos](../../../ejercicios/temario-02/aplicacion/gastos-personales.md) y compara tu razonamiento con las [soluciones](../../../soluciones/temario-02/gastos-personales.md) solo al terminar. Si solo tienes móvil, escribe primero el pseudocódigo en texto: entradas, pasos y salidas.
+
+## Puente al siguiente bloque
+
+Python permite operar con estructuras pequeñas. En NumPy y Pandas aplicarás operaciones parecidas a miles de valores y tablas, pero conservarás las mismas preguntas: ¿qué representa cada dato?, ¿qué regla se aplica?, ¿cómo se comprueba?
+
+# Bloque 03 - Matemáticas aplicadas al análisis
+
+## Propósito y ruta adaptable
+
+Conectar herramientas matemáticas con decisiones de negocio y análisis. Si manejas porcentajes, medias ponderadas, funciones y vectores, usa las explicaciones generales como repaso; las aplicaciones, los límites y la interpretación no son opcionales.
+
+## Lecciones
+
+1. [Magnitudes, porcentajes y tasas](lecciones/01-magnitudes-porcentajes-y-tasas.md)
+2. [Promedios, ponderación y agregación](lecciones/02-promedios-ponderacion-y-agregacion.md)
+3. [Funciones, vectores y matrices](lecciones/03-funciones-vectores-y-matrices.md)
+4. [Tiempo, crecimiento y comparaciones](lecciones/04-tiempo-crecimiento-y-comparaciones.md)
+
+## Resultado esperado
+
+Podrás calcular y comunicar un cambio sin mezclar unidades, elegir una agregación defendible y cuestionar comparaciones aparentemente obvias.
+
+# Magnitudes, porcentajes y tasas
+
+## Objetivos y prerrequisitos
+
+Sabrás separar cambio absoluto, cambio relativo y puntos porcentuales. La aritmética básica es suficiente; si ya dominas fórmulas, céntrate en los ejemplos y errores de interpretación.
+
+## Una cifra necesita unidad y referencia
+
+Pasar de 100 a 120 pedidos supone un cambio absoluto de 20 pedidos y un crecimiento relativo del 20 %: `(120 - 100) / 100`. Ambas cifras son correctas, pero responden preguntas distintas. El cambio absoluto ayuda a estimar capacidad; el relativo permite comparar grupos de tamaño distinto.
+
+Una tasa relaciona cantidades: por ejemplo, 30 compras de 1 000 visitas son una tasa de conversión del 3 %. No digas “subió un 2 %” si pasó de 3 % a 5 %: aumentó **2 puntos porcentuales** y aproximadamente un 66,7 % relativo. Esa diferencia cambia la percepción de impacto.
+
+Este recorrido responde a “¿qué debe declararse antes de comparar un número?”
+
+```mermaid
+flowchart LR
+  A[Valor y unidad] --> B[Referencia]
+  B --> C[Cambio absoluto]
+  B --> D[Cambio relativo o tasa]
+  C --> E[Interpretación]
+  D --> E
+```
+
+La referencia puede ser ayer, el objetivo, otro segmento o el mismo mes del año anterior; elegirla es una decisión analítica, no una operación automática.
+
+## Ejemplo y contraejemplo
+
+Una app pasa de 10 a 20 conversiones: +10 conversiones y +100 %. Otra pasa de 10 000 a 10 100: +100 conversiones pero +1 %. Presentar solo porcentaje hace enorme el primer cambio; presentar solo conteo oculta que el segundo afecta a más clientes. Comunica ambos cuando importen.
+
+Un descenso del 20 % después de un aumento del 20 % no vuelve al inicio: `100 × 1,2 × 0,8 = 96`. Los porcentajes se aplican a bases distintas.
+
+## Resumen y práctica
+
+- Declara unidad, población y referencia.
+- Distingue porcentaje, tasa y punto porcentual.
+- El tamaño de la base cambia la interpretación.
+
+Calcula el cambio absoluto, relativo y en puntos porcentuales si una conversión pasa de 4 % a 5 %. Luego sigue con [ponderación](02-promedios-ponderacion-y-agregacion.md).
+
+# Promedios, ponderación y agregación
+
+## Objetivos y prerrequisitos
+
+Aprenderás cuándo un promedio resume un conjunto y cuándo lo distorsiona. Requiere comprender porcentajes y tasas.
+
+## Un promedio siempre combina observaciones
+
+La media aritmética suma valores y divide por su número. Es útil para importes comparables, pero una media de tasas puede ser engañosa si cada grupo tiene un tamaño distinto. Si el país A convierte 8 de 10 visitas (80 %) y B convierte 1 000 de 10 000 (10 %), la media simple de 45 % no describe la conversión conjunta. La respuesta correcta suma éxitos y oportunidades: `1008 / 10010`, aproximadamente 10,1 %.
+
+Eso es una **media ponderada**: cada tasa pesa según su denominador. No es un detalle de fórmula; evita tomar decisiones de inversión basadas en segmentos pequeños y extremos.
+
+## Agregar cambia el grano
+
+Antes de sumar o promediar, pregunta qué representa una fila. Si cada fila es un pedido, sumar importes da ingresos por pedido. Si cada fila es un usuario mensual, sumar ingresos puede duplicar clientes que compraron varias veces. El nivel al que se describe un dato se llama **grano** y se estudió en el bloque 01.
+
+## Error habitual: promedio de promedios
+
+Un dashboard muestra conversión diaria y calcula la media de siete porcentajes. Puede ser válido si cada día tiene el mismo tráfico; si no, conviene dividir compras totales entre visitas totales. Conserva numerador y denominador: permiten revisar y reponderar.
+
+## Resumen
+
+El promedio no es neutral: depende de qué observaciones se incluyan y cuánto pesa cada una. Continúa con [funciones, vectores y matrices](03-funciones-vectores-y-matrices.md).
+
+# Funciones, vectores y matrices
+
+## Objetivos y prerrequisitos
+
+Comprenderás las ideas matemáticas que harán legibles NumPy y Pandas: una función transforma entradas; un vector reúne valores; una matriz organiza muchos vectores.
+
+## Transformar entradas en salidas
+
+Una **función** expresa una relación: dado número de clientes y precio, devuelve ingresos. `ingresos(clientes, precio) = clientes × precio`. No afirma que ambas variables sean independientes ni que subir precio no cambie clientes: solo define el cálculo bajo unos supuestos.
+
+Un **vector** es una lista ordenada de valores de la misma clase, por ejemplo las ventas de tres días: `[120, 140, 110]`. Una **matriz** organiza muchas filas de valores: cada fila podría ser un día y cada columna pedidos, ingresos y devoluciones. En código, un array de NumPy permitirá aplicar un cálculo a todos los elementos sin escribir un bucle manual.
+
+## Relación con el análisis
+
+Los objetos matemáticos no sustituyen el significado. Dos columnas con mil números pueden formar una matriz, pero no por ello es razonable sumarlas si una contiene euros y otra minutos. La estructura permite calcular; el contexto decide si el cálculo responde una pregunta válida.
+
+## Resumen y puente
+
+Funciones hacen explícitas transformaciones; vectores y matrices permiten representar muchas observaciones. En el bloque 04 aprenderás a manejarlos eficientemente con NumPy.
+
+# Tiempo, crecimiento y comparaciones
+
+## Objetivos y prerrequisitos
+
+Sabrás elegir una comparación temporal defendible y distinguir nivel, variación y crecimiento acumulado. Requiere porcentajes.
+
+## El tiempo no siempre avanza de forma comparable
+
+Comparar junio con mayo puede ser útil, pero una tienda de viajes puede tener una estacionalidad fuerte: junio suele diferir de mayo por razones repetidas cada año. Compara también con junio del año anterior y con una referencia acordada. La elección depende de la decisión: planificación anual, respuesta a una incidencia o seguimiento semanal.
+
+El crecimiento compuesto encadena cambios: si una métrica crece 10 % dos meses, el factor es `1,1 × 1,1 = 1,21`, no 1,20. Para comunicarlo, muestra periodo inicial, final y fórmula, no una etiqueta vaga de “crecimiento”.
+
+## Límite: una serie no demuestra causalidad
+
+Que una métrica cambie tras una acción no identifica por sí mismo la causa. El tiempo puede coincidir con campañas, festivos, cambios de mercado o problemas de medición. Las comparaciones temporales son evidencia descriptiva que requiere contexto, segmentos y, cuando sea necesario, experimentos.
+
+## Cierre del bloque
+
+Las matemáticas aplicadas sirven para no confundir escalas, promedios ni referencias. Antes de automatizar con NumPy o Pandas, pregunta siempre: ¿qué mide este número, sobre qué población y frente a qué comparación?
+
+Aplica el bloque en la [práctica de tasas y promedios](../../../ejercicios/temario-03/aplicacion/tasas-y-promedios.md) antes de leer su solución.
+
+# Bloque 04 - NumPy y cálculo vectorizado
+
+## Propósito
+
+Usar arrays para representar datos numéricos y aplicar cálculos sobre colecciones completas. NumPy prepara el modelo mental de Pandas, pero no reemplaza la comprensión del significado de cada número.
+
+## Lecciones
+
+1. [Arrays y cálculo vectorizado](lecciones/01-arrays-y-vectorizacion.md)
+2. [Selección, máscaras y forma](lecciones/02-seleccion-mascaras-y-forma.md)
+3. [Broadcasting, simulación y reproducibilidad](lecciones/03-broadcasting-simulacion-y-reproducibilidad.md)
+
+# Arrays y cálculo vectorizado
+
+## Objetivos y prerrequisitos
+
+Sabrás crear un array numérico y aplicar un cálculo a todos sus elementos. Requiere entender listas y vectores de los bloques 02 y 03.
+
+## De una lista a un array
+
+Un **array** es una estructura para valores organizados, normalmente del mismo tipo, que permite operaciones numéricas eficientes. En Python se importa NumPy con un alias convencional:
+
+```python
+import numpy as np
+ventas = np.array([120, 140, 110])
+ventas_con_iva = ventas * 1.21
+```
+
+La última línea no multiplica la lista como texto ni requiere un `for`: aplica la operación elemento a elemento. Eso se llama **vectorización**. Expresa “aplica la misma regla a cada venta”, una intención fácil de revisar.
+
+Este flujo responde a “¿qué ocurre cuando la regla llega a una colección completa?”
+
+```mermaid
+flowchart LR
+  A[Array de ventas] --> B[Regla vectorizada]
+  B --> C[Array transformado]
+  C --> D[Suma, media o filtro]
+```
+
+## Límite analítico
+
+Que una operación sea rápida no la hace correcta. Multiplicar por 1,21 solo procede si todos los valores comparten moneda, representan importes sin IVA y la regla de negocio aplica a todos. Vectorizar una mala regla propaga el error más deprisa.
+
+## Resumen
+
+Un array reúne números; la vectorización aplica una operación a cada uno. En la siguiente lección seleccionarás subconjuntos sin perder de vista el criterio usado.
+
+# Selección, máscaras y forma
+
+## Objetivos y prerrequisitos
+
+Aprenderás a elegir elementos por posición o condición y a interpretar la forma de un array. Requiere arrays básicos.
+
+## Preguntar una condición a cada elemento
+
+Una **máscara booleana** contiene `True` o `False` para cada posición. Es la traducción de una pregunta: “¿esta venta supera 100?”
+
+```python
+ventas = np.array([80, 125, 210])
+es_alta = ventas > 100
+ventas[es_alta]  # array([125, 210])
+```
+
+La máscara es valiosa porque hace visible el criterio. Antes de filtrar pedidos “altos”, define por qué 100 es el límite y revisa cuántos elementos quedan fuera.
+
+La **forma** (`shape`) describe dimensiones. Un array de tres ventas tiene forma `(3,)`; una matriz de dos días y tres métricas puede tener `(2, 3)`. La forma no da significado a filas y columnas: debes documentarlo.
+
+## Error habitual
+
+Una máscara de longitud distinta al array no se puede aplicar correctamente. Más grave aún: una máscara correcta técnicamente puede estar desalineada conceptualmente si proviene de otro periodo o de clientes ordenados de forma distinta.
+
+## Resumen
+
+Seleccionar es formular un criterio. Comprueba siempre forma, orden y significado antes de combinar arrays.
+
+# Broadcasting, simulación y reproducibilidad
+
+## Objetivos y prerrequisitos
+
+Comprenderás cómo NumPy combina dimensiones compatibles y por qué una simulación debe poder repetirse. Requiere forma y arrays.
+
+## Broadcasting sin magia
+
+**Broadcasting** es la regla por la que NumPy aplica un vector compatible a una matriz sin copiarlo manualmente. Si una matriz contiene ventas por día y canal, restar la media de cada canal puede centrar sus columnas. No memorices casos: imprime `shape` y comprueba qué dimensión representa cada valor antes de operar.
+
+## Simular para explorar, no para fabricar evidencia
+
+Puedes generar números aleatorios para practicar o evaluar un método. Una **semilla** fija el punto de partida del generador y permite repetir el mismo ejemplo:
+
+```python
+generador = np.random.default_rng(42)
+muestra = generador.normal(loc=100, scale=15, size=5)
+```
+
+El 42 no hace la simulación más verdadera; hace el resultado reproducible. Una muestra simulada sirve para aprender o estudiar escenarios, no para afirmar qué hicieron clientes reales.
+
+## Cierre y ejercicio
+
+NumPy permite transformar, seleccionar y resumir números de forma concisa. Antes de Pandas, resuelve una práctica: crea ventas, aplica una máscara y explica qué supuesto contiene el umbral. Documenta semilla y forma. El mismo criterio se aplicará a tablas reales.
 
 # Bloque 05 - Pandas: manipulación de datos
 

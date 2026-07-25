@@ -38,17 +38,13 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 
 | Bloque | Tema | Estado |
 | --- | --- | --- |
-| 00 | Orientación y pensamiento analítico | Disponible |
-| 01 | Fundamentos de datos | Disponible |
-| 02 | Python desde cero | Disponible |
-| 03 | Matemáticas aplicadas (teoría general opcional) | Disponible |
-| 04-07 | NumPy, Pandas, EDA y visualización | Disponible |
-| 08-10 | Estadística, SQL/NoSQL, métricas y producto | Disponible |
-| 11 | Series temporales | Disponible |
-| 12 | Modelos predictivos para analistas | Disponible |
-| 13 | Herramientas y reproducibilidad | Disponible |
-| 14 | Nivel avanzado: causalidad y escala | Disponible |
-| 15 | Portfolio y preparación profesional | Disponible |
+| 00 | Orientación y pensamiento analítico | En reconstrucción docente |
+| 01 | Fundamentos de datos | Desarrollado: 4 lecciones |
+| 02 | Python desde cero | En reconstrucción docente |
+| 03 | Matemáticas aplicadas (teoría general opcional) | En reconstrucción docente |
+| 04-09 | NumPy, Pandas, EDA, visualización, estadística y datos | En reconstrucción docente |
+| 10 | Métricas y producto | Desarrollado: 9 lecciones |
+| 11-15 | Especialización y portfolio | En reconstrucción docente |
 
 ## Cómo se organiza el material
 
@@ -76,9 +72,9 @@ La teoría, los ejercicios de razonamiento y las autoevaluaciones se pueden cons
 
 Python, Pandas, SQL, MongoDB, DynamoDB, GitHub, Jira, Amplitude y herramientas BI. El objetivo no es memorizar una interfaz: primero se aprende el concepto de análisis y después cómo aplicarlo en cada herramienta.
 
-## Curso completo
+## Estado honesto del curso
 
-Los 16 bloques del itinerario ya están disponibles. La forma recomendada de cerrar el recorrido es completar el [capstone](proyectos/capstone/README.md) y revisarlo con su [rúbrica](evaluaciones/rubricas/capstone.md).
+La estructura completa y las descargas PDF existen, pero no todos los bloques tienen aún la profundidad docente requerida. Los bloques 01 y 10 ya están desarrollados en lecciones completas; el resto se está reconstruyendo antes de presentarlo como un recorrido profesional completo. El criterio y el avance se documentan en el [programa docente](docs/programa-docente.md) y la [auditoría docente](docs/auditoria-docente-2026-07.md).
 
 ## Licencia
 

@@ -19,7 +19,11 @@ Cada bloque se evalúa contra `AGENTS.md`: gradualidad para principiante, leccio
 
 La versión previa era un índice ampliado, no un curso de nivel universitario o profesional. Solo los bloques 01 y 10 cumplen de momento el nuevo estándar. Los demás no deben presentarse como desarrollados hasta completar las lecciones previstas en `docs/programa-docente.md`.
 
-## Próximo orden de reconstrucción
+## Trabajo en curso
+
+La reconstrucción de los 14 bloques pendientes ha comenzado en la rama `agent/reconstruccion-docente-profunda`. Cada bloque pasará de un README-resumen a un índice y un conjunto de lecciones desarrolladas. El estado público del README y del roadmap se ha corregido para no confundir una estructura disponible con contenido ya impartible.
+
+## Orden de reconstrucción
 
 1. 00, 02 y 03: vocabulario, Python y matemáticas aplicadas.
 2. 04 a 08: núcleo técnico de análisis.
