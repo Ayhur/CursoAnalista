@@ -4,164 +4,257 @@
 
 ## Propósito
 
-Este bloque enseña a pensar antes de abrir una hoja de cálculo, Python o una herramienta de BI. El resultado esperado es poder convertir una petición vaga en una pregunta analítica que otra persona pueda revisar y usar para decidir.
+Antes de escribir una consulta, abrir Python o crear un gráfico, un analista debe saber qué decisión está ayudando a tomar. Este bloque enseña a convertir una preocupación de negocio en una investigación revisable: una pregunta concreta, una hipótesis que puede fallar, evidencia adecuada, una recomendación prudente y un plan de seguimiento.
 
-## Lecciones
+El hilo conductor es un caso de producto IT: **Lumen**, una app de reservas de espacios de trabajo, detecta que menos personas que instalan la app completan su primera reserva. Leo acompañará a producto e ingeniería desde el aviso inicial hasta la decisión y su medición posterior.
 
-1. [El rol del analista y el ciclo de decisión](lecciones/01-rol-y-ciclo-de-decision.md)
-2. [Preguntas, hipótesis, evidencia y métricas](lecciones/02-preguntas-hipotesis-y-evidencia.md)
-3. [Cómo estudiar y trabajar de forma reproducible](lecciones/03-metodo-de-estudio-y-diagnostico.md)
+## Resultados observables
 
-## Prerrequisitos
+Al completar el bloque podrás:
 
-Ninguno. No hace falta saber programación ni conocer vocabulario técnico.
+- distinguir descripción, diagnóstico, predicción y prescripción, y saber qué no permite concluir cada uno;
+- redactar un brief analítico que otra persona pueda ejecutar y revisar;
+- separar hechos observados, hipótesis y evidencia;
+- definir una métrica con evento, denominador, exclusiones, grano, ventana, fuente y decisión asociada;
+- estudiar desde el móvil dejando un registro reproducible de tus respuestas y supuestos.
 
-## Ejercicios
+## Ruta de aprendizaje
 
-Realiza [los ejercicios de comprensión](../../ejercicios/temario-00/comprension/preguntas.md) antes de consultar [las soluciones](../../soluciones/temario-00/preguntas.md).
+1. [El rol del analista, tipos de análisis y ciclo de decisión](lecciones/01-rol-y-ciclo-de-decision.md)
+2. [Preguntas, hipótesis, evidencia y contrato de métrica](lecciones/02-preguntas-hipotesis-y-evidencia.md)
+3. [Método de estudio, brief y trabajo reproducible](lecciones/03-metodo-de-estudio-y-diagnostico.md)
 
-# El rol del analista y el ciclo de decisión
+## Prerrequisitos y práctica móvil
 
-## Objetivos y punto de partida
+No necesitas programación ni vocabulario técnico. Desde el móvil puedes leer las lecciones, copiar la [plantilla de brief](plantillas/brief-analitico.md) en una nota y responder el ejercicio. Cuando dispongas de ordenador, repetirás este mismo razonamiento con datos en los bloques siguientes.
 
-Al terminar podrás distinguir una decisión de un cálculo y describir el trabajo de un analista sin reducirlo a “hacer gráficos”. No necesitas saber qué es una base de datos ni programar.
+## Evaluación del bloque
 
-## El problema que resuelve el análisis
+Completa el [caso integrador de Lumen](../../ejercicios/temario-00/comprension/preguntas.md) sin mirar la solución. Después compáralo con la [solución razonada y rúbrica](../../soluciones/temario-00/preguntas.md). No se evalúa acertar una causa inventada: se evalúa formular una investigación y una decisión defendibles.
 
-Una empresa de reparto observa menos pedidos que el mes anterior. La directora debe decidir si cambia una campaña, corrige una incidencia en la aplicación o no hace nada porque la variación es normal. Mirar un número aislado no responde esa decisión: hace falta saber **qué cambió, para quién, respecto a qué referencia y con qué confianza**.
+# El rol del analista, tipos de análisis y ciclo de decisión
 
-Un **analista de datos** transforma una necesidad de decisión en evidencia revisable. Su producto final no es una tabla ni un gráfico: es una recomendación que explica qué se sabe, qué no se sabe y qué conviene comprobar después.
+## Resultado observable y punto de partida
 
-## Del encargo a la acción
+Al terminar podrás recibir una frase como «la activación ha caído» y convertirla en un recorrido de investigación. Distinguirás cuatro tipos de análisis sin confundir una descripción con una causa o una recomendación. No necesitas saber programar: una **app** es un programa que una persona usa en su teléfono; un **evento** será una acción que la app registra, como instalarla o completar una reserva.
 
-Antes de hablar de herramientas, mira este recorrido. Responde a la pregunta: “¿cómo se evita saltar de una impresión a una conclusión?”
+## Caso continuo: la caída de activación de Lumen
+
+Lumen permite reservar puestos de trabajo. El lunes, la responsable de producto escribe: «La activación ha bajado; arregladlo». Antes de actuar faltan datos importantes.
+
+Llamaremos **activación** a que una persona nueva llega a realizar la primera acción de valor del producto. En Lumen, de momento, esa acción será completar una primera reserva. Esta definición es una elección de negocio, no una propiedad mágica del software: más adelante se formalizará para que todos cuenten lo mismo.
+
+El encargo útil no es «mirar los datos». Es decidir entre opciones con coste: ¿priorizar una incidencia de ingeniería en el formulario?, ¿cambiar el texto de bienvenida?, ¿pausar una campaña que atrae usuarios poco adecuados?, ¿esperar porque la caída es solo una variación normal? El analista hace visible qué evidencia haría preferible una opción.
+
+## Del brief al seguimiento
+
+Este flujo responde a «¿qué debe ocurrir entre una alarma y una decisión responsable?».
 
 ```mermaid
 flowchart LR
-  A[Decisión pendiente] --> B[Pregunta concreta]
-  B --> C[Datos y comprobaciones]
-  C --> D[Interpretación]
-  D --> E[Recomendación]
-  E --> F[Medir resultado]
-  F --> A
+  A[Brief: caída de activación] --> B[Pregunta y métrica]
+  B --> C[Hipótesis alternativas]
+  C --> D[Comprobar evidencia]
+  D --> E[Recomendación con límite]
+  E --> F[Acción de producto]
+  F --> G[Seguimiento y aprendizaje]
 ```
 
-El ciclo es deliberadamente circular. Una recomendación no cierra el trabajo: genera una acción cuya consecuencia debe medirse. Si la campaña cambia, habrá que volver a comprobar pedidos, margen y posibles efectos no deseados.
+El seguimiento vuelve a abrir una pregunta, aunque lo representemos como el final de este recorrido para conservar un diagrama legible en PDF. Si Lumen simplifica una pantalla, debe comprobar después si sube la activación **sin** empeorar cancelaciones, soporte o ingresos. Una recomendación no cierra el análisis; crea una nueva situación que hay que observar.
 
-## Ejemplo trabajado
+## Cuatro preguntas, cuatro tipos de análisis
 
-Petición inicial: “las ventas van mal”.
+La misma caída puede estudiarse con preguntas distintas. La tabla no es una escalera automática: cada tipo necesita evidencia diferente.
 
-Una respuesta precipitada sería abrir un gráfico mensual y proponer bajar precios. Una respuesta analítica empieza preguntando: “¿qué decisión está sobre la mesa?”. Supongamos que la decisión es redistribuir 20 000 euros de publicidad. Entonces la pregunta puede ser: “¿Qué canal explica la caída de pedidos de junio frente al promedio de marzo a mayo, y cuál mantiene margen suficiente para recibir inversión?”
+| Tipo | Pregunta de Lumen | Entrega útil | Lo que no permite afirmar por sí solo |
+| --- | --- | --- | --- |
+| Descriptivo | ¿Cuánto cambió la activación y en qué fechas? | Serie, segmentos y definición de la medida | Por qué cambió ni qué hacer |
+| Diagnóstico | ¿En qué paso, dispositivo o canal se concentra la caída? | Hipótesis priorizadas y comprobaciones | Que un factor observado sea la causa |
+| Predictivo | ¿Cuántas activaciones esperamos la próxima semana si continúa el patrón? | Estimación con incertidumbre | Que una acción concreta produzca el resultado |
+| Prescriptivo | ¿Qué opción conviene ejecutar dadas las evidencias, costes y riesgos? | Recomendación, condiciones y seguimiento | Que sea óptima o causalmente demostrada sin experimento |
 
-La pregunta obliga a definir después “pedido”, “canal”, “margen” y los periodos. Aún no demuestra que un canal **cause** la caída; solo delimita qué evidencia buscar.
+En lectura rápida, el análisis **descriptivo** responde «qué pasó»; el **diagnóstico** pregunta «dónde y con qué explicaciones plausibles»; el **predictivo** estima «qué podría pasar»; y el **prescriptivo** propone «qué conviene hacer, bajo qué condiciones y cómo sabremos si funcionó». Ninguno autoriza por sí solo a afirmar causalidad.
 
-## Límite importante: describir no es explicar causas
+### Ejemplo trabajado
 
-Que los pedidos hayan bajado después de una campaña no prueba que la campaña sea la causa. Puede haber estacionalidad, un fallo técnico, cambios de precio o clientes distintos. El análisis descriptivo dice qué ocurrió; una explicación causal exige comparaciones y diseño más cuidadoso, que se estudiará más adelante.
+La primera comprobación muestra que la activación pasó de 38% a 29% entre dos semanas comparables. Eso es **descriptivo**. Al separar por plataforma, la caída aparece sobre todo en Android y coincide con una actualización. Eso es **diagnóstico exploratorio**: orienta a revisar el formulario y los registros de error, pero aún no prueba que la actualización sea la causa. Si Lumen estima el número de activaciones de la semana siguiente para dimensionar soporte, está haciendo una **predicción**. Si decide revertir la actualización temporalmente porque el riesgo de perder usuarios es alto y medirá el efecto, está haciendo una **prescripción** bajo incertidumbre.
+
+### Contraejemplos que evitan errores caros
+
+- «Android cayó después de la actualización; por tanto, la actualización causó la caída». Es una hipótesis plausible, no una prueba. También pudo cambiar la mezcla de campañas o dejar de registrarse un evento.
+- «El modelo predice 600 activaciones; por tanto, cambiar el botón dará 600». Una predicción de demanda no mide el efecto causal de un cambio de interfaz.
+- «Recomiendo cambiar el texto porque parece claro». Una recomendación sin métrica de éxito, coste o plan de reversión es una opinión, no una decisión analítica.
+
+## El producto real del analista
+
+Un gráfico puede ser una evidencia, pero no es el producto final. Una entrega profesional deja una cadena que otra persona puede revisar:
+
+- **Decisión:** qué se puede hacer y quién decide.
+- **Pregunta:** qué comparación responderá esa decisión.
+- **Evidencia:** qué registros, periodos y comprobaciones la sostienen.
+- **Interpretación:** qué muestra el resultado y qué permanece incierto.
+- **Recomendación:** acción, coste, riesgo y criterio de seguimiento.
+
+Esta cadena protege tanto a Lumen como al analista: evita que una cifra bonita se convierta en una afirmación que los datos no permiten.
 
 ## Resumen y comprobación
 
-- El analista ayuda a decidir con evidencia trazable.
-- Una cifra es un indicio, no una conclusión.
-- El trabajo continúa después de recomendar: hay que medir el resultado.
+- Describir, diagnosticar, predecir y prescribir responden preguntas distintas.
+- Una asociación observada puede priorizar una investigación, pero no demuestra causalidad.
+- Toda acción debe tener una métrica de seguimiento y una posible condición de reversión.
 
-Pregúntate: ¿qué decisión cambiaría si el análisis mostrara que la caída procede solo de usuarios nuevos? ¿Qué dato adicional pedirías antes de recomendar bajar precios?
+Comprueba tu comprensión: si la activación baja solo en Android, ¿qué dos explicaciones alternativas investigarías antes de culpar al formulario? ¿Qué dato distinguiría una caída real de un fallo de medición?
 
-Sigue con [preguntas, hipótesis, evidencia y métricas](02-preguntas-hipotesis-y-evidencia.md) y después resuelve el [ejercicio del bloque](../../../ejercicios/temario-00/comprension/preguntas.md).
+En la siguiente lección convertirás la alarma de Lumen en una pregunta comprobable y un contrato de métrica. Después resuelve el [caso integrador](../../../ejercicios/temario-00/comprension/preguntas.md).
 
-# Preguntas, hipótesis, evidencia y métricas
+# Preguntas, hipótesis, evidencia y contrato de métrica
 
-## Objetivos y prerrequisitos
+## Resultado observable y prerrequisitos
 
-Aprenderás a convertir una petición ambigua en una pregunta medible, a separar una hipótesis de un hecho y a pedir una métrica bien definida. Parte de la lección anterior; no requiere matemáticas avanzadas.
+Al terminar redactarás una pregunta analítica y el contrato completo de una métrica de activación. Usarás el caso de Lumen de la lección anterior. Una **métrica** es una regla repetible para medir algo; un **KPI** es una métrica elegida para seguir un objetivo importante. No toda cifra merece ser KPI.
 
-## Una pregunta que se pueda comprobar
+## De una preocupación a una pregunta comprobable
 
-“Queremos que más personas usen la aplicación” expresa un deseo, no una pregunta. Para que un equipo pueda investigar necesita concretar cuatro piezas: la **población** (quiénes), el **resultado** que se observa, el **periodo** y la **comparación**.
+«Queremos que más personas usen la aplicación» expresa una intención, no una investigación. Una pregunta comprobable especifica, como mínimo:
 
-Ejemplo: “Entre quienes instalaron la aplicación en mayo, ¿qué porcentaje completó su primera reserva en siete días, frente a quienes la instalaron en abril?”. Ya se puede buscar evidencia, y también se puede discutir si siete días es una ventana razonable.
+- **Población:** ¿de qué personas o casos hablamos?
+- **Resultado:** ¿qué acción o valor observaremos?
+- **Ventana temporal:** ¿cuánto tiempo tiene cada persona para lograrlo?
+- **Comparación:** ¿frente a qué fecha, segmento o versión?
+- **Decisión:** ¿qué acción puede cambiar la respuesta?
 
-## Hecho, hipótesis y evidencia
+Para Lumen: «Entre las personas que instalan la versión 4.2 de Lumen, ¿qué porcentaje completa una primera reserva dentro de siete días, comparado con la versión 4.1, y en qué paso del flujo se concentra la diferencia para decidir si revertimos el cambio?».
 
-Una **hipótesis** es una explicación provisional que podría ser falsa: “el formulario largo reduce las reservas”. La **evidencia** es la información que apoya o cuestiona esa explicación: registros de pasos completados, una comparación entre versiones o entrevistas. Un resultado observado es: “solo el 42 % llega al último paso”. No confundas el resultado con su causa.
+La pregunta no presupone que la versión sea culpable. Ese detalle permite que la evidencia contradiga la sospecha inicial.
 
-Este mapa responde a “¿qué hay que mantener separado para razonar con rigor?”
+## Hecho, hipótesis y evidencia: mantener las piezas separadas
+
+Una **hipótesis** es una explicación provisional que podría ser falsa; por ejemplo: «el selector de fecha de Android impide avanzar». Un **hecho observado** sería: «en Android, el 31% llega a `reserva_iniciada`, frente al 43% antes de la versión». La **evidencia** es la información que puede apoyar, matizar o refutar la hipótesis: registros de error, repetición del flujo, una comparación con iOS o una prueba controlada.
+
+Este diagrama responde a «¿cómo evitar que una sospecha se disfrace de conclusión?».
 
 ```mermaid
 flowchart TB
-  A[Decisión: simplificar formulario] --> B[Pregunta medible]
-  B --> C[Hecho observado]
-  C --> D[Hipótesis explicativa]
-  D --> E[Evidencia para contrastar]
-  E --> F[Decisión revisada]
+  A[Hecho: baja la activación Android] --> B[Hipótesis: falla selector]
+  B --> C[Predicción observable]
+  C --> D[Registros, prueba y comparación]
+  D --> E[Decisión: ¿la evidencia encaja?]
+  E -->|sí, con límites| F[Priorizar corrección]
+  E -->|no o incompleta| G[Revisar hipótesis y medición]
 ```
 
-La flecha no convierte una hipótesis en verdad. La evidencia puede hacerla más plausible, descartarla o mostrar que faltan datos.
+La ruta «sí» no elimina los límites: quizá el cambio coincide con una campaña. Por eso la recomendación debe indicar el nivel de seguridad y qué se medirá tras actuar.
 
-## Qué significa “métrica”
+## Contrato completo de métrica
 
-Una **métrica** es una medida cuya regla se puede repetir. “Usuarios activos” no basta si nadie sabe si cuenta una apertura de la app, una reserva, un día o un mes. Una definición mínima incluye fórmula, población, periodo, fuente y responsable.
+Decir «la activación es 29%» es insuficiente. Dos personas pueden llegar a números distintos si una cuenta instalaciones y otra cuentas, o si una incluye empleados de Lumen. Un **contrato de métrica** documenta las reglas antes de discutir el resultado.
 
-Por ejemplo: “tasa de primera reserva a siete días = personas que reservan en los siete días posteriores a instalar / personas que instalan, para instalaciones de mayo, excluyendo cuentas de prueba”. Otra persona debe llegar al mismo número al aplicar la misma regla.
+| Campo | Contrato de activación de Lumen | Por qué evita errores |
+| --- | --- | --- |
+| Nombre y decisión | Activación a 7 días; decidir si investigar/revertir cambios de onboarding | Conecta medida y acción |
+| Evento numerador | Usuarios únicos con `reserva_completada` dentro de 7 días tras instalar | Dice qué éxito cuenta |
+| Denominador | Usuarios únicos con `app_instalada` en la versión y periodo definidos | Evita dividir por una población distinta |
+| Exclusiones | Empleados, cuentas de prueba, fraudes detectados y reinstalaciones identificadas | Evita inflar o sesgar la tasa |
+| Grano | Una fila lógica por usuario e instalación elegible | Impide contar varias reservas como varias personas |
+| Ventana y fecha de corte | 7 días desde instalación; solo instalaciones con 7 días completos al corte | Evita comparar cohortes inmaduras |
+| Fuente y calidad | Eventos de la app y tabla de usuarios; comprobar duplicados, zona horaria y eventos faltantes | Hace el número auditable |
+| Segmentos autorizados | Versión, sistema operativo y canal de adquisición | Permite localizar el problema sin inventar segmentos |
+| Propietario y revisión | Producto es propietario; Datos revisa cambios de tracking antes de publicar | Define responsabilidad |
+| Métricas de protección | Cancelación en 7 días y contactos a soporte por reserva | Evita optimizar activación a costa de la experiencia |
 
-Un **KPI** es una métrica elegida para seguir un objetivo importante. No todo número es KPI: si una métrica no orienta una decisión, quizá es ruido o contexto, no una prioridad.
+Para que el contrato también pueda leerse sin una tabla, conserva esta lista de control:
 
-## Error habitual: optimizar el número equivocado
+- Cuenta como éxito el evento `reserva_completada` dentro de siete días; cuenta como entrada cada instalación elegible.
+- Excluye empleados, pruebas, fraude conocido y reinstalaciones identificadas; cada unidad es una instalación elegible por usuario.
+- Espera a que cada cohorte complete siete días y documenta zona horaria, fuente y comprobaciones de duplicados o eventos ausentes.
+- Segmenta por versión, sistema operativo y canal; Producto es propietario y Datos revisa cambios de tracking.
+- Junto a activación, vigila cancelaciones y contactos a soporte para no mejorar un número a costa de la experiencia.
 
-Si se premia solo “reservas creadas”, un equipo podría facilitar reservas que luego se cancelan. Por eso una métrica principal suele necesitar una métrica de protección: junto a reservas, vigilar cancelaciones, reclamaciones o margen. Este riesgo se retomará al diseñar árboles de métricas.
+En notación sencilla:
 
-## Resumen y práctica
+`activación_7d = usuarios elegibles con primera reserva en 7 días / usuarios elegibles que instalaron`
 
-- Una pregunta comprobable delimita población, resultado, periodo y comparación.
-- Una hipótesis explica provisionalmente; la evidencia la contrasta.
-- Una métrica reproducible tiene una definición, no solo un nombre.
+La fórmula no sustituye el contrato. Sin exclusiones, grano y ventana, dos fracciones con el mismo nombre pueden significar cosas opuestas.
 
-Redacta una pregunta sobre el uso de una app y añade una hipótesis alternativa que también pudiera explicar el resultado. Después completa [los ejercicios](../../../ejercicios/temario-00/comprension/preguntas.md).
+## Ejemplo trabajado: decidir con un contrato
 
-# Cómo estudiar y trabajar de forma reproducible
+El 8 de julio, Lumen compara instalaciones del 1 al 7 de junio (versión 4.1) con instalaciones del 1 al 7 de julio (versión 4.2). Espera hasta el 15 de julio para que todos tengan siete días completos. Tras excluir empleados y reinstalaciones, calcula 380 activados de 1.000 elegibles (38%) frente a 290 de 1.000 (29%).
 
-## Objetivos y prerrequisitos
+La diferencia describe una señal prioritaria, pero todavía hay preguntas: ¿el evento `reserva_completada` siguió enviándose? ¿cambió el canal de adquisición? ¿la caída aparece también en iOS? El contrato no responde por sí solo; garantiza que esas preguntas parten del mismo objeto medido.
 
-Sabrás organizar una sesión de estudio desde el móvil o un ordenador, usar ayuda de AI sin delegar el razonamiento y dejar rastro de tus decisiones. No hace falta instalar nada.
+## Error frecuente: optimizar una métrica huérfana
 
-## Teoría, práctica y recuperación
+Si Lumen premia solo «reservas creadas», podría añadir una reserva automática que después se cancela. La tasa parecería mejor mientras el usuario recibe una experiencia peor. Por eso una métrica principal necesita métricas de protección y una decisión explícita. Esto se verá con más profundidad en el bloque de métricas y producto.
 
-Leer una explicación da familiaridad, pero no garantiza que puedas aplicarla. Alterna tres acciones: comprender un ejemplo, resolver uno parecido sin mirar y explicar con tus palabras por qué la respuesta tiene sentido. Ese último paso descubre lagunas antes de que se conviertan en hábitos.
+Otro error es cambiar el contrato después de ver el resultado para hacerlo favorable. Si la definición debe cambiar por una mejora legítima de tracking, se versiona: se conserva la definición anterior, se indica desde qué fecha rige la nueva y se evita comparar series incompatibles como si fueran iguales.
 
-Una sesión mínima desde el móvil puede consistir en leer una lección, responder dos preguntas de comprobación en notas y revisar la solución solo después. Cuando tengas navegador con teclado, abre el notebook de práctica en Google Colab: un **notebook** es una página que mezcla texto, código ejecutable y resultados; lo estudiarás desde cero en Python.
+## Resumen y comprobación
 
-## Reproducibilidad: poder revisar el camino
+- Una pregunta comprobable incluye población, resultado, ventana, comparación y decisión.
+- Hecho, hipótesis y evidencia cumplen papeles distintos; una correlación no prueba una causa.
+- Una métrica profesional necesita más que una fórmula: evento, denominador, exclusiones, grano, ventana, fuente y uso.
 
-Un análisis es **reproducible** si otra persona puede entender qué datos se usaron, qué reglas se aplicaron y cómo se llegó a una conclusión. No requiere una herramienta sofisticada al principio: basta con anotar la pregunta, la fecha, los supuestos y los cambios.
+Antes de avanzar, intenta explicar por qué «usuarios activos: 10.000» no es aún un resultado interpretable. Después usa la [plantilla de brief](../plantillas/brief-analitico.md) y resuelve el [caso integrador](../../../ejercicios/temario-00/comprension/preguntas.md).
 
-El siguiente flujo responde a “¿qué debe conservarse para que una conclusión sea revisable?”
+# Método de estudio, brief y trabajo reproducible
+
+## Resultado observable y prerrequisitos
+
+Sabrás estudiar una lección desde el móvil y dejar un brief que otra persona pueda continuar. No hace falta instalar nada. Un **brief** es una nota breve que fija el problema, la decisión, las reglas de medida y los límites antes de investigar; no es un informe final ni una orden de confirmar una sospecha.
+
+## Estudiar para poder aplicar, no solo reconocer
+
+Leer «activación = 29%» puede hacer que el concepto parezca familiar. Poder usarlo exige recuperar la idea sin mirar y defender una decisión. Para cada lección, alterna:
+
+1. **Comprender:** lee el ejemplo y señala palabras nuevas.
+2. **Recuperar:** cierra la página y explica con tus palabras qué se mide y por qué.
+3. **Aplicar:** resuelve una variación pequeña sin consultar la solución.
+4. **Contrastar:** compara con la solución, corrige el razonamiento y anota qué supuesto omitiste.
+
+Desde el móvil puedes copiar la plantilla en una aplicación de notas y escribir en frases cortas. No necesitas escribir código todavía. Cuando tengas ordenador, un **notebook** será una página que mezcla explicación, código ejecutable y resultados; empezarás desde cero en el bloque de Python.
+
+## El brief mínimo que hace el análisis continuable
+
+Una investigación no es reproducible porque use una herramienta moderna. Es **reproducible** cuando otra persona puede entender qué se preguntó, qué información se usó, qué reglas se aplicaron y por qué se recomendó actuar. El siguiente mapa responde a «¿qué debe conservarse para revisar el caso de Lumen?».
 
 ```mermaid
 flowchart LR
-  A[Pregunta y decisión] --> B[Datos usados]
-  B --> C[Pasos y supuestos]
-  C --> D[Resultado]
-  D --> E[Recomendación y límite]
+  A[Decisión y contexto] --> B[Pregunta e hipótesis]
+  B --> C[Contrato de métrica]
+  C --> D[Fuentes y comprobaciones]
+  D --> E[Resultado y límites]
+  E --> F[Acción y seguimiento]
 ```
 
-Si falta un eslabón, alguien puede ver un número final pero no comprobar si era apropiado. Más adelante Git, tickets de Jira y documentación permitirán hacer este proceso colaborativo.
+Si alguien recibe solo un gráfico final, no puede comprobar si se incluyeron cuentas de prueba, si la comparación tenía la misma ventana o si la recomendación fue prudente. La [plantilla reutilizable](../plantillas/brief-analitico.md) guarda los seis eslabones.
+
+## Ejemplo: un brief inicial para Lumen
+
+Un inicio honesto podría decir:
+
+> **Decisión:** Producto decidirá el viernes si revierte temporalmente el onboarding 4.2 en Android. **Pregunta:** comparar activación a siete días de instalaciones 4.2 frente a 4.1, por sistema operativo y paso del flujo. **Hipótesis alternativas:** error en selector de fecha, cambio de mezcla de campañas o evento de reserva no registrado. **Límite inicial:** una comparación antes/después no demuestra causalidad. **Seguimiento:** si se revierte, medir activación, cancelación y contactos a soporte durante una semana comparable.
+
+Fíjate en lo que no hace: no afirma que el selector «es la causa» y no borra explicaciones alternativas. Un brief puede empezar con incógnitas; su trabajo es hacerlas visibles.
 
 ## Usar AI como tutor, no como piloto automático
 
-Una buena petición a una AI incluye contexto: “No sé qué es una lista en Python; explícame este error con un ejemplo de gastos y pregúntame después”. Pide que explique cada línea y cambia un valor para comprobar que entiendes el efecto. Nunca des por correcta una consulta, gráfico o conclusión solo porque suena convincente: ejecútala, verifica los supuestos y conserva la fuente.
+La AI puede adaptar ejemplos y hacer preguntas, pero no convierte una respuesta convincente en evidencia. Una petición útil para Leo sería: «No sé qué es un denominador. Explícame la activación de Lumen usando tres personas ficticias; después pídeme que defina a quién excluiría». Después verifica el ejemplo cambiando valores y explica por qué cambia el resultado.
 
-## Diagnóstico inicial y ruta adaptable
+No pegues datos personales, credenciales ni información privada de una empresa en una herramienta pública. Cuando más adelante uses código, conserva la fuente y los pasos; cuando uses AI, conserva también la pregunta importante y verifica cualquier consulta o conclusión antes de compartirla.
 
-Si ya manejas porcentajes, medias o álgebra, puedes leer el bloque de matemáticas como repaso y dedicar más atención a sus aplicaciones analíticas. No conviene saltarse la definición de métricas, incertidumbre o sesgo: conocer la fórmula no garantiza interpretar bien un dato empresarial.
+## Diagnóstico y siguiente ruta
 
-## Resumen y siguiente paso
+Tener formación matemática ayuda, pero no permite saltarse las decisiones de medida. Una tasa puede estar bien calculada y responder una pregunta equivocada. Si ya dominas porcentajes, usa los ejemplos para repasar y dedica tiempo a los conceptos nuevos: población, evento, grano, ventana y evidencia.
 
-- Estudiar implica recuperar y aplicar, no solo leer.
-- Reproducibilidad conserva pregunta, datos, pasos, resultado y límites.
-- AI acelera la práctica si puedes explicar y verificar su respuesta.
+Después de completar el ejercicio, continúa con el [bloque 01](../../01-fundamentos-datos/README.md). Allí aprenderás qué es un archivo, una tabla, una fila y una columna: las piezas que después permitirán implementar el contrato de métrica con datos reales.
 
-Completa el [diagnóstico inicial](../../../evaluaciones/diagnosticos/diagnostico-inicial.md). Después continúa con el [bloque 01](../../01-fundamentos-datos/README.md): allí se explicará primero qué es un archivo, una tabla y una observación.
+## Resumen y comprobación
+
+- Estudiar implica recuperar, aplicar y corregir, no solo leer.
+- Un brief conserva decisión, pregunta, contrato, evidencia, límites y seguimiento.
+- AI es útil para practicar si mantienes el control de los datos y verificas las conclusiones.
+
+Pregúntate: ¿qué tendría que escribir Lumen en el brief si el sistema deja de registrar `reserva_completada`? ¿Por qué un número calculado correctamente podría seguir siendo una mala base para decidir?
 
 # Bloque 01 - Fundamentos de datos: desde archivos hasta calidad
 
