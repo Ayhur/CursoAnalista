@@ -1,28 +1,18 @@
 # Bloque 09 - SQL, NoSQL y almacenamiento
 
-## Objetivo
+## Propósito
 
-Entender cómo viven los datos en una empresa, consultar tablas con SQL y saber cuándo un modelo documental o clave-valor requiere una forma distinta de pensar.
+Entender cómo viven los datos en una empresa, consultar tablas con SQL y saber cuándo un modelo documental o clave-valor exige otro diseño.
 
-## SQL para preguntas de negocio
+## Lecciones
 
-SQL permite seleccionar, filtrar, agrupar, unir y ordenar datos. Para cada consulta define el grano: ¿una fila representa un pedido, un usuario, una sesión o un evento? El grano evita duplicar o perder información al usar `JOIN`.
-
-```mermaid
-flowchart LR
-    A[Fuente operacional] --> B[Extracción]
-    B --> C[Warehouse o lakehouse]
-    C --> D[SQL y modelos]
-    D --> E[Dashboard, Python o informe]
-```
-
-## NoSQL sin mitos
-
-MongoDB almacena documentos flexibles y permite filtros y pipelines de agregación. DynamoDB organiza datos alrededor de claves y patrones de acceso con rendimiento predecible. Son excelentes para algunas aplicaciones operacionales; no reemplazan automáticamente un warehouse orientado a análisis histórico y uniones complejas.
-
-## AI para consultas
-
-MongoDB Atlas puede generar filtros y agregaciones a partir de lenguaje natural. Úsalo como borrador, no como autoridad: revisa semántica, filtros, coste, índices, datos sensibles y resultado. Una consulta que "parece" correcta puede contestar otra pregunta.
+1. [Modelo relacional, tablas y grano](lecciones/01-modelo-relacional-y-grano.md)
+2. [Seleccionar, filtrar y resumir con SQL](lecciones/02-sql-seleccion-filtro-y-agregacion.md)
+3. [JOIN y validación de cardinalidad](lecciones/03-joins-y-cardinalidad.md)
+4. [CTE, ventanas, fechas y nulos](lecciones/04-sql-analitico-y-mantenible.md)
+5. [MongoDB y documentos](lecciones/05-mongodb-y-documentos.md)
+6. [DynamoDB y patrones de acceso](lecciones/06-dynamodb-y-patrones-de-acceso.md)
+7. [Warehouse, lakehouse y consultas asistidas](lecciones/07-arquitectura-y-consultas-asistidas.md)
 
 ## Práctica
 

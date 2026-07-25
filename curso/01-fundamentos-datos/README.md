@@ -1,41 +1,20 @@
-# Bloque 01 - Fundamentos de datos
+# Bloque 01 - Fundamentos de datos: desde archivos hasta calidad
 
-## Objetivo
+## Propósito
 
-Reconocer qué representa un conjunto de datos, evaluar su calidad y evitar conclusiones que los datos no permiten.
+Antes de programar o abrir una base de datos, Leo debe entender qué representa un dato, cómo se organiza la información y por qué una cifra aparentemente correcta puede conducir a una decisión equivocada. Este bloque no presupone que sepas qué es CSV, JSON, una tabla o una clave.
 
-## Anatomía de una tabla
+## Resultado de salida
 
-Una observación suele ser una fila: por ejemplo, una compra. Una variable es una columna: fecha, importe o canal. Una clave identifica de forma única una observación; una clave mal definida crea duplicados y totales erróneos.
+Al terminar podrás abrir un archivo sencillo y explicar qué información contiene, distinguir una tabla de un documento JSON, identificar el grano de un conjunto de datos, proponer controles de calidad y reconocer límites de privacidad y sesgo.
 
-Las variables pueden ser numéricas, categóricas, texto, fecha/hora o booleanas. El tipo no es un detalle técnico: determina qué cálculos y visualizaciones tienen sentido.
+## Lecciones
 
-## Calidad del dato
+1. [Qué es un dato, un archivo y una tabla](lecciones/01-archivo-tabla-y-grano.md).
+2. [Filas, columnas, tipos y relaciones](lecciones/02-filas-columnas-y-relaciones.md).
+3. [CSV, JSON, Excel, Parquet y bases de datos](lecciones/03-formatos-y-almacenamiento.md).
+4. [Calidad, ausencia, sesgo, privacidad y ética](lecciones/04-calidad-y-uso-responsable.md).
 
-Antes de analizar, revisa cinco dimensiones:
+## Práctica
 
-- Completitud: ¿faltan valores necesarios?
-- Validez: ¿los valores respetan reglas, unidades y formatos?
-- Consistencia: ¿la misma idea está codificada igual en todo el conjunto?
-- Unicidad: ¿hay duplicados indebidos?
-- Actualidad: ¿el dato es suficientemente reciente para la decisión?
-
-No elimines valores ausentes por costumbre. Primero averigua por qué faltan y si el patrón de ausencia puede sesgar el resultado.
-
-## Archivos y bases de datos
-
-CSV es simple y común, pero no conserva todos los tipos. JSON representa estructuras anidadas. Excel es útil para tareas ligeras y revisión manual. Parquet almacena datos de forma columnar y suele ser eficiente en análisis.
-
-Las bases relacionales organizan tablas conectadas por claves y se consultan con SQL. Las bases documentales como MongoDB almacenan documentos flexibles. DynamoDB es una base NoSQL de clave-valor y documentos orientada a patrones de acceso. Ninguna tecnología elimina la necesidad de comprender la semántica de los datos.
-
-## Ética y privacidad
-
-Que se pueda acceder a un dato no significa que se deba usar. Minimiza la información personal, evita compartir identificadores en notebooks y piensa a quién puede perjudicar una clasificación o recomendación.
-
-## Resumen
-
-El análisis fiable empieza por saber qué mide cada columna y por comprobar la calidad de los datos antes de calcular promedios.
-
-## Ejercicios
-
-Realiza [la auditoría de calidad](../../ejercicios/temario-01/comprension/auditoria-calidad.md) antes de consultar [las soluciones](../../soluciones/temario-01/auditoria-calidad.md).
+Realiza [la auditoría de calidad](../../ejercicios/temario-01/comprension/auditoria-calidad.md) después de la lección 4 y compárala con [la solución razonada](../../soluciones/temario-01/auditoria-calidad.md).

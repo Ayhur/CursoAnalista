@@ -1,35 +1,31 @@
 # Bloque 10 - Métricas, KPIs y analítica de producto
 
-## Objetivo
+## Propósito del bloque
 
-Diseñar métricas que conecten comportamiento, resultados de negocio y decisiones, en lugar de limitarse a contar eventos.
+Este bloque enseña a construir un sistema de medición para un producto o negocio tecnológico. No se trata de aprender una lista de siglas ni de abrir un dashboard: se trata de decidir qué representa valor, cómo medirlo de forma consistente, qué señales deben activar una investigación y cómo evitar que una métrica optimizada localmente perjudique al producto.
 
-## De objetivo a métrica
+## Resultado de salida
 
-Una métrica es una definición reproducible. Un KPI es una métrica elegida para seguir un objetivo importante. Cada definición debe incluir fórmula, población, periodo, fuente, propietario y limitaciones.
+Al terminar podrás tomar una pregunta como “queremos crecer” y convertirla en un árbol de métricas con definiciones, instrumentación, guardrails, segmentos y una decisión asociada. También sabrás revisar un funnel, una cohorte o un dashboard de Amplitude sin aceptar sus cifras ciegamente.
 
-```mermaid
-flowchart TD
-    A[Objetivo de negocio] --> B[North Star Metric]
-    B --> C[Métricas de entrada]
-    B --> D[Guardrails]
-    C --> E[Experimentos y acciones]
-    D --> E
-    E --> F[Aprendizaje y revisión]
-```
+## Prerrequisitos
 
-## Árboles de métricas
+- Bloque 00: preguntas y decisiones.
+- Bloques 05–08: datos tabulares, exploración y estadística básica.
+- Bloque 09: comprensión básica de fuentes y consultas.
 
-Una North Star Metric resume valor entregado y sostenibilidad, pero no se gestiona sola. Descompónla en métricas controlables: adquisición, activación, engagement, retención y monetización. Añade guardrails para no optimizar crecimiento a costa de fraude, soporte o margen.
+## Lecciones
 
-## Producto digital
-
-DAU, WAU, MAU, stickiness, conversión, adopción de funcionalidades, retención y churn son útiles solo con definiciones consistentes. En Amplitude estas ideas aparecen como eventos, propiedades, funnels, cohorts, retention y dashboards. Aprende primero el concepto; después cualquier herramienta será más fácil de usar.
-
-## Gobierno de métricas
-
-Un catálogo evita que dos equipos calculen "usuarios activos" de forma diferente. Guarda definición, código, fuente, cambios y usos. Este hábito evita discusiones de números y mejora la confianza.
+1. [Dato, medida, métrica, indicador y KPI](lecciones/01-lenguaje-de-medicion.md).
+2. [Contrato de una métrica: definición que otra persona puede repetir](lecciones/02-contrato-de-metrica.md).
+3. [Objetivos, North Star, árboles y guardrails](lecciones/03-arquitectura-de-metricas.md).
+4. [Baselines, objetivos, benchmarks, ratios y comparaciones](lecciones/04-baselines-y-comparaciones.md).
+5. [Funnels: definición, instrumentación y diagnóstico de conversión](lecciones/05-funnels.md).
+6. [Cohortes, retención, churn y segmentación](lecciones/06-cohortes-retencion.md).
+7. [Adquisición, engagement, monetización y métricas de valor](lecciones/07-metricas-de-valor.md).
+8. [Experimentación, Goodhart y decisiones bajo incertidumbre](lecciones/08-experimentacion-y-goodhart.md).
+9. [Catálogo de métricas, tracking plan y Amplitude](lecciones/09-gobierno-y-amplitude.md).
 
 ## Práctica
 
-Diseña [un árbol de métricas](../../ejercicios/temario-10/aplicacion/arbol-metricas.md) y contrástalo con [la propuesta](../../soluciones/temario-10/arbol-metricas.md).
+Cuando termines las tres primeras lecciones, realiza [el ejercicio de árbol de métricas](../../ejercicios/temario-10/aplicacion/arbol-metricas.md). No abras [la solución](../../soluciones/temario-10/arbol-metricas.md) hasta haber definido tus propios supuestos.

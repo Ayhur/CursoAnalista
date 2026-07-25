@@ -3,8 +3,8 @@
 ## Fase 1 - Fundamentos y piloto
 
 - [x] Estructura del curso y PDFs por bloque.
-- [x] Módulos 00, 01 y 02.
-- [x] Módulos 03 a 11 y diagramas de flujo en la teoría.
+- [x] Módulos 00, 01 y 02 desarrollados en lecciones y PDFs.
+- [x] Módulos 03 a 11 desarrollados en lecciones con diagramas integrados.
 - [x] Diagnóstico, ejercicios y primer notebook de Colab.
 - [ ] Prueba del recorrido completo desde móvil.
 
@@ -22,7 +22,7 @@
 ## Fase 4 - Especialización
 
 - [x] Series temporales, modelos predictivos, prácticas avanzadas y portfolio.
-- [x] Capstone y rúbrica de evaluación.
+- [x] Capstone y rúbrica de evaluación integrados en el cierre del curso.
 
 ## Fase 5 - Interactividad
 

@@ -38,17 +38,13 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 
 | Bloque | Tema | Estado |
 | --- | --- | --- |
-| 00 | Orientación y pensamiento analítico | Disponible |
-| 01 | Fundamentos de datos | Disponible |
-| 02 | Python desde cero | Disponible |
-| 03 | Matemáticas aplicadas (teoría general opcional) | Disponible |
-| 04-07 | NumPy, Pandas, EDA y visualización | Disponible |
-| 08-10 | Estadística, SQL/NoSQL, métricas y producto | Disponible |
-| 11 | Series temporales | Disponible |
-| 12 | Modelos predictivos para analistas | Disponible |
-| 13 | Herramientas y reproducibilidad | Disponible |
-| 14 | Nivel avanzado: causalidad y escala | Disponible |
-| 15 | Portfolio y preparación profesional | Disponible |
+| 00 | Orientación y pensamiento analítico | Desarrollado: 3 lecciones |
+| 01 | Fundamentos de datos | Desarrollado: 4 lecciones |
+| 02 | Python desde cero | Desarrollado: 6 lecciones |
+| 03 | Matemáticas aplicadas (teoría general opcional) | Desarrollado: 4 lecciones |
+| 04-09 | NumPy, Pandas, EDA, visualización, estadística y datos | Desarrollados: 30 lecciones |
+| 10 | Métricas y producto | Desarrollado: 9 lecciones |
+| 11-15 | Especialización y portfolio | Desarrollados: 24 lecciones |
 
 ## Cómo se organiza el material
 
@@ -76,9 +72,9 @@ La teoría, los ejercicios de razonamiento y las autoevaluaciones se pueden cons
 
 Python, Pandas, SQL, MongoDB, DynamoDB, GitHub, Jira, Amplitude y herramientas BI. El objetivo no es memorizar una interfaz: primero se aprende el concepto de análisis y después cómo aplicarlo en cada herramienta.
 
-## Curso completo
+## Estado del curso
 
-Los 16 bloques del itinerario ya están disponibles. La forma recomendada de cerrar el recorrido es completar el [capstone](proyectos/capstone/README.md) y revisarlo con su [rúbrica](evaluaciones/rubricas/capstone.md).
+Los 16 bloques están desarrollados como **80 lecciones** y se pueden leer en Markdown o descargar por bloque y como temario consolidado en PDF. El criterio docente, la auditoría de reconstrucción y el mapa de cobertura están documentados en el [programa docente](docs/programa-docente.md) y la [auditoría docente](docs/auditoria-docente-2026-07.md).
 
 ## Licencia
 

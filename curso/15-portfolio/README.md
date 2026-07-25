@@ -1,30 +1,15 @@
 # Bloque 15 - Portfolio y preparación profesional
 
-## Objetivo
+## Propósito
 
 Convertir competencias en evidencia visible: proyectos que muestran criterio, técnica, comunicación y honestidad sobre los límites.
 
-## Qué demuestra un buen proyecto
+## Lecciones
 
-Un portfolio no es una colección de gráficos. Cada proyecto debe partir de una pregunta relevante, explicar los datos, mostrar transformaciones, justificar decisiones, comunicar hallazgos y reconocer incertidumbre. La persona que lo lea debe poder reproducir el recorrido o entender dónde no puede hacerlo.
-
-```mermaid
-flowchart TD
-    A[Problema real] --> B[Pregunta y métricas]
-    B --> C[Datos y calidad]
-    C --> D[Análisis o modelo]
-    D --> E[Hallazgos y límites]
-    E --> F[Recomendación]
-    F --> G[README y presentación]
-```
-
-## Formato recomendado
-
-Un proyecto contiene un README ejecutivo, un diccionario de datos, código o notebook reproducible, visualizaciones explicativas y una presentación breve. Es mejor tener tres proyectos claros y acabados que diez exploraciones incompletas.
-
-## Entrevistas
-
-Practica explicar una consulta SQL, detectar un error de calidad, definir una métrica y cuestionar una conclusión estadística. En casos de negocio, di qué pregunta harías primero, qué datos pedirías y cómo validarías tu recomendación.
+1. [Seleccionar y delimitar casos](lecciones/01-seleccionar-y-delimitar-casos.md)
+2. [Estructurar un proyecto defendible](lecciones/02-estructurar-proyecto-defendible.md)
+3. [Narrativa, revisión y publicación](lecciones/03-narrativa-revision-y-publicacion.md)
+4. [Entrevistas, CV y capstone](lecciones/04-entrevistas-cv-y-capstone.md)
 
 ## Capstone
 

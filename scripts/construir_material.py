@@ -30,6 +30,7 @@ class MermaidFlow(Flowable):
         super().__init__()
         self.nodes: list[str] = []
         for label in self.node_pattern.findall(source):
+            label = re.sub(r"<br\s*/?>", " - ", label, flags=re.IGNORECASE)
             if label not in self.nodes:
                 self.nodes.append(label)
         if not self.nodes:
@@ -66,6 +67,15 @@ def chapter_paths() -> list[Path]:
     return sorted(path for path in COURSE_DIR.glob("[0-9][0-9]-*/README.md"))
 
 
+def block_markdown(chapter: Path) -> str:
+    """Consolida el índice del bloque y sus lecciones en orden pedagógico."""
+    lessons_dir = chapter.parent / "lecciones"
+    sources = [chapter]
+    if lessons_dir.exists():
+        sources.extend(sorted(lessons_dir.glob("*.md")))
+    return "\n".join(clean_markdown(source.read_text(encoding="utf-8")) for source in sources)
+
+
 def clean_markdown(text: str) -> str:
     """Normaliza contenido destinado a la concatenación y al PDF."""
     return text.replace("\r\n", "\n").strip() + "\n"
@@ -76,7 +86,7 @@ def write_consolidated_markdown(chapters: list[Path]) -> Path:
     output = DIST_MD / "temario-completo.md"
     parts = ["# Temario completo - Curso de Analista de Datos con Python\n"]
     for chapter in chapters:
-        parts.append(clean_markdown(chapter.read_text(encoding="utf-8")))
+        parts.append(block_markdown(chapter))
     output.write_text("\n".join(parts), encoding="utf-8")
     return output
 
@@ -192,7 +202,7 @@ def build_all() -> None:
         raise SystemExit("No se encontraron capítulos en curso/")
     for chapter in chapters:
         slug = chapter.parent.name
-        build_pdf(clean_markdown(chapter.read_text(encoding="utf-8")), DIST_PDF / f"{slug}.pdf")
+        build_pdf(block_markdown(chapter), DIST_PDF / f"{slug}.pdf")
     full_markdown = write_consolidated_markdown(chapters)
     build_pdf(full_markdown.read_text(encoding="utf-8"), DIST_PDF / "temario-completo.pdf")
 

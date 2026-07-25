@@ -1,52 +1,21 @@
 # Bloque 02 - Python desde cero
 
-## Objetivo
+## Propósito
 
-Aprender a leer, escribir y depurar pequeños programas de Python orientados a datos.
+Aprender a leer, escribir y depurar programas pequeños antes de usar bibliotecas de análisis. El objetivo no es memorizar sintaxis: es expresar una regla de negocio de forma clara y verificable.
 
-## Ejecutar Python
+## Lecciones
 
-Un notebook mezcla texto, código y resultados. Puedes ejecutarlo en Google Colab desde el navegador. Ejecuta una celda, observa el resultado y cambia una sola cosa cada vez cuando estés aprendiendo.
+1. [Ejecutar código, valores y variables](lecciones/01-entorno-valores-y-variables.md)
+2. [Listas, diccionarios y datos sencillos](lecciones/02-colecciones-y-datos-sencillos.md)
+3. [Decisiones y repeticiones](lecciones/03-condiciones-y-bucles.md)
+4. [Funciones y alcance](lecciones/04-funciones-y-alcance.md)
+5. [Errores y depuración](lecciones/05-errores-y-depuracion.md)
+6. [Estilo y práctica guiada](lecciones/06-estilo-y-practica-gastos.md)
 
-## Valores y variables
+## Prerrequisitos
 
-Python trabaja con números, texto, booleanos y el valor especial `None`. Una variable da un nombre a un valor:
-
-```python
-ventas = 1200
-objetivo = 1500
-cumplimiento = ventas / objetivo
-```
-
-Usa nombres descriptivos. `importe_total` comunica más que `x`.
-
-## Colecciones
-
-Las listas guardan una secuencia ordenada y modificable. Los diccionarios relacionan claves con valores. Para un analista, ambos aparecen con frecuencia al recibir respuestas de APIs o preparar datos antes de pasarlos a Pandas.
-
-```python
-canales = ["web", "tienda", "partners"]
-venta = {"canal": "web", "importe": 42.50}
-```
-
-## Condiciones, bucles y funciones
-
-Una condición selecciona una acción. Un bucle repite una operación. Una función encapsula una tarea reutilizable. Prioriza claridad sobre trucos cortos: tu código debe poder explicarse a otra persona.
-
-```python
-def clasificar_venta(importe):
-    if importe >= 100:
-        return "alta"
-    return "normal"
-```
-
-## Errores y depuración
-
-Los errores son información. Lee primero la última línea: indica el tipo de error y la causa inmediata. Después comprueba los valores, tipos y nombres de las variables implicadas. No copies una solución de AI sin ejecutar y entender el resultado.
-
-## Resumen
-
-Python permite expresar cálculos de forma reproducible. Primero dominarás piezas pequeñas y después usarás NumPy y Pandas para trabajar con tablas reales.
+Haber leído los bloques 00 y 01. Basta con saber que un dato debe tener significado y que una regla analítica debe poder revisarse.
 
 ## Práctica
 
