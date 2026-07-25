@@ -36,13 +36,13 @@ Los diagramas se escriben dentro de la lección con Mermaid y se generan tambié
 | 08. Estadística | 6 | Comunicar incertidumbre y evaluar experimentos. |
 | 09. SQL, NoSQL y almacenamiento | 7 | Consultar datos y entender su arquitectura y límites. |
 | 10. Métricas y producto | 9 | Diseñar un sistema de métricas gobernado y accionable. |
-| 11. Series temporales | 4 | Analizar evolución y evaluar previsiones base. |
+| 11. Series temporales | 9 | Analizar evolución, validar previsiones y operar bajo incertidumbre. |
 | 12. Modelos predictivos | 5 | Aplicar predicción con validación, interpretación y ética. |
 | 13. Herramientas y reproducibilidad | 6 | Entregar análisis colaborables y mantenibles. |
 | 14. Nivel avanzado | 5 | Abordar causalidad, escala, anomalías y fuentes externas. |
 | 15. Portfolio | 4 | Demostrar competencias mediante proyectos defendibles. |
 
-Total: **80 lecciones**, que cubren los 161 temas del índice maestro.
+Total: **85 lecciones**, que cubren los 161 temas del índice maestro.
 
 ## Mapa de lecciones por bloque
 
@@ -101,7 +101,7 @@ Total: **80 lecciones**, que cubren los 161 temas del índice maestro.
 
 ### 11-15. Consolidación profesional
 
-- Series temporales: índices; componentes; lags; validación temporal y previsiones.
+- Series temporales: contrato de previsión; calidad temporal; componentes y calendario; lags/ACF/ventanas; baselines; walk-forward; métricas; intervalos; rupturas y monitorización.
 - Modelos predictivos: caso de uso; preparación; modelos; métricas; interpretación y sesgos.
 - Herramientas: proyecto reproducible; Git; Jira; Amplitude; BI; documentación y entrega.
 - Avanzado: causalidad; bootstrap; anomalías; escala; APIs, geoespacial y revisión crítica.

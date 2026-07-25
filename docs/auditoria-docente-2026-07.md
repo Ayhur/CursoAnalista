@@ -26,7 +26,7 @@ La comprobación de cobertura arroja **80 lecciones en 16 bloques**, exactamente
 | 00-04 | 20 |
 | 05-09 | 27 |
 | 10 | 9 |
-| 11-15 | 24 |
-| **Total** | **80** |
+| 11-15 | 29 |
+| **Total** | **85** |
 
 La afirmación de curso desarrollado se refiere a esta cobertura documental y a la validación de las descargas. La mejora futura recomendada sigue siendo añadir más notebooks, datasets y evaluación interactiva; no son necesarios para que la teoría y su recorrido ya estén completos.
