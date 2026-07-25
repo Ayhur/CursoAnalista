@@ -1047,125 +1047,340 @@ Aquí recorres una lista pedido por pedido para comprender el control. NumPy y P
 
 # Bloque 03 - Matemáticas aplicadas al análisis
 
-## Propósito y ruta adaptable
+## Por qué este bloque existe
 
-Conectar herramientas matemáticas con decisiones de negocio y análisis. Si manejas porcentajes, medias ponderadas, funciones y vectores, usa las explicaciones generales como repaso; las aplicaciones, los límites y la interpretación no son opcionales.
+Un analista no estudia matemáticas para repetir fórmulas: las utiliza para no confundir una mejora pequeña con una grande, sumar cantidades incompatibles o recomendar una decisión sobre una comparación injusta. Este bloque acompaña un caso continuo: **Nexo**, una aplicación de reparto. Su equipo quiere saber si el aumento de pedidos está mejorando realmente el negocio y si hace falta más capacidad de reparto.
+
+Leo necesita primero poder leer una cifra con seguridad. Después usará estas ideas con NumPy, Pandas, EDA, estadística y series temporales. Si ya manejas matemática universitaria, puedes saltar la demostración elemental, pero no los supuestos, unidades, contraejemplos ni decisiones del caso.
+
+## Resultados observables
+
+Al completar el bloque podrás:
+
+- declarar qué mide una cifra, en qué unidad, sobre qué población y periodo;
+- calcular e interpretar cambios absolutos, porcentajes, tasas y puntos porcentuales sin cambiar la base de comparación;
+- resumir datos con media, mediana, percentiles, IQR y desviación estándar, explicando cuándo cada resumen engaña;
+- construir agregaciones y medias ponderadas que respeten el grano del dato;
+- usar una función, vector o matriz como modelo sencillo de un problema de IT;
+- comparar tiempo, crecimiento, ventanas y granularidades sin mezclar periodos.
+
+## Prerrequisitos y ruta
+
+No presupone programación. Se usa una **tabla** como una lista ordenada de registros: cada fila representa una observación y cada columna una propiedad. Por ejemplo, una fila puede ser el resumen de pedidos de un día. Los cálculos se muestran a mano primero y después se automatizan en el laboratorio.
 
 ## Lecciones
 
-1. [Magnitudes, porcentajes y tasas](lecciones/01-magnitudes-porcentajes-y-tasas.md)
-2. [Promedios, ponderación y agregación](lecciones/02-promedios-ponderacion-y-agregacion.md)
-3. [Funciones, vectores y matrices](lecciones/03-funciones-vectores-y-matrices.md)
-4. [Tiempo, crecimiento y comparaciones](lecciones/04-tiempo-crecimiento-y-comparaciones.md)
+1. [Magnitudes, unidades, porcentajes y tasas](lecciones/01-magnitudes-porcentajes-y-tasas.md)
+2. [Describir una distribución: centro, dispersión y percentiles](lecciones/02-descriptiva-y-distribuciones.md)
+3. [Ponderación, agregación y el grano del dato](lecciones/03-ponderacion-agregacion-y-grano.md)
+4. [Funciones y modelos sencillos para decisiones](lecciones/04-funciones-y-modelos.md)
+5. [Vectores, matrices y cálculo por lotes](lecciones/05-vectores-matrices-y-numpy.md)
+6. [Tiempo, granularidad, crecimiento y ventanas](lecciones/06-tiempo-granularidad-y-ventanas.md)
 
-## Resultado esperado
+## Práctica y laboratorio
 
-Podrás calcular y comunicar un cambio sin mezclar unidades, elegir una agregación defendible y cuestionar comparaciones aparentemente obvias.
+- [Caso integrador: capacidad y crecimiento de Nexo](../../ejercicios/temario-03/aplicacion/caso-nexo-capacidad.md)
+- [Solución razonada](../../soluciones/temario-03/caso-nexo-capacidad.md)
+- [Laboratorio reproducible](../../notebooks/practicas/03-matematicas-nexo.py)
 
-# Magnitudes, porcentajes y tasas
+## Criterio de salida
 
-## Objetivos y prerrequisitos
+No basta con obtener un número. Una respuesta se considera defendible cuando explica unidad, denominador, periodo, granularidad, tratamiento de ausencias y qué conclusión permite - y cuál no permite.
 
-Sabrás separar cambio absoluto, cambio relativo y puntos porcentuales. La aritmética básica es suficiente; si ya dominas fórmulas, céntrate en los ejemplos y errores de interpretación.
+# 01. Magnitudes, unidades, porcentajes y tasas
 
-## Una cifra necesita unidad y referencia
+## Objetivo y prerrequisitos
 
-Pasar de 100 a 120 pedidos supone un cambio absoluto de 20 pedidos y un crecimiento relativo del 20 %: `(120 - 100) / 100`. Ambas cifras son correctas, pero responden preguntas distintas. El cambio absoluto ayuda a estimar capacidad; el relativo permite comparar grupos de tamaño distinto.
+Al terminar distinguirás una cantidad, su unidad y su referencia; calcularás cambio absoluto, relativo, tasa y puntos porcentuales. Basta con aritmética básica. Una **magnitud** es algo medible (pedidos, euros, minutos); su **unidad** expresa cómo se cuenta (pedidos, EUR, minutos).
 
-Una tasa relaciona cantidades: por ejemplo, 30 compras de 1 000 visitas son una tasa de conversión del 3 %. No digas “subió un 2 %” si pasó de 3 % a 5 %: aumentó **2 puntos porcentuales** y aproximadamente un 66,7 % relativo. Esa diferencia cambia la percepción de impacto.
+## El problema antes de la fórmula
 
-Este recorrido responde a “¿qué debe declararse antes de comparar un número?”
+El lunes Nexo recibe 1.200 pedidos y el martes 1.320. Decir solamente "subieron 120" no dice si se trata de pedidos, euros o minutos, ni frente a qué periodo se compara. La descripción mínima es: *pedidos confirmados por día, España, martes frente a lunes*. Esa frase funciona como contrato de la cifra.
+
+| Día | Pedidos confirmados | Facturación | Tiempo medio de entrega |
+| --- | ---: | ---: | ---: |
+| Lunes | 1.200 pedidos | 24.000 EUR | 31 min |
+| Martes | 1.320 pedidos | 26.400 EUR | 36 min |
+
+El cambio absoluto de pedidos es `1.320 - 1.200 = +120 pedidos`. El cambio relativo usa una **base**: `(1.320 - 1.200) / 1.200 = 0,10 = 10 %`. El primero ayuda a prever repartidores; el segundo compara mercados de distinto tamaño.
+
+Este esquema responde: "¿qué hay que fijar antes de comparar?"
 
 ```mermaid
 flowchart LR
-  A[Valor y unidad] --> B[Referencia]
-  B --> C[Cambio absoluto]
-  B --> D[Cambio relativo o tasa]
-  C --> E[Interpretación]
+  A[Pregunta de negocio] --> B[Qué se mide]
+  B --> C[Unidad y población]
+  C --> D[Periodo y referencia]
+  D --> E[Cálculo]
+  E --> F[Interpretación y decisión]
+```
+
+Sin población y periodo, el mismo número puede tener significado opuesto. Un incremento de 120 pedidos diarios sí exige revisar capacidad; 120 pedidos más en todo un año quizá no.
+
+## Porcentaje, tasa y puntos porcentuales
+
+Una **proporción** es una parte dividida entre un total compatible. Si 66 de 1.320 pedidos terminan cancelados, la tasa de cancelación es `66 / 1.320 = 5 %`. Una **tasa** relaciona dos cantidades con un denominador explícito: pedidos por hora, incidencias por 1.000 pedidos o conversiones por visita.
+
+Si la conversión pasa de 3 % a 5 %, aumenta **2 puntos porcentuales (pp)**, porque `5 % - 3 % = 2 pp`. Relativamente aumenta `(5 - 3) / 3 = 66,7 %`. Ambas formas son correctas y responden a preguntas distintas. Nunca llames "2 %" a los 2 pp: borra la base y puede inducir a error.
+
+### Ejemplo trabajado: ¿creció el negocio?
+
+Nexo pasa de 1.200 a 1.320 pedidos y de 24.000 a 26.400 EUR. El valor medio por pedido es `24.000 / 1.200 = 20 EUR` ambos días. Facturación y pedidos crecen al 10 %, no porque cada pedido valga más sino porque entran más pedidos. A la vez, el tiempo de entrega aumenta 5 min, un empeoramiento absoluto de 5 min y relativo de `5 / 31 = 16,1 %`. Una presentación honesta contiene ambos lados.
+
+## Unidades, dimensiones y conversiones
+
+Una **dimensión** describe la clase física o lógica de una cantidad: dinero, tiempo, pedidos o personas. Solo se suman magnitudes de la misma dimensión: `24.000 EUR + 26.400 EUR` tiene sentido; `1.320 pedidos + 36 min`, no. Dividir sí crea una tasa: `1.320 pedidos / 24 horas = 55 pedidos/hora`.
+
+Convierte antes de operar. Si una fuente usa minutos y otra segundos, `36 min = 2.160 s`. Mezclar moneda, IVA incluido/no incluido o zonas horarias produce errores que una fórmula correcta no arregla.
+
+## Límites y errores frecuentes
+
+- Un descenso del 20 % tras un aumento del 20 % no vuelve al origen: `100 × 1,20 × 0,80 = 96`. Los porcentajes usan bases diferentes.
+- Una tasa con denominador cero no se define. No sustituyas por 0 sin marcarlo: quizá no hubo visitas o falta el dato.
+- Un 100 % sobre dos observaciones puede ser poco relevante. Comunica también el numerador y denominador.
+- La tasa no demuestra causa. Una conversión mayor durante una campaña no prueba que la campaña la haya causado.
+
+## Resumen y comprobación
+
+1. ¿Qué especificarías antes de publicar "la conversión subió"?
+2. Si pasa de 8 % a 10 %, ¿cuántos pp y qué crecimiento relativo representa?
+3. ¿Por qué `pedidos/día` y `pedidos totales` no responden igual a capacidad?
+
+Continúa con [cómo resumir muchos días sin ocultar variabilidad](02-descriptiva-y-distribuciones.md).
+
+# 02. Describir una distribución: centro, dispersión y percentiles
+
+## Resultado observable
+
+Podrás resumir los tiempos de entrega de Nexo sin confundir un día típico con un día problemático. Conocerás media, mediana, percentiles, rango intercuartílico (IQR) y desviación estándar; no necesitas estadística previa.
+
+## De una lista a una pregunta operativa
+
+Una **distribución** es el conjunto de valores que toma una variable y la frecuencia con que aparece. Nexo observa los minutos de entrega de siete pedidos: `22, 24, 25, 26, 27, 28, 80`. La lista no es cómoda para una reunión; resumirla permite responder "¿qué experiencia recibe la mayoría?" y "¿hay colas extremas?".
+
+La **media** suma y divide por el número de valores: `232 / 7 = 33,1 min`. La **mediana** es el valor central al ordenar: `26 min`. El pedido de 80 minutos arrastra la media, pero no la mediana. Ninguno de los dos números es "el correcto" fuera de contexto: la media sirve para estimar minutos totales de capacidad; la mediana describe mejor una entrega típica cuando existen extremos.
+
+```mermaid
+flowchart TD
+  A[Lista de entregas] --> B[Ordenar y revisar unidades]
+  B --> C[Centro: media o mediana]
+  B --> D[Dispersión: percentiles e IQR]
+  C --> E[Pregunta operativa]
   D --> E
 ```
 
-La referencia puede ser ayer, el objetivo, otro segmento o el mismo mes del año anterior; elegirla es una decisión analítica, no una operación automática.
+El diagrama separa dos preguntas. Un centro alto puede deberse a que todos empeoran o a unos pocos pedidos muy tardíos; la dispersión lo aclara.
 
-## Ejemplo y contraejemplo
+## Percentiles e IQR
 
-Una app pasa de 10 a 20 conversiones: +10 conversiones y +100 %. Otra pasa de 10 000 a 10 100: +100 conversiones pero +1 %. Presentar solo porcentaje hace enorme el primer cambio; presentar solo conteo oculta que el segundo afecta a más clientes. Comunica ambos cuando importen.
+Un **percentil p** deja aproximadamente el `p %` de observaciones por debajo. Si el p90 de entrega es 45 min, nueve de cada diez pedidos se entregan en 45 minutos o menos; no significa que el 90 % tarde exactamente 45. El p50 coincide con la mediana. El p25 y p75 delimitan la mitad central; `IQR = p75 - p25` es el rango intercuartílico.
 
-Un descenso del 20 % después de un aumento del 20 % no vuelve al inicio: `100 × 1,2 × 0,8 = 96`. Los porcentajes se aplican a bases distintas.
+Para una muestra grande de Nexo, `p25=24`, `p50=29`, `p75=38`, `p90=52`. El IQR es `14 min`. Producto puede prometer una experiencia típica cercana a 29 min, mientras Operaciones investiga por qué el 10 % más lento supera 52 min. Publicar solo una media de 31 min ocultaría este riesgo.
 
-## Resumen y práctica
+## Desviación estándar, con cautela
 
-- Declara unidad, población y referencia.
-- Distingue porcentaje, tasa y punto porcentual.
-- El tamaño de la base cambia la interpretación.
+La **varianza** mide la distancia media cuadrática al promedio; la **desviación estándar** es su raíz y vuelve a la unidad original. Si la media es 30 min y la desviación estándar es 2 min, los tiempos son mucho más homogéneos que con 15 min. Pero esa lectura de "media ± desviación" es especialmente interpretable si la distribución es aproximadamente simétrica y sin colas graves. En entregas con retrasos extremos, percentiles e IQR suelen comunicar mejor el servicio.
 
-Calcula el cambio absoluto, relativo y en puntos porcentuales si una conversión pasa de 4 % a 5 %. Luego sigue con [ponderación](02-promedios-ponderacion-y-agregacion.md).
+No uses un valor atípico automáticamente como error. Un pedido de 80 min puede ser una tormenta, una dirección errónea o un fallo de registro. Primero conserva su identificador, revisa la causa y decide si se analiza por separado.
 
-# Promedios, ponderación y agregación
+## Segmentos y comparabilidad
 
-## Objetivos y prerrequisitos
+Una distribución agregada puede mezclar centros urbanos y rurales. Si Madrid tiene mediana 26 min y una zona periférica 42 min, una mediana nacional de 29 min no responde qué debe arreglar cada equipo. Segmenta solo cuando la variable cambia la decisión, manteniendo suficientes observaciones y el mismo periodo.
 
-Aprenderás cuándo un promedio resume un conjunto y cuándo lo distorsiona. Requiere comprender porcentajes y tasas.
+## Resumen y comprobación
 
-## Un promedio siempre combina observaciones
+- Media: carga/coste promedio; sensible a extremos.
+- Mediana y percentiles: experiencia típica y cola de servicio.
+- IQR/desviación: variabilidad, no causalidad.
 
-La media aritmética suma valores y divide por su número. Es útil para importes comparables, pero una media de tasas puede ser engañosa si cada grupo tiene un tamaño distinto. Si el país A convierte 8 de 10 visitas (80 %) y B convierte 1 000 de 10 000 (10 %), la media simple de 45 % no describe la conversión conjunta. La respuesta correcta suma éxitos y oportunidades: `1008 / 10010`, aproximadamente 10,1 %.
+1. ¿Qué usarías para un SLA: media o p90, y por qué?
+2. ¿Puede bajar la media mientras empeora p90? Describe un caso.
+3. ¿Qué comprobarías antes de borrar un valor de 80 min?
 
-Eso es una **media ponderada**: cada tasa pesa según su denominador. No es un detalle de fórmula; evita tomar decisiones de inversión basadas en segmentos pequeños y extremos.
+La siguiente lección explica cómo resumir grupos sin dar a cada fila el mismo peso por error.
 
-## Agregar cambia el grano
+# 03. Ponderación, agregación y el grano del dato
 
-Antes de sumar o promediar, pregunta qué representa una fila. Si cada fila es un pedido, sumar importes da ingresos por pedido. Si cada fila es un usuario mensual, sumar ingresos puede duplicar clientes que compraron varias veces. El nivel al que se describe un dato se llama **grano** y se estudió en el bloque 01.
+## Objetivo
 
-## Error habitual: promedio de promedios
+Sabrás elegir el denominador y el peso de un resumen. El **grano** indica qué representa una fila: un pedido, un día, una ciudad o un cliente. Agregar sin saberlo puede duplicar o diluir información.
 
-Un dashboard muestra conversión diaria y calcula la media de siete porcentajes. Puede ser válido si cada día tiene el mismo tráfico; si no, conviene dividir compras totales entre visitas totales. Conserva numerador y denominador: permiten revisar y reponderar.
+## La falsa media de tasas
 
-## Resumen
+Nexo compara conversión por ciudad:
 
-El promedio no es neutral: depende de qué observaciones se incluyan y cuánto pesa cada una. Continúa con [funciones, vectores y matrices](03-funciones-vectores-y-matrices.md).
+| Ciudad | Visitas | Pedidos | Conversión |
+| --- | ---: | ---: | ---: |
+| A | 100 | 15 | 15 % |
+| B | 10.000 | 800 | 8 % |
 
-# Funciones, vectores y matrices
+La media simple `(15 % + 8 %) / 2 = 11,5 %` trata ambas ciudades como si tuvieran igual exposición. La conversión global correcta es `815 / 10.100 = 8,07 %`. Una **media ponderada** multiplica cada valor por un **peso** adecuado y divide por la suma de pesos: `(0,15×100 + 0,08×10.000) / 10.100`.
 
-## Objetivos y prerrequisitos
+```mermaid
+flowchart LR
+  A[Filas de pedidos] --> B[Grano: un pedido]
+  B --> C[Agrupar por ciudad y semana]
+  C --> D[Contar pedidos y visitas]
+  D --> E[Dividir sumas compatibles]
+  E --> F[Tasa agregada defendible]
+```
 
-Comprenderás las ideas matemáticas que harán legibles NumPy y Pandas: una función transforma entradas; un vector reúne valores; una matriz organiza muchos vectores.
+La regla práctica es sumar primero numeradores y denominadores compatibles y dividir después. Promediar porcentajes casi nunca sustituye esa operación.
 
-## Transformar entradas en salidas
+## Agregar responde una pregunta nueva
 
-Una **función** expresa una relación: dado número de clientes y precio, devuelve ingresos. `ingresos(clientes, precio) = clientes × precio`. No afirma que ambas variables sean independientes ni que subir precio no cambie clientes: solo define el cálculo bajo unos supuestos.
+De pedidos individuales a ciudad/día cambiamos de grano. El total de ingresos se suma, pero el tiempo de entrega no debe sumarse: puede promediarse o expresarse como percentil. Una tabla diaria tampoco debe unirse a una tabla por pedido sin comprobar cardinalidad; repetir una fila diaria en cada pedido multiplicaría su facturación.
 
-Un **vector** es una lista ordenada de valores de la misma clase, por ejemplo las ventas de tres días: `[120, 140, 110]`. Una **matriz** organiza muchas filas de valores: cada fila podría ser un día y cada columna pedidos, ingresos y devoluciones. En código, un array de NumPy permitirá aplicar un cálculo a todos los elementos sin escribir un bucle manual.
+Define antes: población (pedidos confirmados), filtro (sin pruebas internas), periodo (semana 20), agrupación (ciudad) y función (`sum`, `count`, `mean`, percentil). Esa especificación será después el contrato de una métrica en el bloque 10.
 
-## Relación con el análisis
+## Ponderar no es maquillar
 
-Los objetos matemáticos no sustituyen el significado. Dos columnas con mil números pueden formar una matriz, pero no por ello es razonable sumarlas si una contiene euros y otra minutos. La estructura permite calcular; el contexto decide si el cálculo responde una pregunta válida.
+El peso debe corresponder al mecanismo que se resume. Para conversión se pondera por visitas; para tiempo promedio por pedidos entregados; para una encuesta representativa pueden existir pesos muestrales definidos por investigación. Ponderar por ingresos para resumir tiempo de entrega cambia la pregunta a "tiempo medio de un euro facturado", que quizá no interesa.
 
-## Resumen y puente
+### Ejemplo: media de promedios diarios
 
-Funciones hacen explícitas transformaciones; vectores y matrices permiten representar muchas observaciones. En el bloque 04 aprenderás a manejarlos eficientemente con NumPy.
+Dos días tienen 20 pedidos a 20 min y 200 pedidos a 40 min. La media simple de sus medias es 30 min; la media por pedido es `(20×20 + 200×40)/220 = 38,2 min`. Si se planifican repartidores con 30 min, faltará capacidad.
 
-# Tiempo, crecimiento y comparaciones
+## Errores y comprobación
 
-## Objetivos y prerrequisitos
+- Un total puede crecer porque hay más filas duplicadas, no porque hay más pedidos: compara claves únicas.
+- Un promedio sin número de casos oculta su fiabilidad.
+- Agregar puede ocultar diferencias de segmento; desagrega cuando cambia la acción.
 
-Sabrás elegir una comparación temporal defendible y distinguir nivel, variación y crecimiento acumulado. Requiere porcentajes.
+1. ¿Cuál es el grano de una tabla con una fila por pedido?
+2. ¿Qué peso usarías para combinar tasas de cancelación por ciudad?
+3. ¿Qué función usarías para resumir ingresos y cuál para p90 de entrega?
 
-## El tiempo no siempre avanza de forma comparable
+Continúa con [funciones y modelos](04-funciones-y-modelos.md).
 
-Comparar junio con mayo puede ser útil, pero una tienda de viajes puede tener una estacionalidad fuerte: junio suele diferir de mayo por razones repetidas cada año. Compara también con junio del año anterior y con una referencia acordada. La elección depende de la decisión: planificación anual, respuesta a una incidencia o seguimiento semanal.
+# 04. Funciones y modelos sencillos para decisiones
 
-El crecimiento compuesto encadena cambios: si una métrica crece 10 % dos meses, el factor es `1,1 × 1,1 = 1,21`, no 1,20. Para comunicarlo, muestra periodo inicial, final y fórmula, no una etiqueta vaga de “crecimiento”.
+## Objetivo
 
-## Límite: una serie no demuestra causalidad
+Representarás una relación entre entradas y salida como una **función**: una regla que asigna una salida a cada entrada válida. Usarás esta idea para planificar capacidad sin confundir una relación observada con una causa demostrada.
 
-Que una métrica cambie tras una acción no identifica por sí mismo la causa. El tiempo puede coincidir con campañas, festivos, cambios de mercado o problemas de medición. Las comparaciones temporales son evidencia descriptiva que requiere contexto, segmentos y, cuando sea necesario, experimentos.
+## El modelo mínimo
 
-## Cierre del bloque
+Nexo estima minutos de trabajo de reparto como `M(p) = 24 × p`, donde `p` son pedidos y 24 es una estimación de minutos por pedido. Para 1.320 pedidos, `M(1320)=31.680 minutos`. Dividir por 480 minutos disponibles por repartidor/día da 66 repartidores-equivalentes antes de descansos e incidencias.
 
-Las matemáticas aplicadas sirven para no confundir escalas, promedios ni referencias. Antes de automatizar con NumPy o Pandas, pregunta siempre: ¿qué mide este número, sobre qué población y frente a qué comparación?
+La entrada `p` tiene unidad pedidos; el coeficiente `24` tiene unidad minutos/pedido; la salida tiene minutos. Este chequeo dimensional detecta fórmulas absurdas.
 
-Aplica el bloque en la [práctica de tasas y promedios](../../../ejercicios/temario-03/aplicacion/tasas-y-promedios.md) antes de leer su solución.
+```mermaid
+flowchart LR
+  A[Pedidos previstos p] --> B[Modelo M(p)=24×p]
+  B --> C[Minutos requeridos]
+  C --> D[Capacidad disponible]
+  D --> E{¿Hay holgura?}
+  E -->|No| F[Reforzar turno o limitar demanda]
+  E -->|Sí| G[Monitorizar servicio]
+```
+
+El modelo convierte una previsión en una decisión, no en una verdad. Sus supuestos deben quedar visibles.
+
+## Pendiente, intercepto y linealidad
+
+Una forma frecuente es `y = a + b x`. `a` es un valor base y `b` es la **pendiente**, el cambio esperado de `y` por una unidad de `x`. Si el tiempo total incluye 600 min fijos de preparación y 24 min por pedido, `M(p)=600+24p`.
+
+La linealidad es una aproximación. Con tráfico, saturación o zonas lejanas, el minuto por pedido puede aumentar cuando crece `p`. Un modelo lineal sencillo es útil como baseline y para comunicar, pero debe contrastarse con datos y no extrapolarse fuera del rango observado.
+
+## Funciones por tramos y reglas de negocio
+
+Nexo cobra 2 EUR de entrega hasta 15 EUR de cesta y entrega gratis desde 15 EUR. Esto es una función por tramos: la salida depende del intervalo de la entrada. Las reglas de negocio deben documentar frontera e inclusividad (`>=15`), porque cambiar un símbolo puede afectar a miles de pedidos.
+
+## Asociación no es causalidad
+
+Si los pedidos y las demoras crecen juntos, puede haber saturación, pero también lluvia o una campaña. La función describe o predice una relación; no prueba que cambiar pedidos cause el efecto. Para causalidad harán falta diseño experimental o métodos del bloque 14.
+
+## Comprobación
+
+1. Indica unidades de cada término de `600 + 24p`.
+2. ¿Qué supuesto rompería este modelo durante lluvia intensa?
+3. ¿Por qué una función útil no demuestra causalidad?
+
+En la siguiente lección aplicarás la misma regla a muchas observaciones de una vez.
+
+# 05. Vectores, matrices y cálculo por lotes
+
+## Objetivo y puente a NumPy
+
+Un **vector** es una lista ordenada de números del mismo tipo conceptual; una **matriz** es una tabla rectangular de números. Estas estructuras permiten aplicar una operación a muchas filas y preparan el pensamiento vectorial de NumPy (bloque 04).
+
+## Del pedido individual al vector
+
+Para tres zonas, los pedidos son `p = [120, 80, 100]` y los minutos medios por pedido son `t = [22, 30, 26]`. Multiplicar componente a componente produce minutos por zona: `[2640, 2400, 2600]`; sumarlos da 7.640 minutos. El orden importa: la primera posición de ambos vectores debe representar la misma zona. Si una fuente ordena zonas distinto, el resultado parece matemático pero es falso.
+
+```mermaid
+flowchart LR
+  A[Vector de pedidos por zona] --> C[Multiplicación elemento a elemento]
+  B[Vector de min por pedido por zona] --> C
+  C --> D[Minutos requeridos por zona]
+  D --> E[Suma: capacidad total]
+```
+
+El diagrama muestra una condición oculta: las posiciones deben estar alineadas por una clave de zona, no solo por su posición.
+
+## Matriz: varias variables o relaciones
+
+Una matriz puede tener filas de zonas y columnas de franja horaria. Por ejemplo, la fila de Centro `[30, 45, 35]` puede representar pedidos de mañana, comida y noche. Sumar por fila responde carga por zona; sumar por columna responde carga por franja. El **eje** que se suma cambia la pregunta.
+
+Otra matriz puede representar costes de asignar repartidores a zonas. No hace falta memorizar álgebra lineal avanzada ahora: importa comprender que una dimensión representa entidades y otra variables, y que las etiquetas deben viajar con los números.
+
+## Operaciones seguras y límites
+
+La **multiplicación matricial** combina filas de una matriz con columnas de otra; solo es válida si las dimensiones interiores coinciden. En la práctica, una incompatibilidad de tamaños suele avisar de que se han mezclado variables o periodos. NumPy hará estas operaciones rápido, pero no conoce el significado de las columnas.
+
+Evita confundir multiplicación elemento a elemento con matricial. `[120,80] * [22,30]` equivale a dos productos por zona; no es un cruce de asignaciones. Comprueba forma, unidad y clave antes de automatizar.
+
+## Comprobación
+
+1. ¿Qué representan filas y columnas de una matriz de pedidos por zona y hora?
+2. ¿Qué falla si el vector de tiempos usa un orden de zona diferente?
+3. ¿Qué suma usarías para conocer carga por franja?
+
+El [laboratorio](../../../notebooks/practicas/03-matematicas-nexo.py) reproduce estas operaciones con listas de Python.
+
+# 06. Tiempo, granularidad, crecimiento y ventanas
+
+## Objetivo
+
+Sabrás definir un periodo comparable y calcular crecimiento sin mezclar días incompletos, zonas horarias ni granularidades. Una **granularidad** es el tamaño de cada intervalo: pedido, hora, día, semana o mes.
+
+## El mismo fenómeno visto a distinta escala
+
+Nexo registra cada pedido a las 23:30 UTC. En España puede pertenecer al día siguiente local. Antes de agrupar por día hay que fijar zona horaria y regla de corte. Después, una fila diaria puede contener total de pedidos, ingresos y p90 de entrega; una fila semanal resume siete días, pero ya no permite estudiar la hora punta.
+
+```mermaid
+flowchart LR
+  A[Eventos con hora y zona] --> B[Normalizar calendario]
+  B --> C[Elegir grano: hora, día o semana]
+  C --> D[Agregar con función adecuada]
+  D --> E[Comparar periodos equivalentes]
+  E --> F[Decisión]
+```
+
+La ventana temporal es parte de la definición de una métrica. Cambiarla cambia el valor y, con frecuencia, la conclusión.
+
+## Crecimiento: base y periodo
+
+El crecimiento intersemanal de 10.000 a 11.000 pedidos es 10 %. Para comparar demanda con patrón semanal, lunes contra lunes suele ser más justo que lunes contra domingo. Para campañas estacionales, conviene comparar con el mismo periodo del año anterior. En periodos largos, el crecimiento acumulado no se reparte linealmente: de 100 a 121 en dos meses equivale a 21 % total, no dos meses de 21 %.
+
+Una **ventana móvil** resume los últimos `k` periodos. La media móvil de 7 días suaviza oscilaciones diarias, pero retrasa la detección de un cambio brusco. No uses datos futuros en una ventana destinada a una decisión de hoy; eso sería fuga de información y se trata a fondo en series temporales.
+
+## Datos faltantes, ceros y días parciales
+
+Un cero puede significar que no hubo pedidos; un valor ausente puede significar que el tracking falló. Son casos diferentes. Tampoco compares un día completo con el día actual a las 10:00. Etiqueta cobertura, fecha de extracción y definición de día antes de afirmar que cae la demanda.
+
+## Resumen y comprobación
+
+- El grano controla qué patrones se pueden observar.
+- Una comparación exige poblaciones y ventanas equivalentes.
+- Una media móvil reduce ruido y añade retraso.
+
+1. ¿Qué perderías al pasar de pedidos por hora a pedidos semanales?
+2. ¿Por qué el día actual puede parecer una caída artificial?
+3. ¿Qué comparación harías para un lunes posterior a un festivo?
+
+Resuelve ahora el [caso integrador](../../../ejercicios/temario-03/aplicacion/caso-nexo-capacidad.md).
 
 # Bloque 04 - NumPy y cálculo vectorizado
 
