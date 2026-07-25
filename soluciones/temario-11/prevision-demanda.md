@@ -1,3 +1,10 @@
-# Solución - Previsión de demanda
+# Solución razonada - Planificar pedidos diarios de Lumen
 
-Busca tendencia, estacionalidad semanal y anual, ruido y anomalías. Bases útiles: último valor y mismo día o semana del año anterior. Entrena con el pasado y valida con un tramo posterior. Una campaña excepcional, rotura de stock o cambio de precio puede romper el patrón.
+1. Objetivo: `pedidos_completados` por día de Madrid. Una fila es un día; la frecuencia es diaria; se predicen 14 días desde el lunes; el corte es domingo 23:59. Solo pueden usarse variables conocidas entonces: calendario, pedidos anteriores y campañas ya planificadas. La decisión es reservar capacidad.
+2. La ausencia puede significar cero pedidos reales, caída de extracción o que el negocio no operó. Revisaría registros operacionales, frescura del pipeline y calendario antes de imputar. Rellenar con cero sin comprobar crearía una falsa anomalía.
+3. Usaría `lag_1`, `lag_7`, día de semana y media móvil de siete días calculada con días anteriores. Una media centrada o una normalización calculada con diciembre completo filtra futuro.
+4. Naïve sirve como referencia inmediata; seasonal naïve suele ser fuerte con patrón semanal; media móvil suaviza ruido. Una regresión con tendencia y día de semana es un candidato sencillo. Solo se conserva si mejora establemente los baselines en validación temporal y no empeora días operativamente críticos.
+5. Entrenaría hasta septiembre, predeciría octubre; ampliaría el historial para predecir noviembre; y reservaría diciembre como prueba final. Fugas: incluir una campaña registrada tras el corte o calcular una media móvil usando días futuros.
+6. MAE es 10 pedidos; RMSE también refleja un error de 10 en ese único día; MAPE no está definido porque divide por cero. Si falta capacidad cuesta mucho, observaría MAE, errores negativos y percentiles de error, no solo una métrica media.
+7. Bajo, central y alto pueden derivar de un intervalo calibrado y de escenarios de campaña. Monitorizaría MAE por horizonte, cobertura de intervalos, días ausentes, stock, cambios de tracking y error por día de semana; una alerta debe tener dueño y runbook.
+8. El resultado del script es reproducible porque fija semilla. El ganador depende de la serie generada; la conclusión correcta incluye las métricas impresas y el límite: una ruptura simulada no garantiza rendimiento durante una campaña o cambio de producto real.

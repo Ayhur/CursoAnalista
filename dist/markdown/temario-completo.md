@@ -1895,82 +1895,204 @@ Escribe tres eventos y dos propiedades para medir activación de un producto. In
 
 ## Propósito
 
-Analizar datos que cambian con el tiempo, distinguir tendencia de estacionalidad y construir previsiones base honestas.
+Analizar pedidos diarios de una aplicación, distinguir patrones temporales de cambios reales y construir previsiones útiles para planificar capacidad e inventario. El objetivo no es memorizar modelos: es definir, validar y comunicar una predicción que otra persona pueda cuestionar.
+
+## Caso continuo: pedidos diarios de Lumen
+
+Lumen es una aplicación de comercio local. Operaciones debe decidir cada lunes cuántos repartidores reservar para los 14 días siguientes. La métrica es `pedidos_completados_diarios`; cada observación es un día en la zona horaria de Madrid. El bloque parte de este caso y conserva su contrato, datos disponibles y riesgos a lo largo de todas las lecciones.
 
 ## Lecciones
 
-1. [Índice temporal y calidad de fechas](lecciones/01-indice-temporal-y-calidad.md)
-2. [Tendencia, estacionalidad y cambios](lecciones/02-componentes-de-una-serie.md)
-3. [Lags, referencias y previsiones base](lecciones/03-lags-y-previsiones-base.md)
-4. [Validación temporal y comunicación](lecciones/04-validacion-temporal-y-comunicacion.md)
+1. [Contrato de previsión y calidad temporal](lecciones/01-indice-temporal-y-calidad.md)
+2. [Tendencia, estacionalidad, calendario y rupturas](lecciones/02-componentes-de-una-serie.md)
+3. [Lags, autocorrelación y ventanas móviles](lecciones/03-lags-y-previsiones-base.md)
+4. [Baselines y un modelo sencillo](lecciones/04-validacion-temporal-y-comunicacion.md)
+5. [Validación walk-forward y fuga de futuro](lecciones/05-validacion-walk-forward-y-fugas.md)
+6. [Métricas de previsión y coste de error](lecciones/06-metricas-de-prevision.md)
+7. [Intervalos de predicción y calibración](lecciones/07-intervalos-y-calibracion.md)
+8. [Rupturas, monitorización y operación](lecciones/08-rupturas-y-monitorizacion.md)
+9. [Laboratorio reproducible de demanda](lecciones/09-laboratorio-demanda.md)
 
 ## Práctica
 
-Plantea [una previsión de demanda](../../ejercicios/temario-11/aplicacion/prevision-demanda.md) y compara con [la guía](../../soluciones/temario-11/prevision-demanda.md).
+Plantea [una previsión de demanda](../../ejercicios/temario-11/aplicacion/prevision-demanda.md), ejecuta el [laboratorio reproducible](../../notebooks/practicas/11-prevision-demanda.py) y compara con [la solución razonada](../../soluciones/temario-11/prevision-demanda.md).
 
-# Índice temporal y calidad de fechas
-
-## Objetivos y prerrequisitos
-
-Prepararás una serie temporal antes de buscar patrones o construir previsiones.
-
-Una **serie temporal** es una medida observada en momentos ordenados: pedidos diarios, usuarios semanales o ingresos mensuales. El orden importa. Define frecuencia, zona horaria, periodo de cobertura y qué ocurre con fechas ausentes. Un día sin fila puede significar cero pedidos, una caída del sistema de captura o una fuente incompleta.
-
-Convierte y ordena fechas explícitamente; identifica duplicados y cambios de definición. Si desde julio “usuario activo” se mide de otro modo, una aparente subida puede ser solo cambio de tracking.
-
-## Resumen
-
-Una serie fiable empieza por un calendario y una métrica estable. Continúa con [componentes temporales](02-componentes-de-una-serie.md).
-
-# Tendencia, estacionalidad y cambios
+# Contrato de previsión y calidad temporal
 
 ## Objetivos y prerrequisitos
 
-Distinguirás patrones sostenidos de repeticiones de calendario, ruido y cambios de nivel.
+Definirás qué se predice, cuándo se predice y qué datos son legítimos antes de mirar un gráfico o elegir un modelo.
 
-Una serie puede contener **tendencia** (movimiento de largo plazo), **estacionalidad** (patrón que se repite por día, semana o año), ruido y rupturas. Una caída de lunes a domingo puede ser normal; una caída frente al mismo lunes de semanas comparables merece investigación.
+Una **serie temporal** es una medida observada en momentos ordenados. En Lumen una fila representa un día; la variable objetivo es el número de `pedidos_completados`; la frecuencia es diaria; la zona es `Europe/Madrid`; el horizonte son los 14 días siguientes; y la fecha de corte es el domingo a las 23:59. Operaciones decide cuántos repartidores reservar el lunes usando solo información anterior al corte.
+
+Esto responde a la pregunta “¿qué contrato evita que una previsión sea una cifra sin contexto?”
 
 ```mermaid
 flowchart LR
- A[Serie temporal] --> B[Tendencia]
- A --> C[Estacionalidad]
- A --> D[Ruido o anomalía]
- B --> E[Previsión]
- C --> E
- D --> F[Investigación]
+ A[Contrato: pedidos diarios] --> B[Fecha de corte]
+ B --> C[Información disponible]
+ C --> D[Horizonte de 14 días]
+ D --> E[Decisión de capacidad]
 ```
 
-Descomponer no prueba causas. Un cambio de nivel puede coincidir con una campaña, una incidencia, un festivo o un error de medición. Cruza eventos y segmentos antes de explicarlo.
+El diagrama es una secuencia de decisión: no se puede usar una campaña conocida el miércoles para predecir el lunes anterior. El contrato hace visible el momento en que el dato se vuelve utilizable.
+
+Antes de modelar, construye un calendario completo. Un día sin fila puede significar cero pedidos, una caída del sistema de captura o una fuente incompleta; son tres hechos distintos. Comprueba duplicados, zona horaria, horas de cambio estacional, cobertura, agregación y cambios de definición. Si desde julio “pedido completado” excluye pedidos parcialmente reembolsados, no compares niveles sin documentar la ruptura.
+
+Ejemplo mínimo: si el 6 de enero no aparece en el archivo, no rellenas automáticamente con cero. Primero contrastas el registro operacional; solo después decides si es un cero real, un ausente o un día que debe excluirse.
 
 ## Resumen
 
-Compara contra referencias temporales adecuadas, no solo contra el periodo anterior.
+Una serie fiable empieza por un contrato, un calendario y una métrica estable. Continúa con [tendencia, estacionalidad y rupturas](02-componentes-de-una-serie.md).
 
-# Lags, referencias y previsiones base
+# Tendencia, estacionalidad, calendario y rupturas
 
 ## Objetivos y prerrequisitos
 
-Usarás valores pasados como referencia y evaluarás una previsión contra alternativas simples.
+Separarás patrones sostenidos, repeticiones de calendario, ruido y cambios estructurales antes de atribuir una causa.
 
-Un **lag** es un valor retrasado: ventas de ayer o del mismo día de la semana anterior. Una previsión ingenua que repite el último valor, o una estacional que repite la semana anterior, es un baseline obligatorio. Si un modelo más complejo no mejora esa referencia, añade coste sin valor.
+Una serie puede contener **tendencia** (movimiento de largo plazo), **estacionalidad** (patrón que se repite por día, semana o año), ciclos, ruido y rupturas. En Lumen los viernes pueden superar a los martes; noviembre puede contener un pico de campañas; y un cierre de zonas de reparto puede producir un cambio de nivel. Una caída de lunes a domingo puede ser normal; una caída frente al mismo lunes de semanas comparables merece investigación.
 
-El horizonte importa: prever mañana y prever seis meses son problemas distintos. Declara qué información estaba disponible en el momento de hacer cada previsión; usar datos futuros por accidente produce resultados irreales.
+```mermaid
+flowchart TD
+ A[Pedidos diarios] --> B[Tendencia]
+ A --> C[Estacionalidad semanal y anual]
+ A --> D[Calendario y festivos]
+ A --> E[Ruido, anomalías y rupturas]
+ B --> F[Modelo y baseline]
+ C --> F
+ D --> F
+ E --> G[Investigación y anotación]
+```
+
+Los componentes son ramas paralelas: no ocurren uno después de otro. Una descomposición puede ser **aditiva** si los efectos se suman aproximadamente (por ejemplo, +20 pedidos cada viernes) o **multiplicativa** si la amplitud crece con el nivel (por ejemplo, un 20 % más). Una transformación logarítmica puede ayudar en el segundo caso, pero no es una obligación ni admite ceros sin tratamiento explícito.
+
+Descomponer no prueba causas. Un cambio de nivel puede coincidir con una campaña, una incidencia, un festivo, falta de stock o error de medición. Cruza eventos y segmentos antes de explicarlo; registra la ruptura para no entrenar un modelo que la interprete como estacionalidad permanente.
 
 ## Resumen
 
-Una previsión se evalúa frente a un baseline y un horizonte, no por lo convincente que parezca la curva.
+Compara contra referencias temporales adecuadas, no solo contra el periodo anterior. Sigue con [lags, autocorrelación y ventanas móviles](03-lags-y-previsiones-base.md).
 
-# Validación temporal y comunicación
+# Lags, autocorrelación y ventanas móviles
 
 ## Objetivos y prerrequisitos
 
-Validarás respetando la flecha del tiempo y comunicarás una previsión como ayuda a una decisión.
+Usarás valores pasados para describir dependencia temporal sin introducir información futura.
 
-Divide en pasado para entrenar y futuro para validar. Puedes repetir ventanas sucesivas para comprobar estabilidad. No barajes filas como en datos independientes: mezclar futuro y pasado filtra información que no existía al predecir.
+Un **lag** es un valor retrasado: `pedidos_t-1` es ayer y `pedidos_t-7` es el mismo día de la semana anterior. La **autocorrelación** resume cuánto se parece la serie a sí misma tras uno o varios retrasos. Una ACF alta en el lag 7 sugiere patrón semanal, no causalidad ni permiso para copiar siete días sin evaluar.
 
-Comunica horizonte, error histórico, rango plausible, supuestos y eventos no modelados. “Esperamos 1 000 pedidos ± un margen” es más útil que una cifra exacta falsa; enlázalo con capacidad, inventario o presupuesto que cambiarían si la previsión falla.
+Una media móvil de 7 días suaviza ruido al promediar solo observaciones anteriores. Para predecir el 10 de marzo, su ventana puede usar del 3 al 9, nunca del 11 al 16. La regla evita una fuga de futuro muy común cuando se calculan ventanas sobre toda la tabla.
+
+Ejemplo: si Lumen tuvo 102 pedidos ayer, 118 hace una semana y una media móvil de 110, esos tres números pueden alimentar modelos distintos. Cada variable contiene una hipótesis: continuidad inmediata, patrón semanal o nivel suavizado.
+
+El horizonte importa: prever mañana y prever seis meses son problemas distintos. Declara qué información estaba disponible en el momento de hacer cada previsión; usar datos futuros por accidente produce resultados irreales. En la siguiente lección convertirás estas referencias en baselines comparables.
+
+## Resumen
+
+Lags y ventanas describen dependencia; no prueban que una acción cause pedidos. Sigue con [baselines y un modelo sencillo](04-validacion-temporal-y-comunicacion.md).
+
+# Baselines y un modelo sencillo
+
+## Objetivos y prerrequisitos
+
+Compararás referencias honestas antes de elegir un modelo más elaborado.
+
+Un baseline responde “¿qué lograríamos sin sofisticación?”. Para Lumen compara: naïve (repetir ayer), seasonal naïve (repetir el mismo día de la semana anterior) y media móvil de siete días. Son modelos explícitos, reproducibles y difíciles de superar cuando hay fuerte patrón semanal.
+
+Como modelo sencillo adicional, una regresión con tendencia y variables de día de semana puede estimar nivel y estacionalidad. No es automáticamente mejor: solo se conserva si mejora de forma estable al baseline y su coste/interpretación compensa. Métodos como ETS, ARIMA o modelos de aprendizaje automático se estudian después de dominar esta comparación.
+
+Ejemplo: si la media móvil gana en semanas tranquilas pero pierde sistemáticamente los viernes, la referencia estacional puede ser preferible. No elijas por una única semana ni por una gráfica atractiva.
+
+El siguiente paso es evaluar respetando la flecha del tiempo. Continúa con [validación walk-forward y fuga de futuro](05-validacion-walk-forward-y-fugas.md).
 
 Plantea la [previsión de demanda](../../../ejercicios/temario-11/aplicacion/prevision-demanda.md). En modelos posteriores aprenderás predicción supervisada, pero conservarás esta regla: validación coherente con el momento de decisión.
+
+# Validación walk-forward y fuga de futuro
+
+## Objetivos y prerrequisitos
+
+Validarás una previsión como se usaría en producción: entrenar con pasado y comprobar contra futuro todavía desconocido.
+
+Una partición temporal no se baraja. En Lumen puedes entrenar hasta septiembre, validar octubre-noviembre, ajustar una única vez y reservar diciembre como prueba final. Para conocer estabilidad, el enfoque **walk-forward** avanza sucesivos cortes: se predice la semana siguiente, se compara con lo observado y se avanza.
+
+```mermaid
+flowchart LR
+ A[Pasado: entrenamiento] --> B[Validación futura 1]
+ B --> C[Validación futura 2]
+ C --> D[Prueba final intacta]
+```
+
+Cada bloque está en orden temporal. La prueba final no decide parámetros ni umbrales; estima cómo habría rendido el proceso al desplegarlo.
+
+Una **fuga de información** ocurre si una variable usa el futuro: una media móvil centrada, normalizar usando todos los meses o incluir un precio que se fijó después de la fecha de corte. Un resultado excepcionalmente bueno merece investigar fuga antes de celebrarlo.
+
+## Resumen y práctica
+
+La validación simula el momento de decisión. Sigue con [métricas de previsión](06-metricas-de-prevision.md).
+
+# Métricas de previsión y coste de error
+
+## Objetivos y prerrequisitos
+
+Elegirás cómo medir un error de previsión según la decisión, la escala y el coste de equivocarse.
+
+El error de un día es `real - predicción`. **MAE** promedia su valor absoluto y se interpreta en la unidad del negocio: “nos equivocamos 12 pedidos al día”. **RMSE** eleva errores al cuadrado antes de promediar y penaliza más fallos grandes; puede convenir si quedarse muy corto de capacidad es especialmente grave.
+
+Las métricas porcentuales requieren cuidado. **MAPE** divide por el valor real: no está definido con ceros y sobrerreacciona ante valores pequeños. **sMAPE** reduce algunos problemas, pero también tiene comportamiento difícil cerca de cero. **MASE** escala el error frente a una previsión naïve y permite comparar series de distinto tamaño, siempre que el baseline sea válido.
+
+Ejemplo: predecir 10 pedidos cuando hubo 0 hace que MAPE falle; MAE sigue diciendo 10 pedidos de error. Si reservar repartidores extra cuesta poco pero faltar capacidad cuesta mucho, una métrica media no basta: comunica también errores por debajo de la demanda y el coste operativo asociado.
+
+## Resumen
+
+No existe “la métrica ganadora” fuera de una decisión. Evalúa varias y explica por qué una domina el criterio de lanzamiento. Continúa con [intervalos y calibración](07-intervalos-y-calibracion.md).
+
+# Intervalos de predicción y calibración
+
+## Objetivos y prerrequisitos
+
+Comunicarás incertidumbre de una previsión y comprobarás si el rango prometido se cumple con la frecuencia esperada.
+
+Una previsión puntual de 120 pedidos no expresa todo lo que sabemos. Un **intervalo de predicción** podría comunicar “entre 95 y 145 pedidos con cobertura nominal del 80 %”, bajo el método y supuestos usados. Debe referirse a observaciones futuras, no solo a incertidumbre sobre una media histórica.
+
+La **calibración** pregunta si los intervalos son honestos: de cien días con intervalos al 80 %, aproximadamente ochenta deberían contener el valor real a largo plazo. Cobertura baja indica rangos demasiado estrechos; cobertura muy alta puede indicar rangos inútilmente amplios. Revisa también si el fallo se concentra en viernes, festivos o campañas.
+
+Para Lumen, operaciones puede planificar tres escenarios: bajo, central y alto. La decisión no es “creer” el número central, sino elegir capacidad compatible con el coste de sobre- y sub-reservar.
+
+## Límite
+
+Un intervalo no protege frente a un evento fuera de la historia, como cierre de una ciudad o campaña inédita. Es un rango condicionado a datos y supuestos, no una garantía.
+
+## Resumen
+
+Una previsión útil incluye incertidumbre verificable. Sigue con [rupturas y monitorización](08-rupturas-y-monitorizacion.md).
+
+# Rupturas, monitorización y operación
+
+## Objetivos y prerrequisitos
+
+Identificarás cambios que pueden invalidar patrones históricos y diseñarás una respuesta operativa ante errores de previsión.
+
+Una **ruptura estructural** es un cambio por el que la relación aprendida deja de ser estable: cambio de precio, falta de stock, expansión de zonas, campaña, nueva versión de producto o cambio de tracking. No se corrige borrando el punto “raro”; se registra el evento, se evalúa el impacto y se decide si el modelo necesita reentrenamiento o una regla temporal.
+
+Monitoriza error por horizonte, cobertura de intervalos, datos ausentes, frescura y sesgo por día de semana. Una alerta debe indicar umbral, dueño y acción: “si el MAE de siete días supera 20 pedidos dos semanas, revisar calendario, stock y extracción”. Alertar sin responsable crea ruido, no control.
+
+## Resumen
+
+Prever es un proceso operativo: datos, modelo, error, aprendizaje y ajuste. Continúa con el [laboratorio reproducible](09-laboratorio-demanda.md).
+
+# Laboratorio reproducible de demanda
+
+## Objetivos y prerrequisitos
+
+Aplicarás el contrato temporal, tres baselines, validación ordenada y métricas de error sobre el caso de Lumen.
+
+El script [11-prevision-demanda.py](../../../notebooks/practicas/11-prevision-demanda.py) genera de forma determinista 90 días de pedidos diarios con patrón semanal y una ruptura documentada. Divide pasado y futuro, compara naïve, seasonal naïve y media móvil, y calcula MAE, RMSE, MAPE, sMAPE y MASE.
+
+No trates la salida como una respuesta universal: inspecciona qué baseline gana y explica por qué. Cambia la fecha de corte o la ruptura para observar que una métrica global puede ocultar días críticos. Escribe en tu entrega qué información estaría disponible realmente antes de predecir.
+
+## Entregable
+
+Resuelve la [práctica de demanda](../../../ejercicios/temario-11/aplicacion/prevision-demanda.md), conserva los resultados esperados y contrasta tu razonamiento con la [solución](../../../soluciones/temario-11/prevision-demanda.md).
 
 # Bloque 12 - Modelos predictivos para analistas
 

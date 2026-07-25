@@ -1,11 +1,15 @@
-# Validación temporal y comunicación
+# Baselines y un modelo sencillo
 
 ## Objetivos y prerrequisitos
 
-Validarás respetando la flecha del tiempo y comunicarás una previsión como ayuda a una decisión.
+Compararás referencias honestas antes de elegir un modelo más elaborado.
 
-Divide en pasado para entrenar y futuro para validar. Puedes repetir ventanas sucesivas para comprobar estabilidad. No barajes filas como en datos independientes: mezclar futuro y pasado filtra información que no existía al predecir.
+Un baseline responde “¿qué lograríamos sin sofisticación?”. Para Lumen compara: naïve (repetir ayer), seasonal naïve (repetir el mismo día de la semana anterior) y media móvil de siete días. Son modelos explícitos, reproducibles y difíciles de superar cuando hay fuerte patrón semanal.
 
-Comunica horizonte, error histórico, rango plausible, supuestos y eventos no modelados. “Esperamos 1 000 pedidos ± un margen” es más útil que una cifra exacta falsa; enlázalo con capacidad, inventario o presupuesto que cambiarían si la previsión falla.
+Como modelo sencillo adicional, una regresión con tendencia y variables de día de semana puede estimar nivel y estacionalidad. No es automáticamente mejor: solo se conserva si mejora de forma estable al baseline y su coste/interpretación compensa. Métodos como ETS, ARIMA o modelos de aprendizaje automático se estudian después de dominar esta comparación.
+
+Ejemplo: si la media móvil gana en semanas tranquilas pero pierde sistemáticamente los viernes, la referencia estacional puede ser preferible. No elijas por una única semana ni por una gráfica atractiva.
+
+El siguiente paso es evaluar respetando la flecha del tiempo. Continúa con [validación walk-forward y fuga de futuro](05-validacion-walk-forward-y-fugas.md).
 
 Plantea la [previsión de demanda](../../../ejercicios/temario-11/aplicacion/prevision-demanda.md). En modelos posteriores aprenderás predicción supervisada, pero conservarás esta regla: validación coherente con el momento de decisión.
