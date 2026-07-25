@@ -1,0 +1,10 @@
+pedido_id;cliente_id;fecha_pedido;estado;importe_bruto;descuento;canal;fecha_extraccion
+P-1001;C-01;2026-06-01;pagado;29,90;0,00;web;2026-06-30T08:00:00Z
+P-1002;C-02;2026-06-02;pagado;49,90;5,00;app;2026-06-30T08:00:00Z
+P-1002;C-02;2026-06-02;pagado;49,90;10,00;app;2026-06-30T09:00:00Z
+P-1003;C-03;2026-06-03;pendiente;19,90;0,00;web;2026-06-30T08:00:00Z
+P-1004;C-04;fecha-mal;pagado;39,90;0,00;partner;2026-06-30T08:00:00Z
+P-1005;C-99;2026-06-04;pagado;60,00;0,00;partner;2026-06-30T08:00:00Z
+P-1006;C-01;2026-06-05;cancelado;25,00;0,00;web;2026-06-30T08:00:00Z
+P-1007;C-05;2026-06-06;pagado;-5,00;0,00;app;2026-06-30T08:00:00Z
+P-1008;C-03;2026-06-07;pagado;15,00;0,00;tienda;2026-06-30T08:00:00Z
