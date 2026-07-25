@@ -1,49 +1,82 @@
-# Decisiones y repeticiones
+# 03 - Condiciones, operadores lógicos y bucles seguros
 
-## Objetivos y prerrequisitos
+## Resultado observable y prerrequisitos
 
-Aplicarás una regla distinta según un dato y repetirás una comprobación sobre varios pedidos. Requiere listas y diccionarios.
+Aplicarás una regla explícita a cada pedido, distinguiendo estados, y repetirás el proceso sin perder eventos. Requiere listas y diccionarios.
 
-## Condiciones: expresar una regla
+## Una regla de negocio tiene bordes
 
-Una condición permite que el programa elija. `if` pregunta por una expresión que da `True` o `False`:
+Lumen considera revisable un pedido si su importe es al menos 100 EUR **y** está confirmado. Antes de codificar, decide qué pasa en los límites: 100 entra; 99,99 no; un importe desconocido no se aprueba automáticamente.
 
 ```python
-importe = 120
-if importe >= 100:
-    categoria = "pedido alto"
+importe = 100
+estado = "confirmado"
+
+if importe >= 100 and estado == "confirmado":
+    accion = "revisar"
+elif estado != "confirmado":
+    accion = "esperar confirmacion"
 else:
-    categoria = "pedido habitual"
+    accion = "operacion normal"
 ```
 
-La sangría no es decoración: las líneas desplazadas pertenecen a la rama de la condición. La regla debe coincidir con una definición de negocio. Pregunta si exactamente 100 debe contarse como alto antes de decidir entre `>` y `>=`.
-
-## Bucles: repetir sin copiar código
-
-Un bucle `for` visita cada elemento de una colección. El siguiente acumula importes y muestra la idea de agregación que luego hará Pandas:
-
-```python
-total = 0
-for importe in [12.5, 18.0, 7.2]:
-    total = total + importe
-print(total)
-```
-
-Este flujo responde a “¿qué ocurre para cada dato de entrada?”
+`if` evalúa una condición, `elif` ofrece una alternativa y `else` cubre el resto. La sangría define qué instrucciones pertenecen a cada rama. Los operadores `and`, `or` y `not` combinan condiciones: `and` exige ambas verdaderas; `or` basta con una; `not` invierte. Usa paréntesis cuando mezcles condiciones para que la prioridad sea legible.
 
 ```mermaid
-flowchart LR
-  A[Un importe] --> B[Comprobar regla]
-  B --> C[Actualizar resultado]
-  C --> D[Siguiente importe]
+flowchart TD
+  A[Pedido] --> B{¿Está confirmado?}
+  B -->|no| C[Esperar confirmación]
+  B -->|sí| D{¿Importe >= 100?}
+  D -->|sí| E[Revisar]
+  D -->|no| F[Operación normal]
 ```
 
-El programa repite el mismo criterio; no decide de forma inteligente qué regla usar. La calidad de la conclusión depende de que la regla y los datos sean apropiados.
+El orden de las preguntas importa: comparar un importe ausente antes de validar el estado o el tipo puede provocar un error o una decisión falsa.
 
-## Error habitual
+## Repetir: `for` cuando conoces la colección, `while` cuando esperas una condición
 
-No modifiques una lista mientras la recorres salvo que entiendas las consecuencias: puedes saltarte elementos. Para aprender, crea una lista nueva para los resultados o revisa primero el tamaño y contenido de la original.
+Un `for` visita cada elemento de una lista. Para sumar solo confirmados, se usa un acumulador que empieza en cero:
 
-## Resumen
+```python
+total_confirmado = 0
+for pedido in pedidos:
+    if pedido["estado"] == "confirmado":
+        total_confirmado += pedido["importe"]
+```
 
-Las condiciones expresan criterios y los bucles los aplican repetidamente. Sigue con [funciones](04-funciones-y-alcance.md).
+Un `while` repite mientras una condición sea verdadera. Es útil, por ejemplo, para reintentar una petición con límite; sin actualizar el contador puede no terminar nunca.
+
+```python
+intentos = 0
+MAX_INTENTOS = 3
+while intentos < MAX_INTENTOS:
+    intentos += 1
+    print(f"Intento {intentos}")
+```
+
+No uses `while True` en un primer programa salvo que haya una salida clara (`break`) y una razón documentada. Para recorrer una lista de pedidos, `for` expresa mejor la intención.
+
+## `break`, `continue` y no modificar la lista recorrida
+
+`continue` salta al siguiente elemento; `break` termina el bucle. Pueden ser correctos, pero un `break` tras el primer pedido inválido puede impedir auditar los demás. En análisis suele ser preferible guardar incidencias y continuar cuando el problema es local.
+
+```python
+validos = []
+incidencias = []
+for pedido in pedidos:
+    if not isinstance(pedido.get("importe"), (int, float)):
+        incidencias.append(pedido.get("id", "sin_id"))
+        continue
+    validos.append(pedido)
+```
+
+No borres elementos de `pedidos` dentro del `for`: puedes saltarte posiciones. Construye `validos` y `incidencias`; así también conservas evidencia de la calidad de origen.
+
+## Microprácticas
+
+1. Clasifica importes 99, 100 y 101. Explica por qué `>` no cumple la regla acordada.
+2. Añade un pedido cancelado y otro con `importe=None`. Diseña qué lista debe recibir cada uno y justifica tu decisión.
+3. Escribe un `while` de tres intentos y provoca deliberadamente el error de no incrementar el contador; no lo ejecutes sin un límite.
+4. Recorre una lista y crea otra solo con canales `web` o `app`. ¿Cuándo usarías `or`?
+
+Las condiciones hacen visibles decisiones; las funciones de la próxima lección impedirán repetir esas decisiones de manera inconsistente.
