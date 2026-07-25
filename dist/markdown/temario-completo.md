@@ -4505,100 +4505,373 @@ Resuelve la [práctica de demanda](../../../ejercicios/temario-11/aplicacion/pre
 
 ## Propósito
 
-Usar modelos predictivos para estimar resultados, priorizar casos y apoyar decisiones. El objetivo no es maximizar una métrica aislada: es construir una predicción útil, válida y explicable.
+Un modelo predictivo no sustituye el criterio de producto: ordena incertidumbre para que un equipo pueda actuar primero donde el beneficio esperado es mayor. En este bloque Leo acompaña a **Lumen**, una aplicación de suscripción, que solo puede contactar cada semana a una parte de las personas con riesgo de abandono (*churn*).
+
+El caso continuo responde a una pregunta concreta: **cada lunes, ¿qué cuentas conviene priorizar para una revisión humana durante los próximos 30 días?** Aprenderás a convertir esa pregunta en objetivo, datos disponibles, evaluación, umbral operativo y documentación responsable.
+
+## Resultados de aprendizaje
+
+Al terminar podrás:
+
+- distinguir predicción, explicación causal y decisión;
+- definir objetivo, población, fecha de corte y variables sin mirar el futuro;
+- comparar un baseline con una clasificación sencilla;
+- leer matriz de confusión, precision, recall, F1, ROC-AUC y PR-AUC;
+- elegir un umbral según capacidad y coste, no por costumbre;
+- detectar desbalanceo, fuga, mala calibración y deriva;
+- documentar límites mediante una model card.
+
+## Prerrequisitos
+
+Los bloques de Python, Pandas, estadística y métricas. No se presupone experiencia previa con aprendizaje automático: cada palabra nueva se introduce dentro del caso.
 
 ## Lecciones
 
-1. [Decidir si la predicción aporta valor](lecciones/01-caso-de-uso-y-objetivo.md)
-2. [Datos, variables y fuga de información](lecciones/02-preparacion-y-fuga.md)
-3. [Baselines y familias de modelos](lecciones/03-baselines-y-modelos.md)
-4. [Evaluación y coste de errores](lecciones/04-evaluacion-y-coste-de-error.md)
-5. [Interpretación, sesgo y uso responsable](lecciones/05-interpretacion-sesgo-y-uso-responsable.md)
+1. [Del problema de negocio al contrato predictivo](lecciones/01-caso-de-uso-y-objetivo.md)
+2. [Datos disponibles, partición temporal y fuga](lecciones/02-preparacion-y-fuga.md)
+3. [Baselines, clasificación y modelos sencillos](lecciones/03-baselines-y-modelos.md)
+4. [Métricas, umbrales, capacidad y calibración](lecciones/04-evaluacion-y-coste-de-error.md)
+5. [Interpretación, sesgo, deriva y model card](lecciones/05-interpretacion-sesgo-y-uso-responsable.md)
 
-## Práctica
+## Material aplicado
 
-Resuelve [el caso de churn](../../ejercicios/temario-12/aplicacion/priorizar-churn.md).
+- [Datos de ejemplo de Lumen](../../datasets/lumen_churn_ejemplo.csv): una fila por cuenta en una fecha de corte.
+- [Laboratorio reproducible](../../notebooks/practicas/12-priorizacion-churn.py): ejecutable con `python` y sin instalar librerías.
+- [Ejercicio de priorización](../../ejercicios/temario-12/aplicacion/priorizar-churn.md) y su [solución razonada](../../soluciones/temario-12/priorizar-churn.md).
 
-# Decidir si la predicción aporta valor
+## Regla profesional del bloque
+
+Una probabilidad no es una orden automática. Antes de contactar, excluir, subir precio o negar una oportunidad, pregunta: «¿qué sabíamos al predecir, qué daño puede causar el error y quién revisa la decisión?».
+
+# 12.1 - Del problema de negocio al contrato predictivo
 
 ## Objetivos y prerrequisitos
 
-Separarás una pregunta predictiva de una causal y definirás la decisión que una predicción puede mejorar.
+Al terminar podrás decidir si una pregunta admite predicción y escribir un contrato que impida construir un modelo «correcto» para una decisión equivocada. Necesitas saber leer una tabla: una fila es una observación y una columna describe una propiedad.
 
-Un modelo predictivo usa patrones históricos para estimar un resultado desconocido: probabilidad de abandono, demanda de mañana o importe esperado. Antes de modelar define quién recibirá la predicción, qué acción puede tomar y cuál es el coste de equivocarse.
+## Antes de decir «modelo»
 
-Predecir riesgo de churn no demuestra por qué alguien abandonará ni qué oferta lo retendrá. Sirve para priorizar contacto; la eficacia de la intervención exige experimento o evidencia causal aparte.
+Lumen vende una suscripción mensual. Su equipo de éxito de cliente puede revisar **20 cuentas cada lunes**, pero no todas las cuentas pueden recibir atención intensiva. La pregunta no es «¿por qué abandonan las personas?»; es «¿qué 20 cuentas conviene revisar primero con la información disponible el lunes?». Un modelo puede ordenar riesgo; no prueba que una intervención vaya a evitar una baja.
+
+En lenguaje cotidiano, una predicción es una estimación de algo aún desconocido a partir de casos anteriores parecidos. Su nombre técnico es **aprendizaje supervisado** cuando disponemos de ejemplos pasados con respuesta conocida. Aquí la respuesta, o **target**, será `churn_30d`: vale 1 si la cuenta canceló dentro de los 30 días posteriores al lunes de corte y 0 si no.
+
+No confundas tres preguntas:
+
+| Pregunta | Ejemplo en Lumen | Herramienta principal |
+| --- | --- | --- |
+| Descriptiva | ¿Cuántas cuentas cancelaron el mes pasado? | Métricas y análisis |
+| Predictiva | ¿Qué cuentas cancelarán en 30 días? | Modelo de clasificación |
+| Causal | ¿Una llamada de onboarding reduce cancelaciones? | Experimento o diseño causal |
+
+Decir que las cuentas con pocos días activos tienen más churn no permite afirmar que «aumentar días activos» lo reduzca. Puede ser una señal del problema, no su causa.
+
+## El contrato de predicción
+
+Un contrato transforma una intuición en trabajo verificable. Para Lumen:
+
+| Elemento | Decisión explícita |
+| --- | --- |
+| Unidad o grano | Una **cuenta** en cada lunes de corte, no un evento ni una persona individual. |
+| Población | Cuentas de pago activas al comenzar el lunes. |
+| Target | Cancelación durante los siguientes 30 días (`1`/`0`). |
+| Fecha de corte | Cada lunes a las 09:00 Europe/Madrid. |
+| Variables permitidas | Uso, facturación y soporte conocidos antes de esa hora. |
+| Acción | Priorizar hasta 20 cuentas para revisión humana, no enviar una oferta automática. |
+| Éxito operativo | Encontrar más cuentas que cancelarán sin saturar al equipo y sin perjuicio injustificado. |
+
+La siguiente figura responde a «¿cómo una pregunta termina en una acción controlada?».
 
 ```mermaid
 flowchart LR
- A[Decisión] --> B[Objetivo medible]
- B --> C[Datos históricos]
- C --> D[Baseline y modelo]
- D --> E[Evaluación]
- E --> F[Acción y seguimiento]
+  A[Pregunta operativa] --> B[Contrato: población, corte y target]
+  B --> C[Datos disponibles en el corte]
+  C --> D[Baseline y modelo]
+  D --> E[Probabilidad de churn]
+  E --> F[¿Cabe en capacidad y reglas?]
+  F -->|Sí| G[Revisión humana]
+  F -->|No| H[Cola o sin acción]
+  G --> I[Resultado y monitorización]
+  H --> I
 ```
 
-## Resumen
+La flecha hacia revisión humana es deliberada: una puntuación ordena casos, pero la política de atención decide qué se hace con ella.
 
-Sin decisión y acción, una predicción puede ser interesante pero no valiosa. Sigue con [datos y fuga](02-preparacion-y-fuga.md).
+## Ejemplo trabajado
 
-# Datos, variables y fuga de información
+El lunes 1 de junio, la cuenta Aster tiene 2 sesiones en los últimos 7 días, una factura impagada y 3 tickets. Todo eso ya era visible el lunes. Si Aster cancela el 20 de junio, su fila de corte del 1 de junio recibe `churn_30d=1`. Si registramos `fecha_cancelacion` como entrada, estaríamos entregando al modelo la respuesta disfrazada de columna.
 
-## Objetivos y prerrequisitos
+El horizonte de 30 días no es arbitrario: permite que una persona contacte y haga seguimiento. Un horizonte de 24 horas daría poco margen; uno de 12 meses mezclaría decisiones y cambios de producto demasiado distintos.
 
-Definirás objetivo, momento de predicción y variables que estarían disponibles entonces.
+## Error habitual y límite
 
-La **variable objetivo** es lo que se quiere estimar; las variables de entrada describen información disponible antes del resultado. Una **fuga de información** ocurre cuando el modelo usa un dato que solo existe después: una cancelación registrada tras el momento en que querías predecir churn.
+Un objetivo mal definido crea métricas bonitas e inútiles. Por ejemplo, usar «canceló alguna vez» como target mezcla cuentas que cancelaron hace tres años con la decisión de este lunes. También es incorrecto llamar *churn* a una tarjeta caducada si el negocio considera que la cuenta vuelve a activar sin intervención: la definición debe estar acordada con producto y finanzas.
 
-Separa entrenamiento, validación y prueba respetando tiempo cuando corresponda. Ajustar transformaciones solo con entrenamiento evita que información del futuro mejore artificialmente la evaluación.
+## Resumen y comprobación
 
-## Error habitual
+- Un modelo predictivo estima un resultado futuro; no demuestra su causa.
+- El contrato fija unidad, población, corte, horizonte, variables y acción.
+- El umbral y la capacidad forman parte del sistema, no aparecen al final.
 
-Crear una variable con “número de tickets resueltos” para predecir una baja cuando esos tickets se abren precisamente al iniciar la baja. Un resultado excelente puede ser señal de fuga, no de inteligencia.
+1. ¿Por qué «ofrecer un descuento» no es automáticamente la conclusión de un modelo de churn?
+2. Para el corte del lunes, ¿una nota creada el martes es una variable permitida? ¿Por qué?
 
-## Resumen
+Continúa con [datos, partición temporal y fuga](02-preparacion-y-fuga.md).
 
-La pregunta correcta es: “¿qué sabíamos en el instante de decidir?”.
-
-# Baselines y familias de modelos
-
-## Objetivos y prerrequisitos
-
-Compararás un modelo con una referencia sencilla antes de usar complejidad adicional.
-
-Un **baseline** puede ser predecir la media, repetir el último valor o clasificar siempre la clase mayoritaria. Si un modelo no lo supera de forma útil, no merece operación ni explicación adicional.
-
-Regresión lineal estima una cantidad; regresión logística estima probabilidad de una clase; árboles capturan divisiones y relaciones no lineales. Ninguna familia es “mejor” sin contexto: más flexibilidad puede sobreajustar y reducir interpretabilidad.
-
-## Resumen
-
-Empieza simple y compara con una referencia honesta. Sigue con [evaluación y coste de error](04-evaluacion-y-coste-de-error.md).
-
-# Evaluación y coste de errores
+# 12.2 - Datos disponibles, partición temporal y fuga
 
 ## Objetivos y prerrequisitos
 
-Elegirás métricas según el tipo de resultado y la consecuencia de cada fallo.
+Al terminar sabrás convertir eventos en variables de una tabla de modelado, separar pasado y futuro y reconocer información filtrada. Partimos del contrato de Lumen de la lección anterior.
 
-Para cantidades, MAE expresa error medio absoluto y RMSE penaliza más fallos grandes. Para clasificación, precisión pregunta cuántos avisos fueron correctos; recall, cuántos casos reales detectaste. No hay métrica universal: en fraude, perder un caso puede costar mucho; en una campaña cara, contactar falsos positivos también.
+## De eventos a una fila que se puede decidir
 
-El umbral de probabilidad transforma un modelo en una acción. Ajustarlo cambia precisión, recall, capacidad operativa y equidad. Evalúa por segmentos relevantes y en datos futuros, no solo una métrica global.
+Una aplicación guarda hechos sueltos: una sesión, un pago, un ticket. Para decidir el lunes, los resumimos en una fila por cuenta. Una **feature** o variable predictora es una columna que describe lo conocido antes del momento de predicción. Por ejemplo, `sesiones_7d=2` significa que Aster abrió la app dos veces en los siete días anteriores al corte.
 
-## Resumen
+| cuenta_id | corte | sesiones_7d | dias_desde_ultima_sesion | factura_impagada | tickets_30d | churn_30d |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Aster | 2026-06-01 | 2 | 5 | 1 | 3 | 1 |
+| Borea | 2026-06-01 | 18 | 0 | 0 | 0 | 0 |
 
-La mejor métrica refleja la decisión y sus costes, no el número más alto de una tabla.
+La última columna se conoce solo después de esperar 30 días. Durante producción no existe todavía; solo se usa para aprender y evaluar ejemplos históricos.
 
-# Interpretación, sesgo y uso responsable
+## Partir por tiempo, no mezclar el futuro
+
+En problemas donde el producto y los clientes cambian, imitar el futuro es más honesto que barajar filas. Entrena con cortes antiguos, ajusta decisiones con un periodo posterior y reserva un periodo final que nadie toca hasta el final.
+
+```mermaid
+flowchart LR
+  A[ene-mar: entrenamiento] --> B[abr: validación y umbral]
+  B --> C[may: prueba final]
+  C --> D[jun: producción]
+  A -.no usa etiquetas ni variables del futuro.-> D
+  B -.no reajusta el modelo final.-> D
+```
+
+La línea temporal permite responder a «¿habría funcionado con la información y el comportamiento de entonces?». Una división aleatoria puede poner en entrenamiento una observación posterior de la misma cuenta y hacer que la prueba parezca más fácil.
+
+## Fuga de información: el excelente resultado sospechoso
+
+Una **fuga** ocurre si una variable contiene, directa o indirectamente, información posterior al corte o información que no estará disponible al ejecutar la decisión. El modelo aprende la respuesta, no un patrón que pueda reutilizarse.
+
+| Columna candidata | ¿Permitida el lunes? | Motivo |
+| --- | --- | --- |
+| Sesiones hasta el domingo | Sí | Ya ocurrieron antes del corte. |
+| Factura vencida conocida | Sí | Puede consultarse antes de priorizar. |
+| Motivo de cancelación | No | Solo aparece al cancelar. |
+| Tickets cerrados en los próximos 30 días | No | Resume el futuro que se intenta predecir. |
+| Media de churn calculada usando todo el año | No | Para enero incorpora resultados de meses futuros. |
+
+Hay fugas menos obvias. Estandarizar una columna usando media y desviación de todo el conjunto deja que la prueba influya en el entrenamiento. Resolver valores ausentes, seleccionar variables o decidir hiperparámetros debe ajustarse con entrenamiento y aplicarse después, sin reaprender de validación ni prueba.
+
+## Calidad y tratamiento mínimo
+
+Antes de modelar, comprueba que cada cuenta aparece una vez por corte, que las unidades son coherentes y que un cero no significa «dato desconocido». `sesiones_7d=0` puede ser una observación válida; un valor vacío puede indicar que falló el seguimiento. Conserva una marca como `sesiones_disponibles` si la ausencia de registro tiene significado.
+
+Una variable categórica, como plan `basic` o `pro`, necesita una codificación que el modelo pueda usar; no asignes arbitrariamente `basic=1` y `pro=2` si ese orden no existe. En cambio, una variable numérica como días desde la última sesión sí tiene orden y unidad.
+
+## Ejemplo trabajado
+
+Para el corte 1 de mayo, la variable `tickets_30d` cuenta tickets abiertos entre 1 y 30 de abril. Una consulta que usa hasta el 30 de mayo es fuga aunque se ejecute después para «preparar» datos. Escribe siempre el intervalo de cada feature: *inicio*, *fin* y *momento de disponibilidad*.
+
+## Resumen y comprobación
+
+- La tabla de modelado tiene una unidad definida y variables disponibles en el corte.
+- Entrenamiento, validación y prueba respetan el orden temporal.
+- Un rendimiento extraordinario obliga a buscar fuga antes de celebrarlo.
+
+1. ¿Por qué una media calculada con todo el año puede ser fuga para una fila de enero?
+2. ¿Qué diferencia hay entre un cero de sesiones y un valor ausente?
+
+Sigue con [baselines y modelos sencillos](03-baselines-y-modelos.md).
+
+# 12.3 - Baselines, clasificación y modelos sencillos
 
 ## Objetivos y prerrequisitos
 
-Comunicarás qué hace un modelo, dónde falla y qué controles necesita antes de automatizar acciones.
+Compararás una regla de referencia con un modelo de clasificación y sabrás qué gana y qué pierde cada opción. Necesitas el concepto de feature, target y partición temporal.
 
-Explicar importancia de variables no demuestra causalidad. Una variable puede predecir churn porque está asociada a un canal, no porque modificarla resuelva el abandono. Examina calidad, representatividad, privacidad y posibles proxies de atributos sensibles.
+## Qué intenta estimar una clasificación
 
-Documenta población, fecha de entrenamiento, objetivo, variables, métricas, umbral, fallos esperados, responsable y monitorización. Si una predicción afecta a personas, conserva revisión humana y mecanismo para detectar daño desigual.
+En Lumen el resultado solo tiene dos clases: `1` significa churn y `0` significa continuidad. Una **clasificación binaria** estima la probabilidad de pertenecer a una clase, por ejemplo `P(churn_30d=1)=0,72`. No produce certeza: dos cuentas con 0,72 pueden tener destinos distintos.
 
-Resuelve el [caso de priorización de churn](../../../ejercicios/temario-12/aplicacion/priorizar-churn.md). El siguiente bloque enseña a entregar este trabajo de forma colaborable y reproducible.
+El primer rival de cualquier modelo es un **baseline**, una referencia deliberadamente simple. Si el 12 % de las cuentas abandonan, un baseline de clase mayoritaria siempre predice «no churn». Acertará 88 % de veces, pero detectará cero abandonos: la exactitud (*accuracy*) por sí sola puede engañar.
+
+## Tres niveles de complejidad
+
+| Enfoque | Cómo funciona | Ventaja | Riesgo o límite |
+| --- | --- | --- | --- |
+| Mayoritaria | Predice siempre la clase más frecuente | Gratis y transparente | No prioriza riesgo. |
+| Regla de negocio | «Riesgo alto si hay factura impagada y menos de 3 sesiones» | Revisable por operaciones | Puede ignorar combinaciones útiles. |
+| Regresión logística | Combina variables y transforma un marcador en probabilidad | Interpretable y estable como base | Supone una forma de relación limitada. |
+| Árbol pequeño | Hace preguntas sucesivas sobre variables | Capta umbrales e interacciones | Puede sobreajustarse si crece demasiado. |
+
+Una regresión logística no es «lineal» en la probabilidad: combina las variables en un marcador y lo transforma para quedar entre 0 y 1. En un árbol, una regla puede ser «si sesiones_7d < 3, continuar; si además hay factura impagada, riesgo alto».
+
+El siguiente diagrama responde a «¿cuándo una regla se convierte en predicción operativa?».
+
+```mermaid
+flowchart TD
+  A[Cuenta en el corte] --> B[Factura impagada]
+  B -->|Sí| C[Riesgo alto]
+  B -->|No| D[Sesiones en 7d < 3]
+  D -->|Sí| E[Riesgo medio]
+  D -->|No| F[Riesgo bajo]
+  C --> G[Ordenar para revisión]
+  E --> G
+  F --> H[No priorizar ahora]
+```
+
+Este árbol es didáctico, no una verdad causal. «Factura impagada» puede ser señal de un problema de cobro y requerir una ruta distinta a una llamada de éxito de cliente.
+
+## Entrenar sin enamorarse del algoritmo
+
+Entrenar significa ajustar parámetros o reglas usando ejemplos históricos. Validar significa comparar alternativas en periodos que el ajuste no vio. Empieza por la regla y la clase mayoritaria; después compara una regresión logística regularizada y un árbol limitado. Si el árbol añade una mejora minúscula pero duplica complejidad y empeora la explicación, quizá no compense.
+
+Evita ajustar decenas de alternativas sobre la misma validación hasta encontrar una ganadora. Esa repetición convierte validación en entrenamiento encubierto. Registra qué versiones probaste y conserva la prueba final para una sola evaluación honesta.
+
+## Ejemplo trabajado
+
+En el laboratorio, el baseline mayoritario nunca marca churn. La regla de Lumen asigna una puntuación mayor si hay poco uso, factura pendiente o muchos tickets. No afirmamos que el score «entienda» a la persona; solo comprobamos si, en cortes posteriores, concentra más cancelaciones dentro de las 20 plazas disponibles.
+
+## Resumen y comprobación
+
+- Un baseline es obligatorio porque impide atribuir valor a complejidad vacía.
+- Clasificar es estimar probabilidad o marcador de clase, no descubrir causas.
+- Un modelo sencillo puede ser preferible si su rendimiento y uso son suficientes.
+
+1. ¿Por qué 88 % de accuracy puede convivir con un modelo inútil para churn?
+2. ¿Qué debe ocurrir antes de preferir un árbol más complejo a una regla?
+
+Sigue con [métricas, umbrales y calibración](04-evaluacion-y-coste-de-error.md).
+
+# 12.4 - Métricas, umbrales, capacidad y calibración
+
+## Objetivos y prerrequisitos
+
+Al terminar podrás interpretar una matriz de confusión, elegir un umbral coherente con la capacidad y distinguir capacidad de ordenación de probabilidades bien calibradas.
+
+## De una probabilidad a cuatro resultados
+
+El modelo entrega un score; un **umbral** lo convierte en aviso. Si Lumen marca churn a partir de `0,50`, cada cuenta queda en uno de cuatro grupos:
+
+| Real / predicción | Priorizar churn | No priorizar |
+| --- | ---: | ---: |
+| Canceló | Verdadero positivo (VP) | Falso negativo (FN) |
+| No canceló | Falso positivo (FP) | Verdadero negativo (VN) |
+
+La matriz de confusión no decide por ti: muestra el tipo de equivocación. De ella salen:
+
+- **Precision** = VP / (VP + FP): de las cuentas priorizadas, qué proporción canceló.
+- **Recall** = VP / (VP + FN): de todas las que cancelaron, qué proporción detectamos.
+- **F1**: media armónica de precision y recall; útil si ambas importan, pero no conoce el coste real.
+
+Si hay solo 20 plazas, una precision alta en las primeras 20 puede importar más que recall global. Si la intervención es preventiva y barata, quizá prefieras detectar más casos aunque aumenten avisos incorrectos.
+
+## Curvas: ordenar no es lo mismo que decidir
+
+ROC-AUC resume cómo el score ordena, en promedio, positivos por encima de negativos para muchos umbrales. Puede parecer alta cuando churn es raro. PR-AUC resume el intercambio entre precision y recall y suele ser más informativa en clases desbalanceadas, como un 5 % de churn. Ninguna AUC responde cuántas cuentas debe atender el equipo: para eso inspecciona el umbral o el top-k real.
+
+```mermaid
+flowchart LR
+  A[Scores de churn] --> B[Ordenar cuentas]
+  B --> C[Capacidad semanal: 20]
+  C --> D[Seleccionar top 20]
+  D --> E[Calcular VP, FP, FN, VN]
+  E --> F[Precision, recall y coste]
+  F --> G[Revisar umbral y política]
+```
+
+El diagrama muestra que la capacidad viene antes de celebrar una métrica global: un modelo puede ordenar razonablemente y aun así no ser útil en las primeras 20 cuentas.
+
+## Coste y umbral: ejemplo de Lumen
+
+Supón que una revisión humana cuesta 15 EUR y que retener una cuenta evita una pérdida esperada de 120 EUR, pero una revisión solo consigue retener al 25 % de las cuentas que iban a cancelar. Un VP no vale automáticamente 120 EUR: su valor esperado sería `0,25 × 120 - 15 = 15 EUR`. Un FP cuesta 15 EUR. Este cálculo es un supuesto de negocio que debe revisarse con finanzas y con evidencia de la intervención.
+
+El umbral 0,50 no es una ley. Si solo hay 20 plazas, se puede elegir el score de la vigésima cuenta como corte provisional y comprobar luego precision, beneficio esperado y daños por segmento. Si hay 200 plazas, el corte puede bajar. Cambiarlo altera operaciones, por lo que se registra como parte de la versión del sistema.
+
+## Desbalanceo y calibración
+
+Con 5 cancelaciones en 100 cuentas, un modelo que predice siempre continuidad tiene 95 % accuracy. Este **desbalanceo** obliga a mirar precision, recall, PR-AUC, top-k y costes, no solo accuracy. Reponderar clases o re-muestrear puede ayudar durante entrenamiento, pero la evaluación debe reflejar la prevalencia real de producción.
+
+Una probabilidad está **calibrada** si, entre las cuentas con score cercano a 0,30, aproximadamente 30 % termina cancelando. Un modelo puede ordenar bien (AUC alta) pero sobreestimar sistemáticamente el riesgo. Agrupa scores en bandas, compara probabilidad media con proporción observada y recalibra solo usando datos de entrenamiento/validación, nunca la prueba final.
+
+## Error habitual y límite
+
+No optimices F1 por defecto: trata por igual un FP y un FN aunque la decisión no lo haga. Tampoco conviertas una probabilidad en promesa individual. Una banda de 0,70 describe frecuencia esperada en un grupo comparable, no destino garantizado para una persona.
+
+## Resumen y comprobación
+
+- Precision mide limpieza de la cola; recall mide cobertura de casos reales.
+- ROC-AUC y PR-AUC evalúan ordenación, no sustituyen la política de capacidad.
+- Calibrar hace interpretables las probabilidades; elegir umbral convierte el modelo en operación.
+
+1. Si Lumen solo puede revisar 20 cuentas, ¿por qué puede ser mejor medir precision@20 que accuracy?
+2. ¿Puede un modelo tener AUC alta y probabilidades mal calibradas? Explica cómo.
+
+Sigue con [interpretación, sesgo y operación responsable](05-interpretacion-sesgo-y-uso-responsable.md).
+
+# 12.5 - Interpretación, sesgo, deriva y model card
+
+## Objetivos y prerrequisitos
+
+Al terminar podrás explicar una predicción sin convertir asociación en causalidad, comprobar riesgos por segmentos y documentar cómo se monitoriza un modelo en producción.
+
+## Explicar una señal no es explicar una causa
+
+Una regresión logística puede indicar que `dias_desde_ultima_sesion` empuja el score hacia arriba. Un árbol puede mostrar que una factura impagada aparece en una rama de riesgo alto. Eso es **interpretación predictiva**: describe cómo el modelo usa señales para ordenar casos. No demuestra que forzar una sesión o pagar una factura cause retención.
+
+La distinción importa. Una cuenta puede dejar de usar la app porque su empresa redujo plantilla; el poco uso es una señal temprana, no necesariamente una palanca. Para estimar si una llamada, descuento o funcionalidad cambia churn se necesita experimento controlado u otro diseño causal del bloque avanzado.
+
+## Sesgo, privacidad y revisión humana
+
+Una variable aparentemente inocua puede ser un **proxy**: por ejemplo, horario de conexión puede correlacionarse con región, tipo de empleo o necesidades de accesibilidad. Antes de usarla, pregunta si es necesaria, si tiene calidad comparable y si puede producir un trato desigual. No recolectes atributos personales «por si acaso».
+
+Evalúa al menos por segmentos operativos relevantes: plan, antigüedad, región si es legítima y tamaño de cuenta. Busca diferencias de cobertura (recall), avisos incorrectos (precision) y calidad de datos. Una diferencia no prueba discriminación por sí sola: puede deberse a tamaños pequeños o definición distinta, pero exige investigación y registro.
+
+```mermaid
+flowchart TD
+  A[Modelo y datos versionados] --> B[Score semanal]
+  B --> C[Capacidad y exclusiones]
+  C --> D[Revisión humana]
+  D --> E[Resultado y segmentos]
+  E --> F[Control de rendimiento y deriva]
+  F --> G[Continuar y registrar]
+  F --> H[Investigar, recalibrar o pausar]
+```
+
+El circuito se repite cada semana; se dibuja sin una flecha de vuelta para que el PDF no convierta el ciclo en una secuencia ilegible. Evita el error de «entrenar y olvidar»: las predicciones cambian la atención recibida, y esa atención también puede cambiar los datos con los que evaluamos.
+
+## Deriva y monitorización
+
+**Deriva de datos** significa que cambió la distribución de entradas: una nueva interfaz puede reducir sesiones registradas. **Deriva de concepto** significa que cambió la relación entre entradas y churn: un cambio de precio puede hacer que el mismo nivel de uso implique otro riesgo. Vigila semanalmente volumen, valores ausentes, distribución de scores, prevalencia observada cuando madure el horizonte, precision@20, recall por segmento y tasa de intervención.
+
+No reentrenes automáticamente ante cualquier oscilación. Define umbrales de alerta, responsable y respuesta. Un salto de 40 % en valores ausentes puede requerir pausar el modelo porque falló el tracking; una caída persistente de precision puede requerir análisis del producto y revalidación temporal.
+
+## Model card mínima de Lumen
+
+Una **model card** es una ficha que permite a otra persona entender y auditar el sistema. Debe incluir:
+
+| Campo | Ejemplo |
+| --- | --- |
+| Propósito | Priorizar revisión humana de churn a 30 días; no automatiza bajas ni precios. |
+| Población y corte | Cuentas de pago activas, lunes 09:00 Europe/Madrid. |
+| Datos y versión | Fuente, periodo, definición de cada variable y exclusiones. |
+| Modelo y baseline | Regla versionada / regresión logística; baseline mayoritario. |
+| Evaluación | Periodo de prueba, precision@20, recall, PR-AUC, calibración y segmentos. |
+| Umbral/política | Top 20 por capacidad, reglas de exclusión y responsable. |
+| Límites y riesgos | Fuga conocida, cambios de tracking, proxies, intervención no causal. |
+| Monitorización | Métricas, frecuencia, dueño, umbrales y procedimiento de pausa. |
+
+## Resumen y comprobación
+
+- Importancia predictiva no equivale a causalidad ni a recomendación de intervención.
+- Los modelos requieren controles de privacidad, segmentos y revisión humana proporcional al impacto.
+- Una model card y monitorización convierten un experimento en un sistema responsable.
+
+1. ¿Qué diferencia hay entre deriva de datos y deriva de concepto?
+2. ¿Por qué una mejora de precision global podría ocultar un problema en un segmento?
+
+Ahora ejecuta el [laboratorio de Lumen](../../../notebooks/practicas/12-priorizacion-churn.py) y resuelve el [ejercicio aplicado](../../../ejercicios/temario-12/aplicacion/priorizar-churn.md).
 
 # Bloque 13 - Herramientas y reproducibilidad
 
