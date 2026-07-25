@@ -28,7 +28,7 @@ Los diagramas se escriben dentro de la lección con Mermaid y se generan tambié
 | 00. Orientación | 3 | Convertir una necesidad de negocio en una pregunta analítica. |
 | 01. Fundamentos de datos | 4 | Entender grano, tipos, calidad, privacidad y fuentes. |
 | 02. Python | 6 | Escribir, leer y depurar código básico reproducible. |
-| 03. Matemáticas aplicadas | 4 | Interpretar magnitudes, tasas, funciones y comparaciones. |
+| 03. Matemáticas aplicadas | 6 | Interpretar magnitudes, tasas, distribuciones, agregaciones y comparaciones temporales. |
 | 04. NumPy | 3 | Pensar vectorialmente y manipular arrays numéricos. |
 | 05. Pandas | 6 | Preparar y validar datos tabulares con trazabilidad. |
 | 06. EDA | 4 | Investigar patrones y anomalías sin sobrerreclamar causalidad. |
@@ -42,7 +42,7 @@ Los diagramas se escriben dentro de la lección con Mermaid y se generan tambié
 | 14. Nivel avanzado | 5 | Abordar causalidad, escala, anomalías y fuentes externas. |
 | 15. Portfolio | 4 | Demostrar competencias mediante proyectos defendibles. |
 
-Total: **85 lecciones**, que cubren los 161 temas del índice maestro.
+Total: **87 lecciones**, que cubren los 161 temas del índice maestro.
 
 ## Mapa de lecciones por bloque
 
@@ -70,7 +70,7 @@ Total: **85 lecciones**, que cubren los 161 temas del índice maestro.
 
 ### 03-08. Núcleo analítico
 
-- Matemáticas aplicadas: porcentajes y tasas; promedios ponderados; funciones; vectores y fechas.
+- Matemáticas aplicadas: unidades, porcentajes y tasas; descriptiva y percentiles; ponderación y grano; funciones; vectores y matrices; tiempo, granularidad y ventanas.
 - NumPy: arrays; selección; broadcasting y simulación.
 - Pandas: importación; perfilado; selección; limpieza; agregación; uniones y validación.
 - EDA: preguntas; distribuciones; segmentos; relaciones, outliers y registro de decisiones.
