@@ -2519,101 +2519,277 @@ No hay una causa «oculta» que debas adivinar. La respuesta correcta identifica
 
 Tu respuesta al [ejercicio aplicado](../../../ejercicios/temario-06/aplicacion/investigar-caida.md) debe incluir una tabla de tasas con denominadores, dos hipótesis rivales, tratamiento justificado de la observación extrema y una actualización responsable al equipo. Consulta la [solución razonada](../../../soluciones/temario-06/investigar-caida.md) solo después de intentarlo.
 
-# Bloque 07 - Visualización y comunicación
+# Bloque 07 — Visualización y comunicación de datos
 
 ## Propósito
 
-Elegir y construir visualizaciones que permitan comprender una decisión con rapidez, sin distorsionar los datos.
+Una visualización es una afirmación hecha con datos: decide qué comparación será visible y qué quedará fuera. En este bloque Leo trabaja como analista de **Lumen**, una app de suscripción. El equipo observa que las altas se mantienen, pero los pagos terminados han caído. El objetivo no es “hacer gráficos bonitos”: es entregar evidencia que permita decidir si investigar el checkout, una campaña o el propio sistema de medición.
+
+## Resultados observables
+
+Al terminar podrás convertir una pregunta en un gráfico defendible; construirlo con Matplotlib y Seaborn; explicar su población, denominador, periodo y límites; y diseñar un dashboard que un responsable pueda usar sin interpretar a ciegas.
+
+## Prerrequisitos
+
+Se parte del bloque 05 (tablas con Pandas) y 06 (EDA). Un gráfico no sustituye revisar duplicados, valores ausentes o una definición de métrica: los hace más fáciles de detectar y comunicar.
+
+## Caso continuo: Lumen
+
+La tabla de ejemplo representa sesiones diarias. Cada fila agrega un día y un canal; `visitas` es el número de sesiones, `inicio_checkout` las sesiones que empezaron a pagar y `pago` las que terminaron. Por tanto, la conversión de pago es `pago / visitas`, no el número de pagos. Cambiar el denominador cambia la pregunta.
+
+```mermaid
+flowchart LR
+ A[Pregunta de decisión] --> B[Contrato de métrica]
+ B --> C[Datos y calidad]
+ C --> D[Gráfico exploratorio]
+ D --> E[Gráfico explicativo]
+ E --> F[Decisión, límite y seguimiento]
+```
+
+El flujo evita el error habitual de empezar por una plantilla de dashboard: primero se decide qué evidencia hace falta y después cómo verla.
 
 ## Lecciones
 
 1. [De la pregunta al tipo de gráfico](lecciones/01-pregunta-y-tipo-de-grafico.md)
-2. [Diseño honesto y accesible](lecciones/02-diseno-honesto-y-accesible.md)
-3. [De exploración a comunicación](lecciones/03-exploracion-y-narrativa.md)
+2. [Diseño honesto, accesible y reproducible](lecciones/02-diseno-honesto-y-accesible.md)
+3. [Matplotlib y Seaborn: de datos a evidencia](lecciones/03-exploracion-y-narrativa.md)
 4. [Dashboards y entregables profesionales](lecciones/04-dashboards-y-entregables.md)
 
-## Ejercicio
+## Práctica y laboratorio
 
-Haz el [diagnóstico de gráficos](../../ejercicios/temario-07/comprension/elegir-grafico.md) y comprueba [los criterios](../../soluciones/temario-07/elegir-grafico.md).
+Sigue el laboratorio reproducible [11-visualizacion-lumen.py](../../notebooks/practicas/07-visualizacion-lumen.py). Después resuelve el [caso de diagnóstico](../../ejercicios/temario-07/aplicacion/diagnostico-lumen.md) antes de consultar la [solución razonada](../../soluciones/temario-07/diagnostico-lumen.md).
 
-# De la pregunta al tipo de gráfico
+## Fuentes técnicas
+
+La interfaz `plt.subplots` y el modelo Figure/Axes se consultan en la [documentación de Matplotlib](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html); Seaborn documenta sus interfaces de alto nivel en su [tutorial oficial](https://seaborn.pydata.org/tutorial.html). Para color, revisa [la guía oficial de mapas de color](https://matplotlib.org/stable/users/explain/colors/colormaps.html).
+
+# Lección 01 — De la pregunta al tipo de gráfico
 
 ## Objetivos y prerrequisitos
 
-Sabrás escoger una representación según la comparación que una decisión necesita. Requiere EDA básico.
+Sabrás elegir una representación según la comparación necesaria y justificar por qué su forma no induce una conclusión falsa. Necesitas distinguir fila, columna, variable numérica, categoría y fecha.
 
-Un gráfico no es una decoración de una tabla: es una forma de hacer visible una comparación. Pregunta primero si necesitas mostrar evolución, diferencias entre categorías, distribución o relación entre dos medidas.
+## Antes del gráfico: la decisión y el contrato
+
+Imagina que la responsable de Lumen pregunta: “¿por qué bajaron los pagos?”. Esa frase no pide todavía una gráfica. Hay que concretar: *¿bajó el número de pagos, la conversión de visitas a pago o ambos; desde cuándo; para qué usuarios; y qué decisión depende de ello?* Un **contrato de métrica** deja escrito numerador, denominador, población, periodo, fuente y responsable.
+
+En Lumen se comprueba primero que `pago` cuenta pagos finalizados únicos y que `visitas` cuenta sesiones. La conversión diaria es `pago / visitas`. Si el tráfico se duplica pero los pagos se mantienen, los pagos no “caen”, pero la conversión sí. La misma columna puede responder preguntas distintas solo con cambiar el denominador.
+
+## Elegir la comparación
+
+La pregunta siguiente guía la forma. Este esquema responde: “¿qué tipo de relación necesito ver?”
 
 ```mermaid
 flowchart LR
- A[Pregunta] --> B{Comparación}
- B -->|Tiempo| C[Línea]
- B -->|Categorías| D[Barras]
- B -->|Distribución| E[Histograma o caja]
- B -->|Relación| F[Dispersión]
- C --> G[Hallazgo y acción]
- D --> G
- E --> G
- F --> G
+ A[Pregunta concreta] --> B[Comparación principal]
+ B --> C[Tiempo]
+ B --> D[Categorías o proceso]
+ B --> E[Valores o relación]
+ C --> H[Hallazgo y acción]
+ D --> H
+ E --> H
 ```
 
-Una línea responde bien a “¿cómo cambió semanalmente la conversión?”. Unas barras ordenadas responden mejor a “¿qué canal tiene más pedidos?”. Un histograma muestra si un promedio es representativo. Un gráfico de dispersión ayuda a explorar asociación, no a afirmar causalidad.
+La ramificación no es una receta automática. Una línea codifica continuidad temporal: úsala para la conversión diaria de Lumen, donde el eje horizontal sí tiene orden y distancia. Barras horizontales ordenadas permiten comparar la conversión por canal sin obligar al lector a adivinar cuál es mayor. Un histograma muestra cuántas observaciones caen en intervalos; sirve para estudiar la distribución de tiempo de carga, no para contar categorías. Una caja resume mediana, cuartiles y posibles valores extremos, pero no muestra todos los picos de una distribución pequeña.
 
-## Error habitual
+Un gráfico de dispersión coloca cada observación en dos ejes numéricos. Si cada punto es una campaña, puede explorar asociación entre gasto e ingresos. No prueba que el gasto *cause* el ingreso: una campaña de temporada o la calidad del público pueden explicar ambos.
 
-Elegir un gráfico porque “queda profesional”. Un gráfico circular con muchas categorías impide comparar; una línea sobre categorías sin orden temporal inventa continuidad. El gráfico correcto depende de la pregunta y del tipo de dato.
+## Funnel: no es una pirámide decorativa
 
-## Resumen
+En un **funnel** cada paso es una condición del proceso: visita → inicio de checkout → pago. Hay que mostrar el número de personas y el porcentaje respecto al paso anterior, y decidir si cada persona puede repetir el evento. Si `inicio_checkout` tiene más sesiones que visitas, la visualización ha descubierto un problema de grano, de instrumentación o de definición; no hay que “arreglarlo” recortando la barra.
 
-Declara la pregunta antes del gráfico. Continúa con [diseño honesto](02-diseno-honesto-y-accesible.md).
+Ejemplo: 10.000 visitas, 2.000 inicios y 1.600 pagos. Conversión de visita a pago = 16%; de inicio a pago = 80%. El primer porcentaje orienta adquisición y producto; el segundo orienta checkout. Nunca digas “la conversión es 80%” sin el paso de referencia.
 
-# Diseño honesto y accesible
+## Ejemplo trabajado: caída tras una versión
 
-## Objetivos y prerrequisitos
+Lumen despliega la versión 4.2 el 15 de mayo. Para decidir si abrir una incidencia se construye una línea de conversión diaria, se marca la fecha del despliegue y se separa móvil de escritorio. Después se contrasta el volumen de visitas: una caída de conversión con 50 visitas es mucho menos estable que con 50.000. El gráfico comunica una asociación temporal y una prioridad de investigación; no demuestra que el despliegue fuera la causa.
 
-Aprenderás a etiquetar, escalar y colorear un gráfico sin exagerar diferencias ni excluir a parte de la audiencia.
+## Errores y límites
 
-Un gráfico honesto declara unidad, periodo, población y fuente cuando son necesarios. En barras que comparan magnitudes, empezar el eje en cero evita que diferencias pequeñas parezcan enormes. En líneas puede usarse otro rango si se explica y se busca estudiar variación, no tamaño absoluto.
+- Un gráfico circular con nueve canales hace difícil comparar ángulos similares; usa barras ordenadas.
+- Una línea sobre “Android, iOS, web” inventa una continuidad que no existe.
+- Agregar por semana puede ocultar una caída de un día; diario puede ser demasiado ruidoso. La granularidad se decide por la acción y el volumen.
+- Un promedio de tiempo de carga puede esconder que un grupo pequeño tiene una experiencia muy mala. Complementa con distribución o percentiles.
 
-El color debe codificar una diferencia con significado: versión A frente a B, cumplimiento frente a riesgo. No hagas que el único mensaje dependa de rojo y verde; añade etiquetas, contraste y patrones si el gráfico se va a reutilizar.
+## Resumen y comprobación
 
-## Límite
+Primero formula decisión, población y denominador; luego elige una forma cuya codificación coincida con la comparación. ¿Qué gráfico usarías para pagos por canal? ¿Qué información adicional exigirías antes de interpretar un funnel? Continúa con [diseño honesto](02-diseno-honesto-y-accesible.md) y aplica estas decisiones en el [caso Lumen](../../../ejercicios/temario-07/aplicacion/diagnostico-lumen.md).
 
-La claridad no significa ocultar incertidumbre: si un valor procede de pocos usuarios o una estimación, muestra contexto, intervalo o nota metodológica. Simplificar es retirar ruido, no retirar condiciones que cambiarían una decisión.
-
-## Resumen
-
-Cada elección visual transmite una interpretación. Verifica escalas, etiquetas y accesibilidad antes de presentar.
-
-# De exploración a comunicación
+# Lección 02 — Diseño honesto, accesible y reproducible
 
 ## Objetivos y prerrequisitos
 
-Separarás un gráfico para investigar de uno para recomendar una decisión.
+Aprenderás a hacer legible una comparación sin amplificarla, ocultar sus condiciones ni depender de que el lector distinga un color. Partimos de la elección de gráfico de la lección anterior.
 
-Durante exploración puedes producir muchos gráficos, probar segmentos y descubrir errores. Un gráfico explicativo reduce esa exploración a una afirmación revisable: título con hallazgo, comparación destacada, definición de métrica y límite relevante.
+## El gráfico es un argumento verificable
 
-Por ejemplo, “La conversión móvil cayó 1,8 puntos desde la versión 4.2” es más informativo que “Conversión por semana”. Acompáñalo de población, ventana temporal y una nota: “asociación temporal; pendiente validar cambio de tracking”.
+Una figura de Lumen debe permitir responder: qué se mide, en qué unidades, para quién, durante qué periodo y con qué fuente. Un título como “Conversión móvil cae 1,8 pp desde la versión 4.2; investigar checkout” dice la afirmación. Un subtítulo o nota dice “pagos finalizados / sesiones; usuarios autenticados; 1–31 mayo; fuente `events_v3`”. **Punto porcentual (pp)** es la diferencia entre porcentajes: pasar de 12% a 10,2% son -1,8 pp, no necesariamente -1,8% relativo.
 
-## Error habitual
+Etiquetas, leyenda y anotaciones no son adornos. Etiqueta ejes con unidad (`Fecha`, `Conversión a pago (%)`), nombra las series directamente cuando haya pocas y anota el despliegue que se investiga. Exporta el código y la versión de datos junto a la imagen: una captura sin origen no es reproducible.
 
-Convertir el dashboard exploratorio en una diapositiva ejecutiva con veinte series y filtros. El receptor no puede saber qué mirar ni qué acción se propone. Una buena narrativa deja clara evidencia, recomendación y grado de confianza.
+## Escalas y denominadores
 
-## Práctica
+En barras de magnitudes, el eje debe empezar en cero: la longitud representa cantidad. Recortar de 96% a 100% hace que una diferencia de 1 pp parezca gigantesca. En líneas de una tasa, un rango recortado puede ser legítimo para estudiar variación pequeña, pero debe verse el rango, explicarse y acompañarse de los valores. No uses eje doble para sugerir relación: dos escalas elegidas a mano pueden hacer coincidir curvas no relacionadas.
 
-Reformula el título de un gráfico que solo diga “Ventas mensuales” y explica qué dato necesitas para justificar el nuevo mensaje.
+El denominador es parte del mensaje. “800 pagos” y “8% de conversión” no son intercambiables. Compara canales con tráfico distinto mediante tasa y muestra además el tamaño de muestra (`n`). Una conversión de 20% sobre 10 visitas no tiene la misma fuerza descriptiva que 18% sobre 10.000; la lección 08 formaliza intervalos, pero aquí se debe declarar la fragilidad.
 
-# Dashboards y entregables profesionales
+## Color, forma y lectura en móvil
+
+El color debe codificar algo consistente: por ejemplo, azul para escritorio y naranja para móvil en todas las figuras de Lumen. No codifiques éxito/fracaso solo con verde/rojo ni uses arcoíris para datos ordenados: añade etiquetas, línea continua/discontinua o marcadores. Comprueba contraste sobre fondo claro y en escala de grises. Para una audiencia móvil, reduce series, aumenta tamaño de texto, evita leyendas lejanas y prioriza un mensaje por panel.
+
+```mermaid
+flowchart LR
+ A[Dato y pregunta] --> B[Escala y denominador correctos]
+ B --> C[Etiquetas, unidad y periodo]
+ C --> D[Color y contraste accesibles]
+ D --> E[Nota de fuente, n y límite]
+ E --> F[Gráfico interpretable]
+```
+
+Cada paso protege una inferencia distinta: una paleta agradable no compensa un denominador equivocado, y una cifra exacta no compensa que el lector no pueda verla.
+
+## Incertidumbre y valores ausentes
+
+Una banda alrededor de una estimación puede mostrar intervalo de confianza o de variabilidad; no es un adorno translúcido. Debe indicar qué representa, cómo se calculó y qué población cubre. Si hay datos ausentes, no unas con una línea como si se hubieran medido: deja hueco o marca la zona. Si el tracking de pago dejó de enviar eventos dos días, el gráfico debe decirlo; concluir “checkout roto” sería confundir un problema de medición con un problema de producto.
+
+## Contraejemplo: la mejora que desaparece
+
+Un informe muestra que móvil pasa de 9,8% a 10,4% y colorea la segunda barra en verde. Cuando se desglosa por canal, el tráfico de un canal de alta conversión aumentó y cada canal se mantuvo o cayó. El total cambia por mezcla, no necesariamente porque la experiencia móvil mejorase. El gráfico correcto compara el total y el desglose, declara los denominadores y evita causalidad no demostrada.
+
+## Resumen y comprobación
+
+Un diseño honesto hace visibles definición, escala, tamaño de muestra y límites. ¿Cuándo es admisible recortar un eje? ¿Qué más añadirías a una línea de conversión si faltan tres días de tracking? Continúa con [Matplotlib y Seaborn](03-exploracion-y-narrativa.md).
+
+# Lección 03 — Matplotlib y Seaborn: de datos a evidencia
 
 ## Objetivos y prerrequisitos
 
-Diseñarás un entregable que responda a una decisión y no solo muestre indicadores.
+Construirás gráficos reproducibles de evolución, distribución, segmentos y funnel, y distinguirás un gráfico para descubrir de uno para recomendar. Requiere Pandas básico: un `DataFrame` es una tabla en memoria; una columna se selecciona con `datos["columna"]`.
 
-Un **dashboard** reúne métricas para seguimiento continuo; no sustituye un análisis cuando hay una decisión nueva. Cada panel debe indicar definición, actualización, propietario y acción esperada. Una presentación o ticket de Jira puede ser mejor para explicar una incidencia concreta: contexto, evidencia, recomendación, riesgos y siguiente paso.
+## Dos herramientas, un modelo mental
 
-Antes de entregar pregunta: ¿quién actúa?, ¿qué cambiaría si el dato varía?, ¿qué limitación debe conocer? Si no hay respuesta, probablemente sobra un gráfico o falta una pregunta.
+**Matplotlib** dibuja la figura y ofrece control fino. Una `Figure` es el lienzo completo; un `Axes` es un panel con sus ejes, título y marcas. `fig, ax = plt.subplots()` crea ambos. **Seaborn** se apoya en Matplotlib y facilita gráficos estadísticos y agrupaciones; no elimina la necesidad de conocer la métrica ni la escala.
 
-Completa el [diagnóstico de gráficos](../../../ejercicios/temario-07/comprension/elegir-grafico.md). El bloque siguiente añadirá la incertidumbre que una visualización por sí sola no puede resolver.
+```python
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(diario["fecha"], diario["conversion_pct"], marker="o")
+ax.set(title="Conversión diaria de Lumen", xlabel="Fecha", ylabel="Conversión (%)")
+ax.grid(axis="y", alpha=0.25)
+fig.tight_layout()
+fig.savefig("salidas/conversion_diaria.png", dpi=160, bbox_inches="tight")
+```
+
+`ax` recibe las instrucciones del panel; `fig.savefig` guarda un resultado que se puede revisar en un ticket, repositorio o presentación. La fecha, el cálculo de `conversion_pct` y el código deben permanecer disponibles para reproducir la imagen.
+
+## Caso Lumen: de tabla a cuatro preguntas
+
+El laboratorio usa 28 días de sesiones agregadas por canal. Primero calcula `conversion_pct = 100 * pago / visitas`, comprobando que `visitas` no es cero. La evolución diaria pregunta si hay cambio y cuándo; un histograma pregunta cómo se reparte la conversión de los segmentos; barras ordenadas comparan canales; el funnel pregunta dónde se pierde el volumen.
+
+```mermaid
+flowchart LR
+ A[Tabla diaria por canal] --> B[Validar visitas y pagos]
+ B --> C[Calcular conversión]
+ C --> D[Evolución: ¿cuándo?]
+ C --> E[Distribución: ¿cómo se reparte?]
+ C --> F[Segmentos: ¿para quién?]
+ C --> G[Funnel: ¿en qué paso?]
+ D --> H[Interpretación y decisión]
+ E --> H
+ F --> H
+ G --> H
+```
+
+La misma tabla admite varias vistas, pero cada vista responde una pregunta diferente. No conviertas las cuatro en una única imagen ilegible.
+
+## Evolución, anotación y comparación limpia
+
+Para una línea temporal, ordena por fecha, dibuja una serie por grupo solo si hay pocas y usa `ax.axvline(fecha_despliegue)` para marcar una intervención. `ax.annotate(...)` puede explicar el contexto; no debe tapar puntos ni presentar la anotación como prueba causal. Si móvil cae tras una versión y escritorio no, es una hipótesis prioritaria: aún hay que comprobar cambios de tráfico, tracking y estacionalidad.
+
+Para barras por canal usa `sort_values`, `ax.barh` y el valor sobre cada barra. El eje de una conversión puede comenzar cerca del rango analizado si se declara claramente; para volúmenes, empieza en cero. Evita barras apiladas cuando el lector necesite comparar una parte interna de cada barra: la base cambia y la comparación se vuelve difícil.
+
+## Distribución y segmentación
+
+Un histograma agrupa valores en intervalos o *bins*. Cambiar los intervalos puede cambiar la impresión: prueba una elección razonable y declara que resume. Con Seaborn, `sns.histplot(data=..., x="conversion_pct", hue="canal")` puede comparar grupos, pero demasiados colores convierten la figura en ruido. Una caja por canal ayuda a comparar mediana y dispersión; revisa observaciones antes de llamar “anómalo” a un valor.
+
+El siguiente fragmento deja explícito que cada punto del gráfico es una fila agregada día-canal, no una persona:
+
+```python
+import seaborn as sns
+
+sns.set_theme(style="whitegrid")
+fig, ax = plt.subplots(figsize=(8, 4))
+sns.boxplot(data=diario, x="canal", y="conversion_pct", ax=ax, color="#8ecae6")
+ax.set(title="Distribución diaria de conversión por canal", xlabel="Canal", ylabel="Conversión (%)")
+```
+
+## Exploración frente a explicación
+
+En exploración es sano generar gráficos provisionales, cambiar filtros y buscar errores. Conserva un registro de qué filtros y versiones usaste. El gráfico explicativo llega después y debe contestar una afirmación concreta: “La conversión móvil cae 1,8 pp desde la versión 4.2; el descenso se concentra en inicio → pago”. Incluye evidencia, recomendación y límite: “asociación temporal; validar eventos `payment_success`”.
+
+Un gráfico con veinte series y filtros puede ser útil al analista, no a dirección. La compresión profesional consiste en retirar lo que no cambia la decisión, no en retirar el periodo, la fuente o los valores incómodos.
+
+## Resumen y práctica
+
+Figure contiene paneles; Axes recibe el gráfico; Seaborn acelera patrones habituales. Exporta el resultado y conserva el código. Ejecuta [el laboratorio Lumen](../../../notebooks/practicas/07-visualizacion-lumen.py) y resuelve [el caso aplicado](../../../ejercicios/temario-07/aplicacion/diagnostico-lumen.md).
+
+# Lección 04 — Dashboards y entregables profesionales
+
+## Objetivos y prerrequisitos
+
+Diseñarás un dashboard como un producto de seguimiento y elegirás cuándo una nota, un ticket o una presentación es mejor. Requiere saber definir métrica y leer gráficos temporales y por segmentos.
+
+## Dashboard no significa “pared de KPI”
+
+Un **dashboard** es una interfaz para seguimiento recurrente: alguien vuelve a ella para detectar si una condición merece actuar. Un análisis responde una pregunta nueva con método y conclusión. Si Lumen necesita decidir hoy si revierte la versión 4.2, un ticket con evidencia y recomendación puede ser más útil que añadir veinte gráficos permanentes.
+
+```mermaid
+flowchart LR
+ A[Decisión recurrente] --> B[Dashboard]
+ A --> C[Incidencia o decisión nueva]
+ C --> D[Análisis / ticket / presentación]
+ B --> E[Señal y umbral]
+ E --> F[Persona responsable actúa]
+```
+
+La diferencia es operacional: un panel sin responsable, umbral o acción es una pantalla, no un sistema de decisión.
+
+## Contrato de un panel
+
+Cada panel de Lumen necesita un pequeño contrato. Escribe: pregunta de decisión; métrica y fórmula; población, grano y ventana; fuente y tiempo de actualización; propietario; umbral o comparación; acción cuando la señal se rompe; y limitaciones conocidas. Por ejemplo: “Conversión visita→pago diaria, sesiones autenticadas, UTC, `events_v3`, se refresca cada mañana; propietaria: Product Analytics; investigar si móvil cae más de 1 pp frente a media de 7 días y n ≥ 5.000”.
+
+La métrica debe tener enlace a su definición, no depender de un nombre ambiguo como “usuarios activos”. Los filtros se diseñan para decisiones reales: periodo, plataforma y país pueden ser útiles; permitir filtrar por veinte atributos sin explicar el denominador facilita *cherry-picking*.
+
+## Arquitectura recomendada para Lumen
+
+La primera pantalla debe poder leerse en móvil. Un titular con fecha de actualización y estado; una línea de conversión frente a referencia; un pequeño funnel con denominadores; un desglose de segmentos que explica el cambio; y una nota de calidad o incidencia. El detalle va en una segunda vista, no en miniaturas ilegibles.
+
+```mermaid
+flowchart TB
+ A[Estado: ¿hay una señal?] --> B[Conversión y referencia temporal]
+ B --> C[Funnel: localizar paso]
+ C --> D[Segmentos: localizar población]
+ D --> E[Nota: fuente, n, calidad y acción]
+```
+
+La lectura es deliberada: primero detectar, después localizar y finalmente actuar. Si el funnel indica caída solo en inicio→pago para móvil, la siguiente acción es revisar checkout y eventos, no comprar más tráfico.
+
+## Entrega ejecutiva: afirmación, evidencia, acción
+
+Para la incidencia de Lumen, una nota de una página puede seguir esta estructura: (1) **qué ocurre**: “la conversión móvil cae 1,8 pp desde 4.2”; (2) **evidencia**: línea diaria, n, segmento y paso de funnel; (3) **interpretación**: asociación temporal, no causalidad probada; (4) **recomendación**: validar `payment_success`, reproducir checkout y valorar reversión; (5) **riesgo y siguiente dato**: revisar mezcla de canales y usuarios afectados. Un ticket de Jira debe enlazar query, versión de datos y dueños; una presentación no debe ser la única copia de la metodología.
+
+## Fallos habituales
+
+- Actualización atrasada sin etiqueta: el lector toma decisiones con datos viejos.
+- Total sano que oculta una caída en un segmento grande: muestra la composición o una alerta de segmento.
+- Umbral fijo sin contexto: una variación normal de bajo volumen genera alarmas inútiles.
+- Mezclar métricas de distintas zonas horarias o definiciones: aparenta una caída que es un cambio de contrato.
+- Mostrar “verde” como éxito cuando la métrica puede ser una guardrail: más tiempo en pantalla quizá es peor.
+
+## Resumen y comprobación
+
+Un dashboard es un acuerdo de seguimiento, no una galería. Antes de publicar pregunta quién actuará, qué valor dispara revisión y qué limitación puede invertir la interpretación. Completa el [diagnóstico Lumen](../../../ejercicios/temario-07/aplicacion/diagnostico-lumen.md); el bloque 08 aporta herramientas formales para cuantificar incertidumbre.
 
 # Bloque 08 - Estadística para decisiones
 
