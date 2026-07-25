@@ -1974,76 +1974,212 @@ Plantea la [previsión de demanda](../../../ejercicios/temario-11/aplicacion/pre
 
 # Bloque 12 - Modelos predictivos para analistas
 
-## Objetivo
+## Propósito
 
-Usar modelos predictivos de manera responsable para estimar resultados, priorizar casos y apoyar decisiones. El objetivo no es competir por la métrica más alta: es construir una predicción útil, válida y explicable.
+Usar modelos predictivos para estimar resultados, priorizar casos y apoyar decisiones. El objetivo no es maximizar una métrica aislada: es construir una predicción útil, válida y explicable.
 
-## Predicción no es causalidad
+## Lecciones
 
-Un modelo puede anticipar qué usuarios tienen riesgo de abandono sin demostrar por qué abandonarán ni qué intervención lo evitará. Usa predicción para priorizar y medir intervenciones aparte cuando la pregunta sea causal.
-
-```mermaid
-flowchart TD
-    A[Pregunta de negocio] --> B[Variable objetivo]
-    B --> C[Datos históricos y variables]
-    C --> D[Separación temporal]
-    D --> E[Modelo base]
-    E --> F[Evaluación y sesgos]
-    F --> G[Decisión o experimento]
-```
-
-## Preparación y evaluación
-
-Define el objetivo antes de tocar variables. Separa entrenamiento, validación y prueba sin filtrar información del futuro. Una fuga de información hace que un modelo parezca excelente en evaluación y fracase al usarse.
-
-Para regresión usa errores como MAE o RMSE; para clasificación considera precisión, recall, F1, AUC y, sobre todo, el coste de cada error. Una métrica no reemplaza el contexto de negocio.
-
-## Modelos que debe conocer un analista
-
-Regresión lineal y logística son referencias interpretables. Árboles y ensembles capturan relaciones complejas, pero requieren más atención a validación e interpretación. Crea primero un baseline sencillo: superar una referencia honesta es más importante que usar el modelo más sofisticado.
-
-## Interpretación y ética
-
-Explica qué variables influyen, para qué población funciona y dónde puede fallar. Evita usar variables sensibles o proxies injustificados. Documenta el impacto de falsos positivos y falsos negativos antes de automatizar una acción.
+1. [Decidir si la predicción aporta valor](lecciones/01-caso-de-uso-y-objetivo.md)
+2. [Datos, variables y fuga de información](lecciones/02-preparacion-y-fuga.md)
+3. [Baselines y familias de modelos](lecciones/03-baselines-y-modelos.md)
+4. [Evaluación y coste de errores](lecciones/04-evaluacion-y-coste-de-error.md)
+5. [Interpretación, sesgo y uso responsable](lecciones/05-interpretacion-sesgo-y-uso-responsable.md)
 
 ## Práctica
 
 Resuelve [el caso de churn](../../ejercicios/temario-12/aplicacion/priorizar-churn.md).
 
-# Bloque 13 - Herramientas y reproducibilidad
+# Decidir si la predicción aporta valor
 
-## Objetivo
+## Objetivos y prerrequisitos
 
-Trabajar como analista dentro de un equipo: convertir peticiones en entregables verificables, documentar decisiones y hacer que un análisis pueda repetirse.
+Separarás una pregunta predictiva de una causal y definirás la decisión que una predicción puede mejorar.
 
-## De ticket a entrega
+Un modelo predictivo usa patrones históricos para estimar un resultado desconocido: probabilidad de abandono, demanda de mañana o importe esperado. Antes de modelar define quién recibirá la predicción, qué acción puede tomar y cuál es el coste de equivocarse.
 
-Jira, Linear u otras herramientas no son solo listas de tareas. Una petición analítica debe expresar contexto, decisión, métrica, alcance, criterio de aceptación y responsable. Si falta la decisión, el análisis corre el riesgo de ser interesante pero inútil.
+Predecir riesgo de churn no demuestra por qué alguien abandonará ni qué oferta lo retendrá. Sirve para priorizar contacto; la eficacia de la intervención exige experimento o evidencia causal aparte.
 
 ```mermaid
 flowchart LR
-    A[Ticket o petición] --> B[Pregunta y criterios]
-    B --> C[Datos y análisis]
-    C --> D[Revisión]
-    D --> E[Dashboard, informe o decisión]
-    E --> F[Seguimiento]
+ A[Decisión] --> B[Objetivo medible]
+ B --> C[Datos históricos]
+ C --> D[Baseline y modelo]
+ D --> E[Evaluación]
+ E --> F[Acción y seguimiento]
 ```
 
-## Git y proyectos analíticos
+## Resumen
 
-Git registra cambios en código, documentación y definiciones. Un análisis reproducible separa datos no versionados, código, dependencias, resultados derivados y documentación. Los notebooks sirven para explorar y explicar; la lógica repetida conviene moverla a funciones o scripts comprobables.
+Sin decisión y acción, una predicción puede ser interesante pero no valiosa. Sigue con [datos y fuga](02-preparacion-y-fuga.md).
 
-## Instrumentación y producto
+# Datos, variables y fuga de información
 
-Herramientas como Amplitude permiten revisar eventos, propiedades, funnels, cohorts y retención. Antes de crear un gráfico, valida el tracking plan: nombre del evento, momento de envío, identidad, propiedades y cobertura. Un dashboard no arregla eventos mal definidos.
+## Objetivos y prerrequisitos
 
-## BI y comunicación
+Definirás objetivo, momento de predicción y variables que estarían disponibles entonces.
 
-Power BI, Tableau, Looker y hojas de cálculo cambian de interfaz, pero comparten lo esencial: modelo de datos, métricas definidas, filtros claros, actualización conocida y audiencia. Entrega siempre contexto, recomendación, límites y enlace al detalle.
+La **variable objetivo** es lo que se quiere estimar; las variables de entrada describen información disponible antes del resultado. Una **fuga de información** ocurre cuando el modelo usa un dato que solo existe después: una cancelación registrada tras el momento en que querías predecir churn.
+
+Separa entrenamiento, validación y prueba respetando tiempo cuando corresponda. Ajustar transformaciones solo con entrenamiento evita que información del futuro mejore artificialmente la evaluación.
+
+## Error habitual
+
+Crear una variable con “número de tickets resueltos” para predecir una baja cuando esos tickets se abren precisamente al iniciar la baja. Un resultado excelente puede ser señal de fuga, no de inteligencia.
+
+## Resumen
+
+La pregunta correcta es: “¿qué sabíamos en el instante de decidir?”.
+
+# Baselines y familias de modelos
+
+## Objetivos y prerrequisitos
+
+Compararás un modelo con una referencia sencilla antes de usar complejidad adicional.
+
+Un **baseline** puede ser predecir la media, repetir el último valor o clasificar siempre la clase mayoritaria. Si un modelo no lo supera de forma útil, no merece operación ni explicación adicional.
+
+Regresión lineal estima una cantidad; regresión logística estima probabilidad de una clase; árboles capturan divisiones y relaciones no lineales. Ninguna familia es “mejor” sin contexto: más flexibilidad puede sobreajustar y reducir interpretabilidad.
+
+## Resumen
+
+Empieza simple y compara con una referencia honesta. Sigue con [evaluación y coste de error](04-evaluacion-y-coste-de-error.md).
+
+# Evaluación y coste de errores
+
+## Objetivos y prerrequisitos
+
+Elegirás métricas según el tipo de resultado y la consecuencia de cada fallo.
+
+Para cantidades, MAE expresa error medio absoluto y RMSE penaliza más fallos grandes. Para clasificación, precisión pregunta cuántos avisos fueron correctos; recall, cuántos casos reales detectaste. No hay métrica universal: en fraude, perder un caso puede costar mucho; en una campaña cara, contactar falsos positivos también.
+
+El umbral de probabilidad transforma un modelo en una acción. Ajustarlo cambia precisión, recall, capacidad operativa y equidad. Evalúa por segmentos relevantes y en datos futuros, no solo una métrica global.
+
+## Resumen
+
+La mejor métrica refleja la decisión y sus costes, no el número más alto de una tabla.
+
+# Interpretación, sesgo y uso responsable
+
+## Objetivos y prerrequisitos
+
+Comunicarás qué hace un modelo, dónde falla y qué controles necesita antes de automatizar acciones.
+
+Explicar importancia de variables no demuestra causalidad. Una variable puede predecir churn porque está asociada a un canal, no porque modificarla resuelva el abandono. Examina calidad, representatividad, privacidad y posibles proxies de atributos sensibles.
+
+Documenta población, fecha de entrenamiento, objetivo, variables, métricas, umbral, fallos esperados, responsable y monitorización. Si una predicción afecta a personas, conserva revisión humana y mecanismo para detectar daño desigual.
+
+Resuelve el [caso de priorización de churn](../../../ejercicios/temario-12/aplicacion/priorizar-churn.md). El siguiente bloque enseña a entregar este trabajo de forma colaborable y reproducible.
+
+# Bloque 13 - Herramientas y reproducibilidad
+
+## Propósito
+
+Trabajar como analista dentro de un equipo: convertir peticiones en entregables verificables, documentar decisiones y hacer que un análisis pueda repetirse.
+
+## Lecciones
+
+1. [De petición a ticket analítico](lecciones/01-ticket-analitico.md)
+2. [Proyecto reproducible y Git](lecciones/02-proyecto-reproducible-y-git.md)
+3. [Notebooks, scripts y revisiones](lecciones/03-notebooks-scripts-y-revision.md)
+4. [Instrumentación, tracking plan y Amplitude](lecciones/04-instrumentacion-y-amplitude.md)
+5. [BI, dashboards y definición de métricas](lecciones/05-bi-y-dashboards.md)
+6. [Entrega, seguimiento y comunicación](lecciones/06-entrega-y-seguimiento.md)
 
 ## Práctica
 
 Redacta [un ticket analítico completo](../../ejercicios/temario-13/aplicacion/ticket-analitico.md).
+
+# De petición a ticket analítico
+
+## Objetivos y prerrequisitos
+
+Convertirás una petición vaga en un acuerdo de trabajo verificable.
+
+Jira, Linear y herramientas similares registran trabajo y decisiones; no son solo listas. Un ticket analítico debe contener contexto, decisión, pregunta, definición de métrica, alcance, fuentes, criterios de aceptación, responsable y fecha de revisión.
+
+```mermaid
+flowchart LR
+ A[Petición] --> B[Pregunta y criterios]
+ B --> C[Datos y análisis]
+ C --> D[Revisión]
+ D --> E[Entrega y decisión]
+ E --> F[Seguimiento]
+```
+
+Si alguien pide “analiza el onboarding”, pregunta qué decisión se tomará y qué resultado cambiaría esa decisión. Así evitas producir un dashboard interesante pero inútil.
+
+## Práctica
+
+Redacta el [ticket analítico](../../../ejercicios/temario-13/aplicacion/ticket-analitico.md) al finalizar el bloque.
+
+# Proyecto reproducible y Git
+
+## Objetivos y prerrequisitos
+
+Organizarás un análisis para que otra persona pueda repetir y revisar sus pasos.
+
+Un proyecto separa código, documentación, datos no versionados, resultados derivados y dependencias. Git registra cambios en archivos de texto como consultas, scripts y definiciones; un commit debe explicar una unidad de cambio comprensible.
+
+Reproducibilidad significa poder responder: qué fuente se usó, en qué fecha, qué versión de código, qué parámetros y qué transformaciones generaron el resultado. No subas datos sensibles al repositorio para “hacerlo reproducible”: documenta un acceso seguro y datos sintéticos de ejemplo.
+
+## Resumen
+
+Git conserva historia; la documentación conserva significado. Necesitas ambos.
+
+# Notebooks, scripts y revisiones
+
+## Objetivos y prerrequisitos
+
+Distinguirás exploración, lógica reutilizable y entrega revisable.
+
+Un notebook mezcla explicación, código y salida: es excelente para aprender, explorar y comunicar. Para lógica repetida, mueve funciones a scripts o módulos probables, con entradas y salidas claras. Ejecuta el notebook de principio a fin antes de compartirlo: celdas ejecutadas fuera de orden producen resultados que nadie puede repetir.
+
+Una revisión de pares busca más que estilo: definiciones, grano, filtros, nulos, uniones, límites y coherencia entre conclusión y evidencia. Deja comentarios que indiquen riesgo y una acción verificable.
+
+## Resumen
+
+La herramienta no impone calidad; el flujo de revisión la hace posible.
+
+# Instrumentación, tracking plan y Amplitude
+
+## Objetivos y prerrequisitos
+
+Entenderás cómo se convierte una acción de producto en un evento analizable y qué debe documentarse antes de medir funnels o retención.
+
+Un evento es un registro de una acción: `reserva_creada`, con momento, usuario y propiedades como canal o importe. Un **tracking plan** define nombre, cuándo se envía, quién lo emite, propiedades, identidad, validaciones y propietario. Amplitude puede explorar eventos, funnels, cohortes y retención, pero no corrige un evento mal definido.
+
+Verifica cobertura y cambios de versión antes de interpretar una caída. Si una app deja de enviar una propiedad, un dashboard puede mostrar un comportamiento inexistente.
+
+## Resumen
+
+Medir producto es diseñar un sistema de evidencia, no pulsar “crear gráfico”.
+
+# BI, dashboards y definición de métricas
+
+## Objetivos y prerrequisitos
+
+Aplicarás principios comunes a Power BI, Tableau, Looker u hojas de cálculo.
+
+Las interfaces cambian, pero un dashboard fiable necesita modelo de datos, métrica con contrato, filtros visibles, actualización conocida, propietario y audiencia. No combines tablas con grano distinto solo para que un panel “tenga más información”.
+
+Cada visual debe responder una pregunta y ofrecer acceso al detalle necesario para auditoría. Documenta zona horaria, exclusiones, último refresco y alertas. Un dashboard es un producto: requiere mantenimiento cuando cambian fuentes o definiciones.
+
+## Resumen
+
+BI comunica decisiones repetidas; no reemplaza investigación ni documentación.
+
+# Entrega, seguimiento y comunicación
+
+## Objetivos y prerrequisitos
+
+Cerrarás un análisis dejando claro qué se recomienda, con qué evidencia y qué ocurrirá después.
+
+Una entrega mínima contiene decisión, hallazgo, evidencia, recomendación, límites, enlace a fuentes y siguiente medición. Adapta forma: nota ejecutiva para dirección, ticket con criterios para ingeniería, dashboard para seguimiento. No cambies el nivel de certeza por cambiar el formato.
+
+El seguimiento convierte análisis en aprendizaje: registra la acción acordada, dueño, fecha y métrica que evaluará resultado. Si el efecto no aparece, vuelve a hipótesis, instrumentación y supuestos en lugar de defender la conclusión inicial.
+
+Completa el [ticket analítico](../../../ejercicios/temario-13/aplicacion/ticket-analitico.md). Después podrás abordar técnicas avanzadas sin abandonar la trazabilidad profesional.
 
 # Bloque 14 - Nivel avanzado: causalidad, escala y criterio
 
