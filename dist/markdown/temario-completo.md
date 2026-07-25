@@ -2281,31 +2281,16 @@ Evalúa el [supuesto causal](../../../ejercicios/temario-14/aplicacion/supuesto-
 
 # Bloque 15 - Portfolio y preparación profesional
 
-## Objetivo
+## Propósito
 
 Convertir competencias en evidencia visible: proyectos que muestran criterio, técnica, comunicación y honestidad sobre los límites.
 
-## Qué demuestra un buen proyecto
+## Lecciones
 
-Un portfolio no es una colección de gráficos. Cada proyecto debe partir de una pregunta relevante, explicar los datos, mostrar transformaciones, justificar decisiones, comunicar hallazgos y reconocer incertidumbre. La persona que lo lea debe poder reproducir el recorrido o entender dónde no puede hacerlo.
-
-```mermaid
-flowchart TD
-    A[Problema real] --> B[Pregunta y métricas]
-    B --> C[Datos y calidad]
-    C --> D[Análisis o modelo]
-    D --> E[Hallazgos y límites]
-    E --> F[Recomendación]
-    F --> G[README y presentación]
-```
-
-## Formato recomendado
-
-Un proyecto contiene un README ejecutivo, un diccionario de datos, código o notebook reproducible, visualizaciones explicativas y una presentación breve. Es mejor tener tres proyectos claros y acabados que diez exploraciones incompletas.
-
-## Entrevistas
-
-Practica explicar una consulta SQL, detectar un error de calidad, definir una métrica y cuestionar una conclusión estadística. En casos de negocio, di qué pregunta harías primero, qué datos pedirías y cómo validarías tu recomendación.
+1. [Seleccionar y delimitar casos](lecciones/01-seleccionar-y-delimitar-casos.md)
+2. [Estructurar un proyecto defendible](lecciones/02-estructurar-proyecto-defendible.md)
+3. [Narrativa, revisión y publicación](lecciones/03-narrativa-revision-y-publicacion.md)
+4. [Entrevistas, CV y capstone](lecciones/04-entrevistas-cv-y-capstone.md)
 
 ## Capstone
 
@@ -2314,3 +2299,83 @@ El [proyecto final](../../proyectos/capstone/README.md) integra el curso: datos 
 ## Cierre
 
 Terminar el curso no significa saberlo todo. Significa tener un método fiable para aprender una herramienta nueva, hacer preguntas mejores y justificar decisiones con evidencia.
+
+# Seleccionar y delimitar casos
+
+## Objetivos y prerrequisitos
+
+Elegirás proyectos que demuestren competencias reales y limitarás su alcance para poder terminarlos con rigor.
+
+Un portfolio no es una colección de gráficos ni una lista de tecnologías. Un caso valioso empieza por una decisión: priorizar una mejora de producto, prever demanda, entender abandono o detectar una ineficiencia. Debe permitir mostrar pregunta, datos, calidad, método, evidencia, límites y recomendación.
+
+Elige tres casos variados en vez de diez exploraciones a medias: uno de datos tabulares y limpieza; uno de métricas/producto o SQL; y uno que incorpore incertidumbre, previsión o modelo cuando sea apropiado. Usa datos con licencia y sin información personal innecesaria.
+
+## Límite
+
+No inventes impacto empresarial ni presentes datos simulados como si fueran clientes reales. Un proyecto didáctico puede ser excelente si declara qué es simulado, qué decisión ilustraría y qué evidencia faltaría en producción.
+
+## Resumen
+
+La calidad del problema y la honestidad del alcance pesan más que la complejidad aparente. Continúa con [estructura defendible](02-estructurar-proyecto-defendible.md).
+
+# Estructurar un proyecto defendible
+
+## Objetivos y prerrequisitos
+
+Organizarás los artefactos que permiten a otra persona entender, ejecutar y cuestionar un análisis.
+
+Un proyecto debe incluir README ejecutivo, pregunta y decisión, diccionario de datos, procedencia/licencia, código o notebook reproducible, visualizaciones, límites y próximos pasos. El README no repite cada detalle técnico: permite entender en dos minutos qué se halló y dónde está la evidencia.
+
+Este flujo responde a “¿qué debe poder seguir una persona que revisa un caso?”
+
+```mermaid
+flowchart LR
+ A[Problema y decisión] --> B[Datos y calidad]
+ B --> C[Métodos reproducibles]
+ C --> D[Hallazgos]
+ D --> E[Límites]
+ E --> F[Recomendación]
+ F --> G[README y presentación]
+```
+
+El diagrama no obliga a una secuencia rígida: al hallar un error de datos puedes volver a la pregunta. Sí obliga a no saltar de datos a recomendación sin mostrar el razonamiento.
+
+## Resumen
+
+Un caso defendible conserva tanto el resultado como el camino. Continúa con [narrativa y revisión](03-narrativa-revision-y-publicacion.md).
+
+# Narrativa, revisión y publicación
+
+## Objetivos y prerrequisitos
+
+Comunicarás un hallazgo a una audiencia concreta y revisarás el proyecto antes de hacerlo público.
+
+Una narrativa analítica ordena contexto, pregunta, evidencia, interpretación, recomendación y límite. No empieza por la herramienta: “usé Python” no es un hallazgo. Un título útil dice qué ocurrió y para quién; una visualización enseña la comparación que lo respalda.
+
+Antes de publicar, revisa enlaces, rutas, instrucciones de ejecución, dependencias, datos sensibles, licencias, definiciones de métricas y conclusiones excesivas. Pide a otra persona que intente seguir el README: si no sabe cómo reproducir o entender una decisión, el proyecto todavía no está listo.
+
+## Error habitual
+
+Eliminar los pasos incómodos para que el portfolio parezca perfecto. Documentar una limitación o un dato descartado con razón aumenta credibilidad profesional.
+
+## Resumen
+
+Publicar es una entrega para lectores reales, no el final de una carpeta local.
+
+# Entrevistas, CV y capstone
+
+## Objetivos y prerrequisitos
+
+Prepararás una explicación oral de tu método y cerrarás el curso con un proyecto integrador.
+
+En entrevista, empieza por aclarar decisión, población, métrica y datos disponibles. Al explicar un caso, distingue hecho observado, interpretación, riesgo y siguiente comprobación. Practica responder: “¿qué grano tiene esta tabla?”, “¿cómo validarías este JOIN?”, “¿qué harías ante un dato ausente?” o “¿por qué no demuestra causalidad este gráfico?”.
+
+El CV y GitHub deben enlazar proyectos que puedas defender línea a línea: problema, contribución, herramientas, resultado y límite. No declares competencias que no puedas aplicar o explicar.
+
+## Capstone
+
+El [proyecto final](../../../proyectos/capstone/README.md) integra el curso: datos sin limpiar, análisis, métricas, visualización, recomendación y una entrega para público no técnico. Empieza leyendo su [rúbrica](../../../evaluaciones/rubricas/capstone.md); úsala como lista de control, no solo como nota final.
+
+## Cierre
+
+El objetivo no es saberlo todo: es tener un método fiable para aprender una herramienta nueva, hacer preguntas mejores y justificar decisiones con evidencia.

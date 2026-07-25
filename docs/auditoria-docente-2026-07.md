@@ -15,17 +15,18 @@ Cada bloque se evalúa contra `AGENTS.md`: gradualidad para principiante, leccio
 | 10 | Resumen de 2 páginas | Reconstruido: 9 lecciones, 16 páginas PDF. |
 | 11-15 | Resúmenes de 2 páginas | Requieren desarrollo en lecciones. |
 
-## Conclusión honesta
+## Reconstrucción completada
 
-La versión previa era un índice ampliado, no un curso de nivel universitario o profesional. Solo los bloques 01 y 10 cumplen de momento el nuevo estándar. Los demás no deben presentarse como desarrollados hasta completar las lecciones previstas en `docs/programa-docente.md`.
+La versión previa era un índice ampliado, no un curso de nivel universitario o profesional. Se reconstruyeron los 14 bloques pendientes en la rama `agent/reconstruccion-docente-profunda`: cada README pasó a ser un índice y se añadieron lecciones desarrolladas, práctica enlazada y diagramas integrados cuando ayudan a entender una relación.
 
-## Trabajo en curso
+La comprobación de cobertura arroja **80 lecciones en 16 bloques**, exactamente el mapa declarado en `docs/programa-docente.md`. Los PDFs se regeneraron desde README y lecciones, y se inspeccionaron visualmente muestras de cada lote de reconstrucción.
 
-La reconstrucción de los 14 bloques pendientes ha comenzado en la rama `agent/reconstruccion-docente-profunda`. Cada bloque pasará de un README-resumen a un índice y un conjunto de lecciones desarrolladas. El estado público del README y del roadmap se ha corregido para no confundir una estructura disponible con contenido ya impartible.
+| Bloques | Lecciones desarrolladas |
+| --- | ---: |
+| 00-04 | 20 |
+| 05-09 | 27 |
+| 10 | 9 |
+| 11-15 | 24 |
+| **Total** | **80** |
 
-## Orden de reconstrucción
-
-1. 00, 02 y 03: vocabulario, Python y matemáticas aplicadas.
-2. 04 a 08: núcleo técnico de análisis.
-3. 09 a 11: datos, métricas y tiempo.
-4. 12 a 15: práctica profesional, especialización y portfolio.
+La afirmación de curso desarrollado se refiere a esta cobertura documental y a la validación de las descargas. La mejora futura recomendada sigue siendo añadir más notebooks, datasets y evaluación interactiva; no son necesarios para que la teoría y su recorrido ya estén completos.

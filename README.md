@@ -38,13 +38,13 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 
 | Bloque | Tema | Estado |
 | --- | --- | --- |
-| 00 | Orientación y pensamiento analítico | En reconstrucción docente |
+| 00 | Orientación y pensamiento analítico | Desarrollado: 3 lecciones |
 | 01 | Fundamentos de datos | Desarrollado: 4 lecciones |
-| 02 | Python desde cero | En reconstrucción docente |
-| 03 | Matemáticas aplicadas (teoría general opcional) | En reconstrucción docente |
-| 04-09 | NumPy, Pandas, EDA, visualización, estadística y datos | En reconstrucción docente |
+| 02 | Python desde cero | Desarrollado: 6 lecciones |
+| 03 | Matemáticas aplicadas (teoría general opcional) | Desarrollado: 4 lecciones |
+| 04-09 | NumPy, Pandas, EDA, visualización, estadística y datos | Desarrollados: 30 lecciones |
 | 10 | Métricas y producto | Desarrollado: 9 lecciones |
-| 11-15 | Especialización y portfolio | En reconstrucción docente |
+| 11-15 | Especialización y portfolio | Desarrollados: 24 lecciones |
 
 ## Cómo se organiza el material
 
@@ -72,9 +72,9 @@ La teoría, los ejercicios de razonamiento y las autoevaluaciones se pueden cons
 
 Python, Pandas, SQL, MongoDB, DynamoDB, GitHub, Jira, Amplitude y herramientas BI. El objetivo no es memorizar una interfaz: primero se aprende el concepto de análisis y después cómo aplicarlo en cada herramienta.
 
-## Estado honesto del curso
+## Estado del curso
 
-La estructura completa y las descargas PDF existen, pero no todos los bloques tienen aún la profundidad docente requerida. Los bloques 01 y 10 ya están desarrollados en lecciones completas; el resto se está reconstruyendo antes de presentarlo como un recorrido profesional completo. El criterio y el avance se documentan en el [programa docente](docs/programa-docente.md) y la [auditoría docente](docs/auditoria-docente-2026-07.md).
+Los 16 bloques están desarrollados como **80 lecciones** y se pueden leer en Markdown o descargar por bloque y como temario consolidado en PDF. El criterio docente, la auditoría de reconstrucción y el mapa de cobertura están documentados en el [programa docente](docs/programa-docente.md) y la [auditoría docente](docs/auditoria-docente-2026-07.md).
 
 ## Licencia
 
