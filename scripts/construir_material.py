@@ -22,20 +22,80 @@ DIST_PDF = ROOT / "dist" / "pdf"
 
 
 class MermaidFlow(Flowable):
-    """Dibuja en el PDF los flujos Mermaid sencillos usados por el curso."""
+    """Dibuja en PDF una parte segura y semántica de los flowcharts Mermaid."""
 
-    node_pattern = re.compile(r"[A-Za-z0-9_]+\[([^]]+)\]")
+    node_pattern = re.compile(r"(?P<id>[A-Za-z0-9_]+)\[(?P<label>[^]]+)\]")
+    edge_pattern = re.compile(
+        r"(?P<source>[A-Za-z0-9_]+)(?:\[[^]]+\])?\s*-->\s*(?:\|(?P<label>[^|]+)\|\s*)?(?P<target>[A-Za-z0-9_]+)"
+    )
 
     def __init__(self, source: str):
         super().__init__()
-        self.nodes: list[str] = []
-        for label in self.node_pattern.findall(source):
-            label = re.sub(r"<br\s*/?>", " - ", label, flags=re.IGNORECASE)
-            if label not in self.nodes:
-                self.nodes.append(label)
-        if not self.nodes:
-            self.nodes = ["Diagrama no compatible"]
-        self.height = max(2.4 * cm, len(self.nodes) * 1.25 * cm)
+        self.labels: dict[str, str] = {}
+        self.order: list[str] = []
+        for match in self.node_pattern.finditer(source):
+            node_id = match.group("id")
+            label = re.sub(r"<br\s*/?>", " - ", match.group("label"), flags=re.IGNORECASE)
+            self.labels[node_id] = label
+            if node_id not in self.order:
+                self.order.append(node_id)
+        self.edges = []
+        for match in self.edge_pattern.finditer(source):
+            source_id, target_id = match.group("source"), match.group("target")
+            if source_id not in self.labels:
+                self.labels[source_id] = source_id
+                self.order.append(source_id)
+            if target_id not in self.labels:
+                self.labels[target_id] = target_id
+                self.order.append(target_id)
+            self.edges.append((source_id, target_id, match.group("label") or ""))
+        if not self.order:
+            self.labels = {"fallback": "Diagrama no compatible"}
+            self.order = ["fallback"]
+        self.ranks = self._ranks()
+        self.height = max(2.4 * cm, (len(self.ranks) * 1.65 + 0.5) * cm)
+
+    def _ranks(self):
+        """Agrupa nodos por nivel sin inventar una cadena para las ramas.
+
+        Kahn resuelve los grafos acíclicos (el caso habitual). Si hay un ciclo,
+        conserva sus nodos en un nivel estable y permite que la arista de retorno
+        se dibuje hacia arriba: es preferible a iterar sin fin o falsificarlo.
+        """
+        children = {node: [] for node in self.order}
+        pending = {node: 0 for node in self.order}
+        for source, target, _ in self.edges:
+            children[source].append(target)
+            pending[target] += 1
+
+        rank = {node: 0 for node in self.order}
+        queue = [node for node in self.order if pending[node] == 0]
+        processed = set()
+        while queue:
+            node = queue.pop(0)
+            processed.add(node)
+            for child in children[node]:
+                rank[child] = max(rank[child], rank[node] + 1)
+                pending[child] -= 1
+                if pending[child] == 0:
+                    queue.append(child)
+
+        # Los ciclos no tienen una jerarquía dirigida válida. Se sitúan de
+        # forma determinista tras sus predecesores ya resueltos, sin introducir
+        # niveles vacíos ni forzar una relación inexistente entre hermanos.
+        for node in self.order:
+            if node not in processed:
+                parent_ranks = [
+                    rank[source]
+                    for source, target, _ in self.edges
+                    if target == node and source in processed
+                ]
+                rank[node] = max(parent_ranks, default=0) + (1 if parent_ranks else 0)
+
+        levels = {}
+        for node in self.order:
+            levels.setdefault(rank[node], []).append(node)
+        return [levels[level] for level in sorted(levels)]
 
     def wrap(self, available_width, available_height):
         self.width = available_width
@@ -43,24 +103,40 @@ class MermaidFlow(Flowable):
 
     def draw(self):
         canvas = self.canv
-        box_width = min(self.width * 0.76, 12 * cm)
-        box_height = 0.72 * cm
-        x = (self.width - box_width) / 2
-        y = self.height - box_height
-        for index, label in enumerate(self.nodes):
+        box_height = 0.68 * cm
+        positions = {}
+        for level, nodes in enumerate(self.ranks):
+            count = len(nodes)
+            if not count:
+                continue
+            box_width = min(5.0 * cm, max(2.5 * cm, (self.width - (count + 1) * 0.35 * cm) / count))
+            y = self.height - (level + 1) * 1.5 * cm
+            for index, node in enumerate(nodes):
+                x = (self.width - (count * box_width + (count - 1) * 0.35 * cm)) / 2 + index * (box_width + 0.35 * cm)
+                positions[node] = (x, y, box_width, box_height)
+        for source, target, edge_label in self.edges:
+            if source not in positions or target not in positions:
+                continue
+            sx, sy, sw, _ = positions[source]
+            tx, ty, tw, th = positions[target]
+            start_x, start_y = sx + sw / 2, sy
+            end_x, end_y = tx + tw / 2, ty + th
+            canvas.setStrokeColor(HexColor("#667085"))
+            canvas.line(start_x, start_y, end_x, end_y)
+            canvas.line(end_x, end_y, end_x - 3, end_y + 5)
+            canvas.line(end_x, end_y, end_x + 3, end_y + 5)
+            if edge_label:
+                canvas.setFillColor(HexColor("#475467"))
+                canvas.setFont("Helvetica", 6.5)
+                canvas.drawCentredString((start_x + end_x) / 2, (start_y + end_y) / 2, edge_label[:28])
+        for node in self.order:
+            x, y, box_width, box_height = positions[node]
             canvas.setFillColor(HexColor("#EAF2F8"))
             canvas.setStrokeColor(HexColor("#1D5D84"))
             canvas.roundRect(x, y, box_width, box_height, 4, fill=1, stroke=1)
             canvas.setFillColor(HexColor("#12355B"))
             canvas.setFont("Helvetica", 8.5)
-            canvas.drawCentredString(self.width / 2, y + 0.25 * cm, label[:72])
-            if index < len(self.nodes) - 1:
-                center_x = self.width / 2
-                canvas.setStrokeColor(HexColor("#667085"))
-                canvas.line(center_x, y, center_x, y - 0.35 * cm)
-                canvas.line(center_x, y - 0.35 * cm, center_x - 3, y - 0.25 * cm)
-                canvas.line(center_x, y - 0.35 * cm, center_x + 3, y - 0.25 * cm)
-            y -= 1.25 * cm
+            canvas.drawCentredString(x + box_width / 2, y + 0.24 * cm, self.labels[node][:56])
 
 
 def chapter_paths() -> list[Path]:
