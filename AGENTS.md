@@ -2,6 +2,12 @@
 
 Estas reglas se aplican solo a este repositorio. El objetivo no es producir resúmenes: es construir un curso de análisis de datos aplicado a IT, adecuado para una persona principiante y suficientemente riguroso para servir como base de formación universitaria o de máster profesional.
 
+## Protocolo obligatorio de cátedra analítica
+
+**Antes de crear, modificar, revisar o publicar cualquier bloque, lección, ejercicio, solución, notebook, diagrama o PDF**, leer y aplicar el [Protocolo de cátedra analítica](docs/protocolo-catedra-analitica.md). Esta norma es exclusiva de `CursoAnalista`.
+
+El protocolo exige una revisión docente y profesional previa, ejemplos prácticos integrados, contraste de actualidad cuando corresponda, práctica evaluable y validación semántica de diagramas. Para series temporales añade un estándar técnico específico: no se puede tratar como completo un bloque que omita los elementos aplicables de dicho estándar.
+
 ## Alumno de referencia: Leo
 
 Asumir que Leo puede tener razonamiento matemático sólido, pero **no conoce todavía el vocabulario técnico de datos ni programación**. No se puede dar por sabido qué son:
