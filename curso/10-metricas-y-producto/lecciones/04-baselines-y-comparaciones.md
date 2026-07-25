@@ -8,6 +8,12 @@ Evitar conclusiones engañosas al comparar una métrica con un periodo, una pobl
 
 Decir “la conversión es 4 %” no permite decidir. ¿Es 4 % frente a un objetivo de 3 % o de 8 %? ¿Sube respecto a la semana anterior? ¿La semana anterior tenía una campaña, una caída de tracking o un festivo? Toda métrica necesita una referencia: baseline histórico, objetivo acordado, benchmark externo comparable o grupo de control.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Valor observado](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--04-baselines-y-comparaciones-01-633f7b94.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Valor observado] --> B{Referencia válida}
@@ -20,6 +26,7 @@ flowchart TD
     E --> G
     F --> G
 ```
+</details>
 
 Un benchmark externo puede orientar, pero rara vez es una meta automática: modelo de negocio, mercado, madurez, definición y población pueden diferir. Es más riguroso usarlo para plantear preguntas que para declarar éxito o fracaso.
 

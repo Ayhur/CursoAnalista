@@ -12,6 +12,12 @@ Un catálogo es el lugar donde se encuentran nombre, propósito, definición, f�
 
 Antes de instrumentar, documenta qué eventos representan interacciones importantes, qué propiedades permiten segmentar y cómo se identifica a usuario, cuenta o dispositivo. Define también eventos prohibidos: no envíes PII innecesaria a herramientas de analítica. El plan debe incluir validación de cobertura y un proceso de cambio cuando el producto evolucione.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Decisión y métrica](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--09-gobierno-y-amplitude-01-84187c69.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     A[Decisión y métrica] --> B[Tracking plan]
@@ -21,6 +27,7 @@ flowchart LR
     E --> F[Dashboard y acción]
     F --> G[Catálogo y versión]
 ```
+</details>
 
 ## Amplitude como ejemplo, no como sustituto del criterio
 
@@ -34,6 +41,12 @@ Un tracking plan útil se parece a un contrato de API: cada cambio tiene autor, 
 
 La instrumentación no termina en el frontend. Un cliente puede emitir una intención; el servidor debe confirmar operaciones que cambian estado. Ambos pueden enviarse, pero con fuentes explícitas y un `event_id` o `request_id` que permita detectar reintentos. Registra `occurred_at` en UTC y `received_at` por separado: si una aplicación offline envía tarde, la actividad ocurrió antes aunque llegue hoy. Deduplica por `event_id`, no por «dos filas parecidas».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Propuesta de evento o métrica](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--09-gobierno-y-amplitude-02-345074de.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Propuesta de evento o métrica] --> B[Revisión Producto, Datos e Ingeniería]
@@ -44,6 +57,7 @@ flowchart TD
     F --> G[Monitorizar SLA y consumidores]
     G --> H[Deprecar con sustituto y fecha]
 ```
+</details>
 
 El diagrama responde a quién impide que una modificación local rompa una serie histórica: ninguna persona aprueba en solitario. Producto valida el significado; Ingeniería, la emisión; Datos, el modelo y las pruebas; Privacidad, las propiedades sensibles. Por ejemplo, un SLA puede exigir que el propietario investigue cobertura inferior al 99,5 % en un día laborable y que una definición nueva se anuncie antes de entrar en el dashboard ejecutivo.
 

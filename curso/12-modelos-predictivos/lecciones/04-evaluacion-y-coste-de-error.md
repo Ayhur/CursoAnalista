@@ -25,6 +25,12 @@ Si hay solo 20 plazas, una precision alta en las primeras 20 puede importar más
 
 ROC-AUC resume cómo el score ordena, en promedio, positivos por encima de negativos para muchos umbrales. Puede parecer alta cuando churn es raro. PR-AUC resume el intercambio entre precision y recall y suele ser más informativa en clases desbalanceadas, como un 5 % de churn. Ninguna AUC responde cuántas cuentas debe atender el equipo: para eso inspecciona el umbral o el top-k real.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Scores de churn](../../../recursos/diagramas-moviles/curso--12-modelos-predictivos--lecciones--04-evaluacion-y-coste-de-error-01-836c40ee.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Scores de churn] --> B[Ordenar cuentas]
@@ -34,6 +40,7 @@ flowchart LR
   E --> F[Precision, recall y coste]
   F --> G[Revisar umbral y política]
 ```
+</details>
 
 El diagrama muestra que la capacidad viene antes de celebrar una métrica global: un modelo puede ordenar razonablemente y aun así no ser útil en las primeras 20 cuentas.
 

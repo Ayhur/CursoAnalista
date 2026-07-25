@@ -64,12 +64,19 @@ En una conciliación financiera, sustituir un pago ausente por cero puede escond
 
 Un **funnel** mide cuántas personas o entidades pasan por pasos ordenados. No es «contar eventos de cada nombre»: una persona puede disparar `checkout_started` repetidamente. El contrato de Lumen es: cliente que hizo `view_product` y, después, `checkout_started` y `purchase` durante la misma semana UTC. Se cuenta una vez por cliente y semana.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: view_product: cliente-semana](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--04-sql-analitico-y-mantenible-01-18a493f0.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[view_product: cliente-semana] --> B[checkout: después de ver]
  B --> C[purchase: después de checkout]
  A -.validar identidad, orden y ventana.-> C
 ```
+</details>
 
 Una implementación pedagógica usa la primera hora de cada paso y condiciones de orden:
 

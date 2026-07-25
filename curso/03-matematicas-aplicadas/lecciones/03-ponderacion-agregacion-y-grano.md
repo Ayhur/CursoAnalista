@@ -15,6 +15,12 @@ Nexo compara conversión por ciudad:
 
 La media simple `(15 % + 8 %) / 2 = 11,5 %` trata ambas ciudades como si tuvieran igual exposición. La conversión global correcta es `815 / 10.100 = 8,07 %`. Una **media ponderada** multiplica cada valor por un **peso** adecuado y divide por la suma de pesos: `(0,15×100 + 0,08×10.000) / 10.100`.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Filas de pedidos](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--03-ponderacion-agregacion-y-grano-01-b1a3fef3.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Filas de pedidos] --> B[Grano: un pedido]
@@ -23,6 +29,7 @@ flowchart LR
   D --> E[Dividir sumas compatibles]
   E --> F[Tasa agregada defendible]
 ```
+</details>
 
 La regla práctica es sumar primero numeradores y denominadores compatibles y dividir después. Promediar porcentajes casi nunca sustituye esa operación.
 

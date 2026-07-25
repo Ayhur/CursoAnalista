@@ -8,6 +8,12 @@ Construir un funnel que represente un recorrido real del usuario y diagnosticar 
 
 Un funnel compara cuántas entidades pasan por una secuencia de pasos definidos. La entidad puede ser usuario, cuenta, pedido o sesión; escogerla cambia la respuesta. Un funnel de onboarding por usuario y un funnel de checkout por pedido no son intercambiables.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Visita elegible](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--05-funnels-01-a537cdbc.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     A[Visita elegible] --> B[Registro completado]
@@ -15,6 +21,7 @@ flowchart LR
     C --> D[Primer valor]
     D --> E[Pago o retención]
 ```
+</details>
 
 Cada flecha es una hipótesis sobre un recorrido. Define orden, ventana máxima, repetición de eventos, exclusiones y tratamiento de usuarios que entran a mitad del proceso. Si una persona completa pasos en varios dispositivos, necesitas una regla de identidad antes de calcular.
 

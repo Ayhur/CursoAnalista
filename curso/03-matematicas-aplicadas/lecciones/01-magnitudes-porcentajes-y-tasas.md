@@ -17,6 +17,12 @@ El cambio absoluto de pedidos es `1.320 - 1.200 = +120 pedidos`. El cambio relat
 
 Este esquema responde: "¿qué hay que fijar antes de comparar?"
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta de negocio](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--01-magnitudes-porcentajes-y-tasas-01-6d41b6cc.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Pregunta de negocio] --> B[Qué se mide]
@@ -25,6 +31,7 @@ flowchart LR
   D --> E[Cálculo]
   E --> F[Interpretación y decisión]
 ```
+</details>
 
 Sin población y periodo, el mismo número puede tener significado opuesto. Un incremento de 120 pedidos diarios sí exige revisar capacidad; 120 pedidos más en todo un año quizá no.
 

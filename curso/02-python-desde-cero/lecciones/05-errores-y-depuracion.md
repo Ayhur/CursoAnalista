@@ -19,6 +19,12 @@ Un **traceback** es la ruta de llamadas que Python muestra cuando no puede conti
 
 Un programa puede no lanzar excepciones y aun así estar equivocado: usar `>` en lugar de `>=` en el umbral de Lumen cambia la clasificación de 100 EUR sin que Python proteste. Por eso se combinan traceback y pruebas de casos límite.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Salida inesperada o excepción](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--05-errores-y-depuracion-01-4ad25749.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Salida inesperada o excepción] --> B[Reducir a ejemplo mínimo]
@@ -27,6 +33,7 @@ flowchart TD
   D --> E[Prueba que puede refutarla]
   E --> F[Corregir una causa y volver a ejecutar]
 ```
+</details>
 
 La corrección se hace después de entender la causa; cambiar cinco líneas a la vez impide saber cuál resolvió el problema.
 

@@ -10,6 +10,12 @@ Un equipo recibe: «la activación ha caído; miradlo». Es una **petición**, n
 
 Un *ticket* es una ficha compartida de trabajo. Jira es una aplicación popular para guardar estas fichas; la idea es independiente de la marca. Su función no es vigilar personas: conserva el contexto, las decisiones y los criterios de aceptación cuando la conversación ya no está en Slack o en la memoria de alguien.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Petición: cayó activación](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--01-ticket-analitico-01-a516bfa4.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
  A[Petición: cayó activación] --> B[¿Qué decisión depende del resultado?]
@@ -18,6 +24,7 @@ flowchart TD
  C --> E[Definir fuentes, periodo y riesgos]
  E --> F[Criterios de aceptación y responsable]
 ```
+</details>
 
 La pregunta del diagrama obliga a fijar el uso antes de medir. «¿Cayó?» no basta; en Nébula se decide entre revertir la versión 4.2, corregir el flujo o mantenerla.
 

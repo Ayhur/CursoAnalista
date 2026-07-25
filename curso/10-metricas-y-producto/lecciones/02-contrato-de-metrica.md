@@ -10,6 +10,12 @@ Escribir `conversion = compras / visitas` parece claro hasta que aparecen pregun
 
 Un contrato de métrica elimina ambigüedad antes de que el dashboard llegue a una reunión. Debe ser breve, pero suficiente para que otra persona pueda reproducirla sin interpretar intenciones.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta de negocio](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--02-contrato-de-metrica-01-1709428d.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     A[Pregunta de negocio] --> B[Contrato de métrica]
@@ -19,6 +25,7 @@ flowchart LR
     E --> F[Decisión y responsable]
     F --> B
 ```
+</details>
 
 El último retorno importa: una definición no es eterna. Si cambia el producto, el comportamiento de valor o la fuente, se revisa el contrato y se documenta el cambio. No se sobrescribe silenciosamente la historia.
 

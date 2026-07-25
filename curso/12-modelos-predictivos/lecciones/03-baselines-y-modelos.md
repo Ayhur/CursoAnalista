@@ -23,6 +23,12 @@ Una regresión logística no es «lineal» en la probabilidad: combina las varia
 
 El siguiente diagrama responde a «¿cuándo una regla se convierte en predicción operativa?».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Cuenta en el corte](../../../recursos/diagramas-moviles/curso--12-modelos-predictivos--lecciones--03-baselines-y-modelos-01-d4862b0f.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Cuenta en el corte] --> B[Factura impagada]
@@ -34,6 +40,7 @@ flowchart TD
   E --> G
   F --> H[No priorizar ahora]
 ```
+</details>
 
 Este árbol es didáctico, no una verdad causal. «Factura impagada» puede ser señal de un problema de cobro y requerir una ruta distinta a una llamada de éxito de cliente.
 

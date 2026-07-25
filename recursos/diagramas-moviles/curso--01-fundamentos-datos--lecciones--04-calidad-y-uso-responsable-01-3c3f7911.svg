@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="996" viewBox="0 0 960 996" role="img">
+<title>Diagrama del curso</title><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#667085"/></marker></defs>
+<rect width="100%" height="100%" rx="12" fill="#ffffff"/>
+<path d="M 480.0 112.0 L 480.0 166.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M 480.0 244.0 L 480.0 298.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M 480.0 376.0 L 346.0 430.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="413.0" y="398.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#475467">No</text>
+<path d="M 480.0 376.0 L 614.0 430.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="547.0" y="398.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#475467">Sí</text>
+<path d="M 614.0 508.0 L 480.0 562.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M 480.0 640.0 L 346.0 694.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="413.0" y="662.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#475467">Sí, crítico</text>
+<path d="M 480.0 640.0 L 614.0 694.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="547.0" y="662.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#475467">No, advertencia</text>
+<path d="M 346.0 772.0 L 480.0 826.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M 614.0 772.0 L 480.0 826.0" stroke="#667085" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<rect x="355.0" y="34.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="73.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Ingreso de archivo o API</text>
+<rect x="355.0" y="166.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="195.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Validar esquema, grano y</text>
+<text x="480.0" y="215.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">reglas</text>
+<rect x="355.0" y="298.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="337.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">¿Falla alguna regla?</text>
+<rect x="221.0" y="430.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="346.0" y="459.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Publicar dataset con</text>
+<text x="346.0" y="479.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">versión</text>
+<rect x="489.0" y="430.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="614.0" y="459.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Registrar evidencia y</text>
+<text x="614.0" y="479.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">severidad</text>
+<rect x="355.0" y="562.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="591.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">¿Afecta una métrica o</text>
+<text x="480.0" y="611.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">privacidad?</text>
+<rect x="221.0" y="694.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="346.0" y="723.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Bloquear uso y avisar</text>
+<text x="346.0" y="743.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">propietario</text>
+<rect x="489.0" y="694.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="614.0" y="723.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Aislar, documentar</text>
+<text x="614.0" y="743.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">límite y corregir</text>
+<rect x="355.0" y="826.0" width="250.0" height="78" rx="10" fill="#EAF2F8" stroke="#1D5D84" stroke-width="2"/>
+<text x="480.0" y="855.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">Revalidar y dejar</text>
+<text x="480.0" y="875.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#12355B">historial</text>
+</svg>

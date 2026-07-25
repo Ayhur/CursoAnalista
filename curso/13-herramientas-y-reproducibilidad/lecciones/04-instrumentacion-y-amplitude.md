@@ -8,6 +8,12 @@ Un *tracking plan* es el contrato compartido de esos eventos. Amplitude es una p
 
 ## De una métrica a los eventos necesarios
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Métrica: activación a 7 días](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--04-instrumentacion-y-amplitude-01-fcce0395.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Métrica: activación a 7 días] --> B[Definir cuenta elegible]
@@ -18,6 +24,7 @@ flowchart LR
  E --> F[Validación y monitorización]
  F --> G[Funnel o cohorte]
 ```
+</details>
 
 El diagrama muestra una dependencia: un funnel es el último paso. Si `cuenta_creada` usa un identificador y `reserva_creada` otro, no se puede saber con honestidad si una misma cuenta hizo ambas cosas.
 

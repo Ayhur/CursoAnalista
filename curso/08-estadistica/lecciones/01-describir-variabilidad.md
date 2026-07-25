@@ -23,6 +23,12 @@ Una media responde dónde está el centro; la **variabilidad** indica cuánto se
 
 Supón que A y B tienen media de 4 minutos. En A casi todos tardan entre 3 y 5; en B unos tardan 1 y otros 12. La media no permite concluir que la experiencia sea igual. Para un flujo de producto conviene mirar una distribución o percentiles antes de celebrar una media.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Usuarios expuestos](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--01-describir-variabilidad-01-3b2e5996.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Usuarios expuestos] --> B[Resultado por usuario]
@@ -32,6 +38,7 @@ flowchart LR
  C --> F[Comparación A vs B]
  E --> F
 ```
+</details>
 
 Este esquema separa dos preguntas: si B cambia la probabilidad de activar y si cambia el esfuerzo o demora de quien activa. Una variante puede elevar conversiones y empeorar mucho el tiempo de algunos usuarios; ambas cosas importan.
 

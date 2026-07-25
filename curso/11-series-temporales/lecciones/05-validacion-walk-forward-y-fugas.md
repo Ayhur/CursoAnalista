@@ -6,12 +6,19 @@ Validarás una previsión como se usaría en producción: entrenar con pasado y 
 
 Una partición temporal no se baraja. En Lumen puedes entrenar hasta septiembre, validar octubre-noviembre, ajustar una única vez y reservar diciembre como prueba final. Para conocer estabilidad, el enfoque **walk-forward** avanza sucesivos cortes: se predice la semana siguiente, se compara con lo observado y se avanza.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pasado: entrenamiento](../../../recursos/diagramas-moviles/curso--11-series-temporales--lecciones--05-validacion-walk-forward-y-fugas-01-090294c9.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pasado: entrenamiento] --> B[Validación futura 1]
  B --> C[Validación futura 2]
  C --> D[Prueba final intacta]
 ```
+</details>
 
 Cada bloque está en orden temporal. La prueba final no decide parámetros ni umbrales; estima cómo habría rendido el proceso al desplegarlo.
 

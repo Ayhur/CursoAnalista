@@ -10,6 +10,12 @@ Nexo quiere decidir sobre los nuevos usuarios de web en España que pueden ver o
 
 Una muestra grande reduce fluctuación aleatoria, pero no cura que esté mal escogida. Si B se muestra únicamente a personas que llegan desde una campaña de pago y A a tráfico orgánico, la diferencia mezcla variante y canal. Eso es **sesgo de selección**: el mecanismo de entrar en cada grupo está relacionado con características que afectan al resultado.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Población elegible](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--02-poblacion-muestra-y-sesgo-01-76840c01.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Población elegible] --> B[Regla de elegibilidad]
@@ -18,6 +24,7 @@ flowchart LR
  D --> E[Eventos medidos]
  E --> F[Muestra analizada]
 ```
+</details>
 
 El flujo responde «¿dónde puede cambiar quién llega al análisis?». Cada flecha es auditable: una exclusión tras conocer el resultado, una asignación rota o un evento perdido cambian lo que el número representa.
 

@@ -50,6 +50,12 @@ El encargo útil no es «mirar los datos». Es decidir entre opciones con coste:
 
 Este flujo responde a «¿qué debe ocurrir entre una alarma y una decisión responsable?».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Brief: caída de activación](../../../recursos/diagramas-moviles/curso--00-orientacion--lecciones--01-rol-y-ciclo-de-decision-01-89ee04dc.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Brief: caída de activación] --> B[Pregunta y métrica]
@@ -59,6 +65,7 @@ flowchart LR
   E --> F[Acción de producto]
   F --> G[Seguimiento y aprendizaje]
 ```
+</details>
 
 El seguimiento vuelve a abrir una pregunta, aunque lo representemos como el final de este recorrido para conservar un diagrama legible en PDF. Si Lumen simplifica una pantalla, debe comprobar después si sube la activación **sin** empeorar cancelaciones, soporte o ingresos. Una recomendación no cierra el análisis; crea una nueva situación que hay que observar.
 
@@ -133,6 +140,12 @@ Una **hipótesis** es una explicación provisional que podría ser falsa; por ej
 
 Este diagrama responde a «¿cómo evitar que una sospecha se disfrace de conclusión?».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Hecho: baja la activación Android](../../../recursos/diagramas-moviles/curso--00-orientacion--lecciones--02-preguntas-hipotesis-y-evidencia-01-5d8445b7.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
   A[Hecho: baja la activación Android] --> B[Hipótesis: falla selector]
@@ -142,6 +155,7 @@ flowchart TB
   E -->|sí, con límites| F[Priorizar corrección]
   E -->|no o incompleta| G[Revisar hipótesis y medición]
 ```
+</details>
 
 La ruta «sí» no elimina los límites: quizá el cambio coincide con una campaña. Por eso la recomendación debe indicar el nivel de seguridad y qué se medirá tras actuar.
 
@@ -217,6 +231,12 @@ Desde el móvil puedes copiar la plantilla en una aplicación de notas y escribi
 
 Una investigación no es reproducible porque use una herramienta moderna. Es **reproducible** cuando otra persona puede entender qué se preguntó, qué información se usó, qué reglas se aplicaron y por qué se recomendó actuar. El siguiente mapa responde a «¿qué debe conservarse para revisar el caso de Lumen?».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Decisión y contexto](../../../recursos/diagramas-moviles/curso--00-orientacion--lecciones--03-metodo-de-estudio-y-diagnostico-01-3696afe2.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Decisión y contexto] --> B[Pregunta e hipótesis]
@@ -225,6 +245,7 @@ flowchart LR
   D --> E[Resultado y límites]
   E --> F[Acción y seguimiento]
 ```
+</details>
 
 Si alguien recibe solo un gráfico final, no puede comprobar si se incluyeron cuentas de prueba, si la comparación tenía la misma ventana o si la recomendación fue prudente. La [plantilla reutilizable](../plantillas/brief-analitico.md) guarda los seis eslabones.
 
@@ -327,6 +348,12 @@ Antes de abrir una herramienta completa esta frase: «cada fila de esta tabla re
 
 ¿Qué camino convierte la pregunta en una cifra defendible?
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta: pedidos pagados ayer](../../../recursos/diagramas-moviles/curso--01-fundamentos-datos--lecciones--01-archivo-tabla-y-grano-01-a86dbda5.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     Q[Pregunta: pedidos pagados ayer] --> F[Localizar tabla de pedidos]
@@ -335,6 +362,7 @@ flowchart TD
     R --> M[Medida: contar pedido_id únicos]
     M --> L[Declarar límites: zona horaria, reintentos y retrasos]
 ```
+</details>
 
 La cifra no es solo un `COUNT`: depende de la definición de «ayer», del estado que cuenta como pago y de que `pedido_id` no esté duplicado.
 
@@ -389,6 +417,12 @@ Una **clave primaria** identifica de manera única una fila dentro de su tabla: 
 
 ¿Cómo se conectan las piezas del caso sin inventar relaciones?
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: usuarios: clave usuario_id](../../../recursos/diagramas-moviles/curso--01-fundamentos-datos--lecciones--02-filas-columnas-y-relaciones-01-7458099e.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     U[usuarios: clave usuario_id] -->|1 a N mediante usuario_id| P[pedidos: clave pedido_id]
@@ -396,6 +430,7 @@ flowchart LR
     P -->|1 a 1 o 0 a 1| F[pagos: clave pedido_id]
     U -->|1 a N; usuario puede ser nulo| E[eventos_app]
 ```
+</details>
 
 Un usuario puede tener muchos pedidos (1:N); cada pedido pertenece a un usuario si el negocio lo exige. Un pago puede ser 0:1 con pedido si hay pedidos iniciados pero no cobrados. Las relaciones describen una regla de negocio, no una forma de dibujo.
 
@@ -482,6 +517,12 @@ Un archivo **JSON** (*JavaScript Object Notation*) también es texto, pero puede
 
 No hay una única conversión correcta de JSON a CSV. El objeto principal se puede convertir en una fila de `pedidos`; `usuario.usuario_id` se extrae como una columna; cada elemento de `items` debe crear una fila de `lineas_pedido`. Repetir el pedido en cada línea es válido solo si declaramos que el resultado tiene grano de línea y no reutilizamos `total_eur` como si fuera un importe por línea.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: JSON: un pedido con lista items](../../../recursos/diagramas-moviles/curso--01-fundamentos-datos--lecciones--03-formatos-y-almacenamiento-01-4e660629.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     J[JSON: un pedido con lista items] --> P[Tabla pedidos: una fila por pedido]
@@ -490,6 +531,7 @@ flowchart LR
     L --> A[Analizar unidades y productos]
     P --> I[Analizar pedidos e ingreso]
 ```
+</details>
 
 El objetivo de la conversión no es «aplanar todo»: es conservar significado y poder analizar cada pregunta con el grano correspondiente.
 
@@ -535,6 +577,12 @@ El contrato de datos de la lección 02 declara esquema, grano, reglas, propietar
 
 ¿Cómo se gobierna una incidencia sin esconderla bajo una limpieza automática?
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Ingreso de archivo o API](../../../recursos/diagramas-moviles/curso--01-fundamentos-datos--lecciones--04-calidad-y-uso-responsable-01-3c3f7911.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Ingreso de archivo o API] --> B[Validar esquema, grano y reglas]
@@ -547,6 +595,7 @@ flowchart TD
     G --> I[Revalidar y dejar historial]
     H --> I
 ```
+</details>
 
 El flujo enseña que «limpiar» no equivale a borrar. Primero se preserva evidencia; después se decide una corrección reproducible.
 
@@ -649,12 +698,19 @@ print(importe_con_iva)
 
 Una **variable** es un nombre que referencia un valor; `=` es una asignación, no una igualdad matemática. La constante en mayúsculas comunica una convención humana: no debería cambiar durante el cálculo. Python no impide modificarla, por lo que la revisión sigue siendo necesaria.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Valor de entrada: 42.50](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--01-entorno-valores-y-variables-01-619142d3.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Valor de entrada: 42.50] --> B[Expresión: importe * 1.21]
   B --> C[Valor calculado: 51.425]
   C --> D[Nombre con significado]
 ```
+</details>
 
 El diagrama recuerda que un nombre no convierte un dato en correcto: solo hace visible qué creemos que representa.
 
@@ -704,12 +760,19 @@ print(pedidos[0]["importe"])  # 42.5
 
 `pedidos[0]` significa «primer elemento» porque Python empieza a contar desde cero. `pedido["importe"]` usa una clave, no una posición. El anidamiento (`lista` dentro de `dict`) se parece a una respuesta JSON de una API; todavía no es una tabla, pero ya obliga a preguntar qué campos son obligatorios.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Lista pedidos](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--02-colecciones-y-datos-sencillos-01-26b2f5c9.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
   A[Lista pedidos] --> B[Pedido p-101: diccionario]
   A --> C[Pedido p-102: diccionario]
   B --> D[etiquetas: lista]
 ```
+</details>
 
 La relación no es una secuencia: un pedido tiene varios campos y una lista contiene varios pedidos.
 
@@ -776,6 +839,12 @@ else:
 
 `if` evalúa una condición, `elif` ofrece una alternativa y `else` cubre el resto. La sangría define qué instrucciones pertenecen a cada rama. Los operadores `and`, `or` y `not` combinan condiciones: `and` exige ambas verdaderas; `or` basta con una; `not` invierte. Usa paréntesis cuando mezcles condiciones para que la prioridad sea legible.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedido](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--03-condiciones-y-bucles-01-550d32db.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Pedido] --> B{¿Está confirmado?}
@@ -784,6 +853,7 @@ flowchart TD
   D -->|sí| E[Revisar]
   D -->|no| F[Operación normal]
 ```
+</details>
 
 El orden de las preguntas importa: comparar un importe ausente antes de validar el estado o el tipo puede provocar un error o una decisión falsa.
 
@@ -857,12 +927,19 @@ def clasificar_importe(importe, limite=100):
 
 `importe` y `limite` son parámetros. `limite=100` es un argumento opcional: la persona que llama puede usar el valor por defecto o indicar otro. `return` entrega un resultado y termina la función; `print` solo lo muestra en pantalla. Por eso una función analítica debe normalmente devolver datos y dejar que otra parte decida cómo presentarlos.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Entrada: importe y límite](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--04-funciones-y-alcance-01-3eaf1c6e.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Entrada: importe y límite] --> B[Función: regla visible]
   B --> C[Salida: alto, normal o inválido]
   C --> D[Prueba o decisión posterior]
 ```
+</details>
 
 ## Pruebas mínimas: normal, límite y dato inválido
 
@@ -934,6 +1011,12 @@ Un **traceback** es la ruta de llamadas que Python muestra cuando no puede conti
 
 Un programa puede no lanzar excepciones y aun así estar equivocado: usar `>` en lugar de `>=` en el umbral de Lumen cambia la clasificación de 100 EUR sin que Python proteste. Por eso se combinan traceback y pruebas de casos límite.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Salida inesperada o excepción](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--05-errores-y-depuracion-01-4ad25749.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Salida inesperada o excepción] --> B[Reducir a ejemplo mínimo]
@@ -942,6 +1025,7 @@ flowchart TD
   D --> E[Prueba que puede refutarla]
   E --> F[Corregir una causa y volver a ejecutar]
 ```
+</details>
 
 La corrección se hace después de entender la causa; cambiar cinco líneas a la vez impide saber cuál resolvió el problema.
 
@@ -1001,6 +1085,12 @@ Producto quiere conocer el importe confirmado del día. Ingeniería advierte que
 
 El [laboratorio ejecutable](../../../notebooks/practicas/02-auditoria-pedidos.py) separa cuatro responsabilidades:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Lista de eventos](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--06-estilo-y-practica-gastos-01-43b01021.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Lista de eventos] --> B[validar_pedido]
@@ -1009,6 +1099,7 @@ flowchart LR
   C --> E[resumen verificable]
   D --> E
 ```
+</details>
 
 Separar funciones no es estética: permite probar la validación sin depender de la presentación del resumen.
 
@@ -1106,6 +1197,12 @@ El cambio absoluto de pedidos es `1.320 - 1.200 = +120 pedidos`. El cambio relat
 
 Este esquema responde: "¿qué hay que fijar antes de comparar?"
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta de negocio](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--01-magnitudes-porcentajes-y-tasas-01-6d41b6cc.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Pregunta de negocio] --> B[Qué se mide]
@@ -1114,6 +1211,7 @@ flowchart LR
   D --> E[Cálculo]
   E --> F[Interpretación y decisión]
 ```
+</details>
 
 Sin población y periodo, el mismo número puede tener significado opuesto. Un incremento de 120 pedidos diarios sí exige revisar capacidad; 120 pedidos más en todo un año quizá no.
 
@@ -1160,6 +1258,12 @@ Una **distribución** es el conjunto de valores que toma una variable y la frecu
 
 La **media** suma y divide por el número de valores: `232 / 7 = 33,1 min`. La **mediana** es el valor central al ordenar: `26 min`. El pedido de 80 minutos arrastra la media, pero no la mediana. Ninguno de los dos números es "el correcto" fuera de contexto: la media sirve para estimar minutos totales de capacidad; la mediana describe mejor una entrega típica cuando existen extremos.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Lista de entregas](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--02-descriptiva-y-distribuciones-01-549a6894.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Lista de entregas] --> B[Ordenar y revisar unidades]
@@ -1168,6 +1272,7 @@ flowchart TD
   C --> E[Pregunta operativa]
   D --> E
 ```
+</details>
 
 El diagrama separa dos preguntas. Un centro alto puede deberse a que todos empeoran o a unos pocos pedidos muy tardíos; la dispersión lo aclara.
 
@@ -1216,6 +1321,12 @@ Nexo compara conversión por ciudad:
 
 La media simple `(15 % + 8 %) / 2 = 11,5 %` trata ambas ciudades como si tuvieran igual exposición. La conversión global correcta es `815 / 10.100 = 8,07 %`. Una **media ponderada** multiplica cada valor por un **peso** adecuado y divide por la suma de pesos: `(0,15×100 + 0,08×10.000) / 10.100`.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Filas de pedidos](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--03-ponderacion-agregacion-y-grano-01-b1a3fef3.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Filas de pedidos] --> B[Grano: un pedido]
@@ -1224,6 +1335,7 @@ flowchart LR
   D --> E[Dividir sumas compatibles]
   E --> F[Tasa agregada defendible]
 ```
+</details>
 
 La regla práctica es sumar primero numeradores y denominadores compatibles y dividir después. Promediar porcentajes casi nunca sustituye esa operación.
 
@@ -1265,6 +1377,12 @@ Nexo estima minutos de trabajo de reparto como `M(p) = 24 × p`, donde `p` son p
 
 La entrada `p` tiene unidad pedidos; el coeficiente `24` tiene unidad minutos/pedido; la salida tiene minutos. Este chequeo dimensional detecta fórmulas absurdas.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedidos previstos p](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--04-funciones-y-modelos-01-1da8a926.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Pedidos previstos p] --> B[Modelo M(p)=24×p]
@@ -1274,6 +1392,7 @@ flowchart LR
   E -->|No| F[Reforzar turno o limitar demanda]
   E -->|Sí| G[Monitorizar servicio]
 ```
+</details>
 
 El modelo convierte una previsión en una decisión, no en una verdad. Sus supuestos deben quedar visibles.
 
@@ -1309,6 +1428,12 @@ Un **vector** es una lista ordenada de números del mismo tipo conceptual; una *
 
 Para tres zonas, los pedidos son `p = [120, 80, 100]` y los minutos medios por pedido son `t = [22, 30, 26]`. Multiplicar componente a componente produce minutos por zona: `[2640, 2400, 2600]`; sumarlos da 7.640 minutos. El orden importa: la primera posición de ambos vectores debe representar la misma zona. Si una fuente ordena zonas distinto, el resultado parece matemático pero es falso.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Vector de pedidos por zona](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--05-vectores-matrices-y-numpy-01-86a5f5e9.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Vector de pedidos por zona] --> C[Multiplicación elemento a elemento]
@@ -1316,6 +1441,7 @@ flowchart LR
   C --> D[Minutos requeridos por zona]
   D --> E[Suma: capacidad total]
 ```
+</details>
 
 El diagrama muestra una condición oculta: las posiciones deben estar alineadas por una clave de zona, no solo por su posición.
 
@@ -1349,6 +1475,12 @@ Sabrás definir un periodo comparable y calcular crecimiento sin mezclar días i
 
 Nexo registra cada pedido a las 23:30 UTC. En España puede pertenecer al día siguiente local. Antes de agrupar por día hay que fijar zona horaria y regla de corte. Después, una fila diaria puede contener total de pedidos, ingresos y p90 de entrega; una fila semanal resume siete días, pero ya no permite estudiar la hora punta.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Eventos con hora y zona](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--06-tiempo-granularidad-y-ventanas-01-b41cd595.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Eventos con hora y zona] --> B[Normalizar calendario]
@@ -1357,6 +1489,7 @@ flowchart LR
   D --> E[Comparar periodos equivalentes]
   E --> F[Decisión]
 ```
+</details>
 
 La ventana temporal es parte de la definición de una métrica. Cambiarla cambia el valor y, con frecuencia, la conclusión.
 
@@ -1469,6 +1602,12 @@ El resultado de `minutos / 60` conserva tres posiciones. La tercera línea compa
 
 Este diagrama responde a «¿qué tiene que seguir siendo cierto para que una operación vectorizada signifique lo que creemos?»:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Array de minutos por día](../../../recursos/diagramas-moviles/curso--04-numpy--lecciones--01-arrays-y-vectorizacion-01-696fddca.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Array de minutos por día] --> B[Regla: dividir entre 60]
@@ -1476,6 +1615,7 @@ flowchart LR
   C --> D[Resumen o decisión]
   E[Unidad y orden documentados] --> B
 ```
+</details>
 
 La flecha desde unidad y orden no es decorativa: sin ellos el cálculo puede ejecutarse y seguir siendo analíticamente falso.
 
@@ -1546,6 +1686,12 @@ por_dia = resueltas.sum(axis=1)    # [24, 27, 26, 27], un total por día
 
 La relación visual responde a «¿qué etiqueta conserva cada suma?»:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Matriz: días por canales](../../../recursos/diagramas-moviles/curso--04-numpy--lecciones--02-seleccion-mascaras-y-forma-01-5c583b62.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
   A[Matriz: días por canales] --> B[sum axis=0]
@@ -1553,6 +1699,7 @@ flowchart TB
   A --> D[sum axis=1]
   D --> E[Un total por día]
 ```
+</details>
 
 `axis=0` no significa «mejor» ni «vertical» en abstracto; solo resulta correcto porque el contrato asignó filas a días y columnas a canales. Verifica la forma del resultado antes de asignarle un nombre.
 
@@ -1640,6 +1787,12 @@ No dependas de recordar todas las reglas de indexación avanzada. Si vas a alter
 
 ## Flujo de decisión para un dato sospechoso
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Valor de tiempo](../../../recursos/diagramas-moviles/curso--04-numpy--lecciones--03-mascaras-nan-y-copias-01-3d7c73d8.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Valor de tiempo] --> B[¿Es NaN?]
@@ -1649,6 +1802,7 @@ flowchart TD
   D -->|Sí| E[Incluir en revisión]
   D -->|No| F[Conservar y documentar]
 ```
+</details>
 
 El flujo separa ausencia de rendimiento bajo: sustituir ambos por cero convertiría problemas distintos en el mismo número.
 
@@ -1684,12 +1838,19 @@ desviacion = tiempos - objetivos
 
 La pregunta es «¿qué objetivo se resta de cada celda?»:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Matriz días x canales](../../../recursos/diagramas-moviles/curso--04-numpy--lecciones--04-broadcasting-y-reglas-por-canal-01-5d2bc3ee.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Matriz días x canales] --> C[Restar por columnas]
   B[Vector: objetivo por canal] --> C
   C --> D[Matriz: desviación por día y canal]
 ```
+</details>
 
 Cada columna recibe su objetivo. No se está calculando todavía la causa de las demoras: solo una diferencia respecto a una referencia acordada.
 
@@ -1823,6 +1984,12 @@ pedidos_raw = pd.read_csv(
 
 El diagrama responde a «¿qué debo saber antes de transformar una exportación?»:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Archivo CSV](../../../recursos/diagramas-moviles/curso--05-pandas--lecciones--01-dataframes-importacion-y-perfilado-01-cec72fef.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Archivo CSV] --> B[Parámetros de lectura]
@@ -1834,6 +2001,7 @@ flowchart LR
  E --> G
  F --> G
 ```
+</details>
 
 La importación no es todavía limpieza. Produce una versión `raw` que se conserva para poder explicar de dónde salió cualquier fila descartada.
 
@@ -1982,6 +2150,12 @@ por_canal = (
 
 Este flujo responde a «¿cómo sé que el resumen no perdió o duplicó dinero?»:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedidos válidos](../../../recursos/diagramas-moviles/curso--05-pandas--lecciones--03-transformacion-y-agregacion-01-f3184e6f.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pedidos válidos] --> B[Regla importe neto]
@@ -1992,6 +2166,7 @@ flowchart LR
  E --> G[Reconciliar]
  F --> G
 ```
+</details>
 
 La reconciliación compara dos caminos que deberían coincidir:
 
@@ -2028,6 +2203,12 @@ Enriquecerás pedidos con el segmento de cliente sin multiplicar ingresos por ac
 
 `pedidos` contiene muchos pedidos por `cliente_id`; `clientes` debe contener una sola ficha vigente por cliente. Por tanto, la relación esperada es **muchos a uno**: muchos pedidos encuentran un cliente. Una unión combina columnas mediante una clave; no es una prueba de que la clave represente a la misma persona en ambos sistemas.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedidos: muchos por cliente](../../../recursos/diagramas-moviles/curso--05-pandas--lecciones--04-uniones-y-cardinalidad-01-b6551a85.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pedidos: muchos por cliente] --> C[cliente_id]
@@ -2036,6 +2217,7 @@ flowchart LR
  D --> E[Pedidos enriquecidos]
  D --> F[Auditar sin coincidencia]
 ```
+</details>
 
 `how="left"` conserva todas las filas del lado izquierdo, importante cuando un pedido no encuentra cliente: ocultarlo convertiría un problema de cobertura en una aparente mejora de calidad.
 
@@ -2111,6 +2293,12 @@ Un `assert` es adecuado para un pipeline educativo o una comprobación interna. 
 
 El **linaje** registra origen, transformaciones y salida. El diagrama responde esa pregunta para ingresos por canal:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: CSV pedidos v1](../../../recursos/diagramas-moviles/curso--05-pandas--lecciones--05-validacion-y-trazabilidad-01-41616dd8.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[CSV pedidos v1] --> B[Carga raw]
@@ -2120,6 +2308,7 @@ flowchart LR
  E --> F[Merge clientes]
  F --> G[Resumen por canal]
 ```
+</details>
 
 Junto a cada ejecución conserva: fecha/hora de extracción, ruta o identificador de versión, conteo de entrada, rechazos por motivo, filas de salida y total reconciliado. No guardes datos personales innecesarios en el registro; IDs y muestras deben tratarse según la política de privacidad.
 
@@ -2146,6 +2335,12 @@ La pregunta de negocio es: **«en la extracción de junio, ¿cuántos pedidos pa
 
 ## Secuencia de trabajo
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Leer CSV raw](../../../recursos/diagramas-moviles/curso--05-pandas--lecciones--06-caso-integrado-pedidos-01-04a34a31.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Leer CSV raw] --> B[Perfilar]
@@ -2156,6 +2351,7 @@ flowchart LR
  F --> G[Merge many_to_one]
  G --> H[Agregar y reconciliar]
 ```
+</details>
 
 Al ejecutar, revisa especialmente tres decisiones: una fecha inválida se rechaza en vez de inventarse; una actualización duplicada de `P-1002` se resuelve por fecha de extracción; un cliente sin ficha se conserva en ingresos y se declara como cobertura incompleta.
 
@@ -2226,6 +2422,12 @@ Convertirás una alerta de negocio en una pregunta que los datos puedan responde
 
 En Nébula, una fila representa el agregado de un `día`, `plataforma` y `canal`. La métrica de esa fila es `compras / visitas`. La pregunta inicial es: **¿la caída de conversión entre el 5 y el 11 de mayo está concentrada en algún segmento y el archivo permite investigarla?** No pregunta todavía por una causa.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Alerta: conversion baja](../../../recursos/diagramas-moviles/curso--06-analisis-exploratorio--lecciones--01-preguntas-y-perfil-exploratorio-01-9c0bfac6.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Alerta: conversion baja] --> B[Definir metrica, periodo y grano]
@@ -2234,6 +2436,7 @@ flowchart LR
  D --> E[Hallazgo descriptivo]
  E --> F[Comprobar explicaciones rivales]
 ```
+</details>
 
 El diagrama responde al orden de trabajo: primero definimos qué mide cada fila; después miramos patrones. Un gráfico bonito hecho antes del perfil puede estar describiendo una fuente defectuosa.
 
@@ -2303,6 +2506,12 @@ resumen = (
 resumen["conversion"] = resumen["compras"] / resumen["visitas"]
 ```
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Total: compras / visitas](../../../recursos/diagramas-moviles/curso--06-analisis-exploratorio--lecciones--02-distribuciones-segmentos-y-outliers-01-8c77251c.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
  A[Total: compras / visitas] --> B[Segmentar con una pregunta]
@@ -2312,6 +2521,7 @@ flowchart TB
  D --> E
  E --> F[Preguntar que explicacion distingue el dato]
 ```
+</details>
 
 El diagrama muestra que los segmentos son ramas paralelas: no debemos sumar sus porcentajes ni tratarlos como pasos de una secuencia.
 
@@ -2356,6 +2566,12 @@ En Nébula, un día con muchas visitas y compras cero puede señalar un checkout
 
 ## Protocolo de investigación
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Valor inusual](../../../recursos/diagramas-moviles/curso--06-analisis-exploratorio--lecciones--03-valores-extremos-y-calidad-01-e125286f.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Valor inusual] --> B[Comprobar tipo, rango y duplicados]
@@ -2366,6 +2582,7 @@ flowchart LR
  E --> G[Documentar impacto]
  F --> G
 ```
+</details>
 
 La decisión tiene dos salidas legítimas. Solo se excluye después de confirmar el motivo; si hay duda, se conserva y se explica cómo cambia el resultado con y sin ese caso.
 
@@ -2409,6 +2626,12 @@ Separarás lo que los datos observacionales muestran de lo que sería necesario 
 
 La *correlación* mide una forma de asociación lineal; no es una flecha de causa. Una campaña puede aumentar a la vez visitas y compras. La correlación entre ambas no demuestra que una visita concreta haya causado una compra ni que aumentar tráfico de baja calidad funcione.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Campana](../../../recursos/diagramas-moviles/curso--06-analisis-exploratorio--lecciones--04-relaciones-correlacion-y-causalidad-01-7b436039.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
  A[Campana] --> B[Visitas]
@@ -2418,6 +2641,7 @@ flowchart TB
  D[Cambio de tracking] --> B
  D --> C
 ```
+</details>
 
 El diagrama formula explicaciones rivales: campaña y tracking pueden producir un patrón parecido. El EDA permite encontrarlas; un experimento, un análisis causal o una investigación técnica decide entre ellas.
 
@@ -2465,6 +2689,12 @@ Un análisis no termina al encontrar un número. Debe permitir que otra persona 
 
 Esta nota dice qué se observó y qué falta. Una mala versión sería «la versión 4.2 rompió Android»: oculta el método, borra incertidumbre y puede hacer actuar al equipo sobre una causa falsa.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Hallazgo reproducible](../../../recursos/diagramas-moviles/curso--06-analisis-exploratorio--lecciones--05-registro-de-hallazgos-y-decisiones-01-97e773f1.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Hallazgo reproducible] --> B[Limites y explicaciones rivales]
@@ -2472,6 +2702,7 @@ flowchart LR
  C --> D[Comprobacion tecnica o experimento]
  D --> E[Actualizar decision]
 ```
+</details>
 
 El flujo no termina en una conclusión tajante. La salida del EDA es una acción proporcional a la evidencia y una forma concreta de aprender más.
 
@@ -2579,6 +2810,12 @@ En Lumen se comprueba primero que `pago` cuenta pagos finalizados únicos y que 
 
 La pregunta siguiente guía la forma. Este esquema responde: “¿qué tipo de relación necesito ver?”
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta concreta](../../../recursos/diagramas-moviles/curso--07-visualizacion--lecciones--01-pregunta-y-tipo-de-grafico-01-70defe68.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pregunta concreta] --> B[Comparación principal]
@@ -2589,6 +2826,7 @@ flowchart LR
  D --> H
  E --> H
 ```
+</details>
 
 La ramificación no es una receta automática. Una línea codifica continuidad temporal: úsala para la conversión diaria de Lumen, donde el eje horizontal sí tiene orden y distancia. Barras horizontales ordenadas permiten comparar la conversión por canal sin obligar al lector a adivinar cuál es mayor. Un histograma muestra cuántas observaciones caen en intervalos; sirve para estudiar la distribución de tiempo de carga, no para contar categorías. Una caja resume mediana, cuartiles y posibles valores extremos, pero no muestra todos los picos de una distribución pequeña.
 
@@ -2637,6 +2875,12 @@ El denominador es parte del mensaje. “800 pagos” y “8% de conversión” n
 
 El color debe codificar algo consistente: por ejemplo, azul para escritorio y naranja para móvil en todas las figuras de Lumen. No codifiques éxito/fracaso solo con verde/rojo ni uses arcoíris para datos ordenados: añade etiquetas, línea continua/discontinua o marcadores. Comprueba contraste sobre fondo claro y en escala de grises. Para una audiencia móvil, reduce series, aumenta tamaño de texto, evita leyendas lejanas y prioriza un mensaje por panel.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Dato y pregunta](../../../recursos/diagramas-moviles/curso--07-visualizacion--lecciones--02-diseno-honesto-y-accesible-01-f4502444.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Dato y pregunta] --> B[Escala y denominador correctos]
@@ -2645,6 +2889,7 @@ flowchart LR
  D --> E[Nota de fuente, n y límite]
  E --> F[Gráfico interpretable]
 ```
+</details>
 
 Cada paso protege una inferencia distinta: una paleta agradable no compensa un denominador equivocado, y una cifra exacta no compensa que el lector no pueda verla.
 
@@ -2687,6 +2932,12 @@ fig.savefig("salidas/conversion_diaria.png", dpi=160, bbox_inches="tight")
 
 El laboratorio usa 28 días de sesiones agregadas por canal. Primero calcula `conversion_pct = 100 * pago / visitas`, comprobando que `visitas` no es cero. La evolución diaria pregunta si hay cambio y cuándo; un histograma pregunta cómo se reparte la conversión de los segmentos; barras ordenadas comparan canales; el funnel pregunta dónde se pierde el volumen.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Tabla diaria por canal](../../../recursos/diagramas-moviles/curso--07-visualizacion--lecciones--03-exploracion-y-narrativa-01-956ca8a6.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Tabla diaria por canal] --> B[Validar visitas y pagos]
@@ -2700,6 +2951,7 @@ flowchart LR
  F --> H
  G --> H
 ```
+</details>
 
 La misma tabla admite varias vistas, pero cada vista responde una pregunta diferente. No conviertas las cuatro en una única imagen ilegible.
 
@@ -2744,6 +2996,12 @@ Diseñarás un dashboard como un producto de seguimiento y elegirás cuándo una
 
 Un **dashboard** es una interfaz para seguimiento recurrente: alguien vuelve a ella para detectar si una condición merece actuar. Un análisis responde una pregunta nueva con método y conclusión. Si Lumen necesita decidir hoy si revierte la versión 4.2, un ticket con evidencia y recomendación puede ser más útil que añadir veinte gráficos permanentes.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Decisión recurrente](../../../recursos/diagramas-moviles/curso--07-visualizacion--lecciones--04-dashboards-y-entregables-01-b997752a.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Decisión recurrente] --> B[Dashboard]
@@ -2752,6 +3010,7 @@ flowchart LR
  B --> E[Señal y umbral]
  E --> F[Persona responsable actúa]
 ```
+</details>
 
 La diferencia es operacional: un panel sin responsable, umbral o acción es una pantalla, no un sistema de decisión.
 
@@ -2765,6 +3024,12 @@ La métrica debe tener enlace a su definición, no depender de un nombre ambiguo
 
 La primera pantalla debe poder leerse en móvil. Un titular con fecha de actualización y estado; una línea de conversión frente a referencia; un pequeño funnel con denominadores; un desglose de segmentos que explica el cambio; y una nota de calidad o incidencia. El detalle va en una segunda vista, no en miniaturas ilegibles.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Estado: ¿hay una señal?](../../../recursos/diagramas-moviles/curso--07-visualizacion--lecciones--04-dashboards-y-entregables-02-24dbd2b1.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
  A[Estado: ¿hay una señal?] --> B[Conversión y referencia temporal]
@@ -2772,6 +3037,7 @@ flowchart TB
  C --> D[Segmentos: localizar población]
  D --> E[Nota: fuente, n, calidad y acción]
 ```
+</details>
 
 La lectura es deliberada: primero detectar, después localizar y finalmente actuar. Si el funnel indica caída solo en inicio→pago para móvil, la siguiente acción es revisar checkout y eventos, no comprar más tráfico.
 
@@ -2866,6 +3132,12 @@ Una media responde dónde está el centro; la **variabilidad** indica cuánto se
 
 Supón que A y B tienen media de 4 minutos. En A casi todos tardan entre 3 y 5; en B unos tardan 1 y otros 12. La media no permite concluir que la experiencia sea igual. Para un flujo de producto conviene mirar una distribución o percentiles antes de celebrar una media.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Usuarios expuestos](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--01-describir-variabilidad-01-3b2e5996.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Usuarios expuestos] --> B[Resultado por usuario]
@@ -2875,6 +3147,7 @@ flowchart LR
  C --> F[Comparación A vs B]
  E --> F
 ```
+</details>
 
 Este esquema separa dos preguntas: si B cambia la probabilidad de activar y si cambia el esfuerzo o demora de quien activa. Una variante puede elevar conversiones y empeorar mucho el tiempo de algunos usuarios; ambas cosas importan.
 
@@ -2915,6 +3188,12 @@ Nexo quiere decidir sobre los nuevos usuarios de web en España que pueden ver o
 
 Una muestra grande reduce fluctuación aleatoria, pero no cura que esté mal escogida. Si B se muestra únicamente a personas que llegan desde una campaña de pago y A a tráfico orgánico, la diferencia mezcla variante y canal. Eso es **sesgo de selección**: el mecanismo de entrar en cada grupo está relacionado con características que afectan al resultado.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Población elegible](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--02-poblacion-muestra-y-sesgo-01-76840c01.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Población elegible] --> B[Regla de elegibilidad]
@@ -2923,6 +3202,7 @@ flowchart LR
  D --> E[Eventos medidos]
  E --> F[Muestra analizada]
 ```
+</details>
 
 El flujo responde «¿dónde puede cambiar quién llega al análisis?». Cada flecha es auditable: una exclusión tras conocer el resultado, una asignación rota o un evento perdido cambian lo que el número representa.
 
@@ -2975,6 +3255,12 @@ Para una métrica de `0/1`, un modelo simple es una **variable Bernoulli**: cada
 
 Imagina que A y B son idénticas y ambas activan al 20 %. Extraemos 500 usuarios para cada una muchas veces. Algunas repeticiones darán 18,4 % frente a 21,0 % solo por azar. La colección de resultados de esas repeticiones se llama **distribución muestral** de la estimación.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Proceso real: p = 20%](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--03-probabilidad-e-incertidumbre-01-c763e277.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Proceso real: p = 20%] --> B[Muestra de 500]
@@ -2985,6 +3271,7 @@ flowchart LR
  E --> F
  F --> G[Error estándar]
 ```
+</details>
 
 El diagrama muestra que el error estándar no es el error de un usuario ni un fallo del analista: resume cuánto suele variar el estimador si repitiéramos el muestreo bajo los supuestos del modelo.
 
@@ -3034,6 +3321,12 @@ Una **hipótesis nula** es un punto de referencia, normalmente `H0: pB − pA = 
 
 Elegir `α = 0,05` antes de mirar datos fija una tasa de falsos positivos a largo plazo para una familia de decisiones bien especificada. Rechazar H0 con `p < α` es una regla operativa, no una prueba de certeza.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Estimación: B - A](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--04-intervalos-y-pruebas-01-71a6749f.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Estimación: B - A] --> B[Intervalo de confianza]
@@ -3043,6 +3336,7 @@ flowchart LR
  D --> F[Decisión con guardrails y coste]
  E --> F
 ```
+</details>
 
 El diagrama responde por qué intervalo y prueba no compiten: la prueba compara una referencia; el intervalo muestra magnitudes plausibles. La decisión necesita ambas y el contexto de negocio.
 
@@ -3090,6 +3384,12 @@ Un experimento empieza por la decisión, no por un gráfico. Nexo quiere saber s
 
 La variante es un tratamiento; la activación es el resultado. Para estimar un efecto causal, B debe llegar por asignación aleatoria y la medición ha de ser igual para ambos grupos. “Tener B en el código” no demuestra que el usuario la haya visto: registra una **exposición** cuando la pantalla se renderiza correctamente.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Usuario elegible](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--05-experimentos-ab-01-0b3ad36d.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Usuario elegible] --> B[Asignación estable]
@@ -3101,6 +3401,7 @@ flowchart LR
  F --> G[Análisis predefinido]
  G --> H[Decisión documentada]
 ```
+</details>
 
 El flujo responde “¿qué datos hacen falta para confiar en la comparación?”. La auditoría va antes del análisis: no se usa la estadística para maquillar una experiencia que no se mostró o se midió de forma desigual.
 
@@ -3156,6 +3457,12 @@ Para dos tasas similares, una aproximación de planificación por grupo es:
 
 Con línea base 20 %, MDE 1 pp, α=0,05 y potencia 80 %, el orden de magnitud es decenas de miles de usuarios por variante. Es una estimación: usa una calculadora o biblioteca validada para el cálculo final, documenta la fórmula y añade margen por pérdidas, exposición incompleta y exclusiones predefinidas.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Impacto mínimo que merece actuar](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--06-tamano-de-efecto-y-decision-01-f0be8779.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Impacto mínimo que merece actuar] --> B[MDE]
@@ -3166,6 +3473,7 @@ flowchart LR
  E -->|No, incierto| G[Continuar o rediseñar]
  E -->|Daño| H[Detener y aprender]
 ```
+</details>
 
 El diagrama responde “¿cómo conecta el tamaño de muestra con una decisión?”. Se empieza por el impacto que justifica coste, no por ejecutar hasta que aparezca una etiqueta verde.
 
@@ -3249,6 +3557,12 @@ La pregunta que evita la mayor parte de los errores es el **grano**: «¿qué re
 
 La pregunta «¿qué conecta clientes, pedidos, líneas, pagos y eventos?» se responde con este diagrama entidad-relación simplificado:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: clientes: PK cliente_id](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--01-modelo-relacional-y-grano-01-e0c9eaa9.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     C[clientes: PK cliente_id] -->|1 a N: realiza| P[pedidos: PK pedido_id, FK cliente_id]
@@ -3256,6 +3570,7 @@ flowchart LR
     P -->|0 a 1: se liquida con| G[pagos: PK pago_id, FK pedido_id]
     C -->|1 a N: genera| E[eventos: PK evento_id, FK cliente_id]
 ```
+</details>
 
 Interpretación: un cliente puede no tener pedidos o tener muchos; un pedido tiene varias líneas; el ejercicio impone como simplificación un único pago por pedido. `UNIQUE(pedido_id)` en `pagos` expresa esa última regla. En un sistema real podría existir reintento, reembolso o pago dividido; entonces el grano de pagos y la relación cambiarían.
 
@@ -3403,6 +3718,12 @@ Primero se calcula un importe **por pedido**; después se clasifica. Clasificar 
 
 La pregunta «¿qué sucede antes de que aparezca el resultado?» se resume así:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: FROM: filas de pedidos](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--02-sql-seleccion-filtro-y-agregacion-01-6e3a6551.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     A[FROM: filas de pedidos] --> B[WHERE: solo pagados y periodo]
@@ -3411,6 +3732,7 @@ flowchart LR
     D --> E[HAVING: grupos con regla]
     E --> F[SELECT y ORDER BY: resultado]
 ```
+</details>
 
 El orden enseña por qué una condición de fila no se comporta igual que una condición de grupo. Un motor puede optimizar internamente el plan, pero el significado lógico debe mantenerse.
 
@@ -3436,12 +3758,19 @@ Combinarás tablas de Lumen sin inflar ingresos y localizarás registros sin cor
 
 Un `JOIN` combina una fila izquierda con las filas derechas que satisfacen una condición. La **cardinalidad** describe cuántas coincidencias puede haber: 1:1, 1:N, N:1 o N:M. Declárala antes de ejecutar la consulta; es un supuesto de negocio verificable.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: pedidos\n1 fila por pedido](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--03-joins-y-cardinalidad-01-2cd02293.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
     A[pedidos\n1 fila por pedido] -->|JOIN pedido_id\n1 a N| B[lineas_pedido\nvarias filas por pedido]
     B --> C[resultado\nuna fila por línea]
     A --> D[pagos\n0 o 1 fila por pedido]
 ```
+</details>
 
 El resultado de `pedidos JOIN lineas_pedido` está a grano **línea**, no pedido. Por eso `SUM(p.importe_de_pedido)` tras ese join repetiría el importe de cada pedido tantas veces como líneas tenga.
 
@@ -3591,12 +3920,19 @@ En una conciliación financiera, sustituir un pago ausente por cero puede escond
 
 Un **funnel** mide cuántas personas o entidades pasan por pasos ordenados. No es «contar eventos de cada nombre»: una persona puede disparar `checkout_started` repetidamente. El contrato de Lumen es: cliente que hizo `view_product` y, después, `checkout_started` y `purchase` durante la misma semana UTC. Se cuenta una vez por cliente y semana.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: view_product: cliente-semana](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--04-sql-analitico-y-mantenible-01-18a493f0.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[view_product: cliente-semana] --> B[checkout: después de ver]
  B --> C[purchase: después de checkout]
  A -.validar identidad, orden y ventana.-> C
 ```
+</details>
 
 Una implementación pedagógica usa la primera hora de cada paso y condiciones de orden:
 
@@ -3649,12 +3985,19 @@ MongoDB agrupa documentos en **colecciones**. Un documento no requiere que todos
 
 La pregunta «¿cuándo conviene guardar juntos los datos relacionados?» tiene dos respuestas posibles:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedido](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--05-mongodb-y-documentos-01-0f8f4963.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
  A[Pedido] --> B{¿Se lee y actualiza junto\ny el conjunto es acotado?}
  B -->|Sí| C[Incrustar líneas\nuna lectura y una escritura atómica]
  B -->|No: crece, cambia o es N:M| D[Referencia\nclienteId, productoId]
 ```
+</details>
 
 **Embedding** guarda datos relacionados dentro de un documento y puede servirlos en una sola lectura; es útil para líneas de un pedido cerrado. Las [guías oficiales de MongoDB sobre embedding](https://www.mongodb.com/docs/v8.2/data-modeling/embedding/) recalcan esas ventajas. Usa **referencias** si duplicar sería costoso, los datos cambian con frecuencia, hay relaciones muchos-a-muchos o un arreglo puede crecer sin control; la [documentación oficial](https://www.mongodb.com/docs/manual/data-modeling/referencing/) enumera estos casos.
 
@@ -3722,11 +4065,18 @@ Un diseño posible de tabla única para el historial del cliente es:
 | `PEDIDO#P100` | `METADATA` | `PEDIDO` | cliente, total |
 | `PEDIDO#P100` | `LINEA#001` | `LINEA` | producto, cantidad |
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Patrón: historial de C001](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--06-dynamodb-y-patrones-de-acceso-01-40cff177.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Patrón: historial de C001] --> B[PK = CLIENTE#C001]
  B --> C[Query por rango SK PEDIDO#fecha]
 ```
+</details>
 
 La pregunta agregada global de la tabla anterior no debe resolverse con un `Scan` periódico: se extrae a OLAP. La SK debe ordenarse para los rangos que realmente se consultan. Una PK con valor muy repetido, como `estado=pagado`, puede concentrar tráfico; AWS recomienda distribuir actividad de forma uniforme y analizar volumen por clave ([partition keys](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html)).
 
@@ -3752,6 +4102,12 @@ Distinguirás la base que sostiene una operación de la capa que permite analiza
 
 **OLTP** (procesamiento transaccional en línea) prioriza registrar una operación correcta y rápida: crear pedido, cobrar o mostrar perfil. Sus tablas o ítems suelen estar optimizados para accesos de la aplicación. **OLAP** (procesamiento analítico en línea) prioriza leer muchas observaciones, combinar historia y resumir para responder preguntas. Un análisis de margen trimestral por cohortes no debe competir con la pantalla de pago.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: App Lumen: OLTP](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--07-arquitectura-y-consultas-asistidas-01-c8f3f6f9.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[App Lumen: OLTP] --> B[Extracción o CDC con controles]
@@ -3760,6 +4116,7 @@ flowchart LR
  D --> E[SQL, Python y BI]
  E -.definiciones y alertas.-> A
 ```
+</details>
 
 El diagrama no afirma que toda empresa tenga las mismas herramientas. Expresa una separación de responsabilidades: la copia analítica recibe datos, los transforma de forma documentada y sirve decisiones sin alterar el registro operacional.
 
@@ -3773,6 +4130,12 @@ Ejemplo: `fact_pedidos` puede tener una fila por pedido pagado, con `dim_fecha` 
 
 Una herramienta puede transformar «ingresos de julio por país» en SQL o MongoDB. Acelera sintaxis, pero no decide qué significa ingreso ni conoce los permisos. Revisa siempre este flujo:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta humana](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--07-arquitectura-y-consultas-asistidas-02-7d1d36ff.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pregunta humana] --> B[Contrato: población, grano, periodo]
@@ -3781,6 +4144,7 @@ flowchart LR
  D --> E[Controles: conteos y muestras]
  E --> F[Resultado y limitaciones]
 ```
+</details>
 
 Un checklist mínimo:
 
@@ -3840,6 +4204,12 @@ Una empresa tecnológica produce muchas huellas: eventos de aplicación, pedidos
 
 Un **dato** es un valor registrado: `usuario_id=42`, `evento="checkout_completed"`, `importe=39.90`. Una **medida** es una operación elemental sobre datos, como contar eventos o sumar importes. Una **métrica** añade una definición reutilizable y un propósito: por ejemplo, “usuarios activos semanales”, calculados como usuarios únicos que realizan una acción de valor entre lunes y domingo. Un **indicador** interpreta una métrica respecto a un contexto: “la activación está 2 puntos por debajo del objetivo”. Un **KPI** es el indicador elegido para gobernar una prioridad importante y al que se asigna responsabilidad y seguimiento.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Datos crudos: eventos, pedidos, tickets](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--01-lenguaje-de-medicion-01-a522f5fd.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Datos crudos: eventos, pedidos, tickets] --> B[Medida: conteo o suma]
@@ -3848,6 +4218,7 @@ flowchart TD
     D --> E[KPI: señal prioritaria para decidir]
     E --> F[Acción, aprendizaje y revisión]
 ```
+</details>
 
 La flecha no significa que toda medida acabe siendo un KPI. La mayoría no debería serlo. Si una organización convierte cada número visible en un KPI, nadie sabe qué priorizar y se optimizan cifras irrelevantes.
 
@@ -3895,6 +4266,12 @@ Escribir `conversion = compras / visitas` parece claro hasta que aparecen pregun
 
 Un contrato de métrica elimina ambigüedad antes de que el dashboard llegue a una reunión. Debe ser breve, pero suficiente para que otra persona pueda reproducirla sin interpretar intenciones.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta de negocio](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--02-contrato-de-metrica-01-1709428d.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     A[Pregunta de negocio] --> B[Contrato de métrica]
@@ -3904,6 +4281,7 @@ flowchart LR
     E --> F[Decisión y responsable]
     F --> B
 ```
+</details>
 
 El último retorno importa: una definición no es eterna. Si cambia el producto, el comportamiento de valor o la fuente, se revisa el contrato y se documenta el cambio. No se sobrescribe silenciosamente la historia.
 
@@ -3951,6 +4329,12 @@ Un objetivo formula una dirección: “hacer que equipos pequeños obtengan valo
 
 Una North Star útil debe estar relacionada con valor para el cliente, ser medible con suficiente calidad, responder a acciones de equipos y no ser tan fácil de manipular que incentive un comportamiento dañino. “Usuarios registrados” suele ser demasiado superficial; “cuentas que completan un flujo de valor semanal” suele estar más cerca de la experiencia real, aunque exige una definición cuidadosa.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Objetivo: valor recurrente](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--03-arquitectura-de-metricas-01-09eeb267.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Objetivo: valor recurrente] --> B[North Star: cuentas con valor semanal]
@@ -3963,6 +4347,7 @@ flowchart TD
     E --> G
     F --> G
 ```
+</details>
 
 El árbol no es una cadena causal demostrada automáticamente. Es una hipótesis de negocio: debe contrastarse con análisis, experiencia de producto y experimentos. Su valor está en obligar a explicitar cómo se espera que una acción local contribuya al resultado global.
 
@@ -3996,6 +4381,12 @@ Evitar conclusiones engañosas al comparar una métrica con un periodo, una pobl
 
 Decir “la conversión es 4 %” no permite decidir. ¿Es 4 % frente a un objetivo de 3 % o de 8 %? ¿Sube respecto a la semana anterior? ¿La semana anterior tenía una campaña, una caída de tracking o un festivo? Toda métrica necesita una referencia: baseline histórico, objetivo acordado, benchmark externo comparable o grupo de control.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Valor observado](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--04-baselines-y-comparaciones-01-633f7b94.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Valor observado] --> B{Referencia válida}
@@ -4008,6 +4399,7 @@ flowchart TD
     E --> G
     F --> G
 ```
+</details>
 
 Un benchmark externo puede orientar, pero rara vez es una meta automática: modelo de negocio, mercado, madurez, definición y población pueden diferir. Es más riguroso usarlo para plantear preguntas que para declarar éxito o fracaso.
 
@@ -4035,6 +4427,12 @@ Construir un funnel que represente un recorrido real del usuario y diagnosticar 
 
 Un funnel compara cuántas entidades pasan por una secuencia de pasos definidos. La entidad puede ser usuario, cuenta, pedido o sesión; escogerla cambia la respuesta. Un funnel de onboarding por usuario y un funnel de checkout por pedido no son intercambiables.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Visita elegible](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--05-funnels-01-a537cdbc.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     A[Visita elegible] --> B[Registro completado]
@@ -4042,6 +4440,7 @@ flowchart LR
     C --> D[Primer valor]
     D --> E[Pago o retención]
 ```
+</details>
 
 Cada flecha es una hipótesis sobre un recorrido. Define orden, ventana máxima, repetición de eventos, exclusiones y tratamiento de usuarios que entran a mitad del proceso. Si una persona completa pasos en varios dispositivos, necesitas una regla de identidad antes de calcular.
 
@@ -4071,6 +4470,12 @@ Interpretar cuándo una población vuelve, se mantiene o abandona, y evitar comp
 
 Una cohorte agrupa entidades que comparten una condición de entrada: por ejemplo, usuarios registrados en la misma semana o cuentas que activaron una funcionalidad. La retención pregunta qué proporción vuelve a realizar una acción definida después de esa entrada. Sin cohorte, una media de usuarios activos mezcla generaciones de producto, campañas y antigüedad.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Cohorte: registro semana 1](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--06-cohortes-retencion-01-84843459.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Cohorte: registro semana 1] --> B[Actividad semana 1]
@@ -4078,6 +4483,7 @@ flowchart TD
     C --> D[Retención semana 4]
     D --> E[Investigación por segmento]
 ```
+</details>
 
 Define con precisión evento de entrada, evento de retorno, intervalo y tipo de retención. La retención clásica exige volver en un periodo concreto; la no acotada permite volver en o después de cierto día. Ambas son válidas si se nombran correctamente.
 
@@ -4103,6 +4509,12 @@ Relacionar métricas de distintas etapas del producto sin convertirlas en una co
 
 Adquisición responde quién llega; activación responde quién obtiene primer valor; engagement responde con qué frecuencia y profundidad se usa; retención responde quién vuelve; monetización responde qué valor económico sostiene el servicio. No existe una secuencia universal, pero dibujar la relación evita optimizar una etapa contra otra.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Adquisición](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--07-metricas-de-valor-01-a469954a.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     A[Adquisición] --> B[Activación]
@@ -4111,6 +4523,7 @@ flowchart LR
     D --> E[Monetización]
     E --> F[Capacidad de reinversión]
 ```
+</details>
 
 DAU, WAU y MAU son recuentos de actividad; el cociente DAU/MAU se usa a veces como aproximación a frecuencia, pero solo es interpretable con una definición de actividad estable. ARPU, CAC y LTV ayudan a hablar de economía unitaria, pero dependen de costes, horizontes y atribución. No los presentes como verdades universales.
 
@@ -4132,6 +4545,12 @@ Define hipótesis, población, métrica primaria, guardrails, duración y criter
 
 La estadística ayuda a medir incertidumbre; no decide por sí sola. Una diferencia puede ser compatible con ruido, demasiado pequeña para justificar coste o perjudicial en un segmento. Comunica magnitud absoluta, relativa, intervalo, tamaño de muestra, duración y límites.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Hipótesis](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--08-experimentacion-y-goodhart-01-88650bc7.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Hipótesis] --> B[Métrica primaria y guardrails]
@@ -4142,6 +4561,7 @@ flowchart TD
     F -->|Sí| G[Desplegar y monitorizar]
     F -->|No| H[Aprender o iterar]
 ```
+</details>
 
 ## Goodhart en la práctica
 
@@ -4165,6 +4585,12 @@ Un catálogo es el lugar donde se encuentran nombre, propósito, definición, f�
 
 Antes de instrumentar, documenta qué eventos representan interacciones importantes, qué propiedades permiten segmentar y cómo se identifica a usuario, cuenta o dispositivo. Define también eventos prohibidos: no envíes PII innecesaria a herramientas de analítica. El plan debe incluir validación de cobertura y un proceso de cambio cuando el producto evolucione.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Decisión y métrica](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--09-gobierno-y-amplitude-01-84187c69.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     A[Decisión y métrica] --> B[Tracking plan]
@@ -4174,6 +4600,7 @@ flowchart LR
     E --> F[Dashboard y acción]
     F --> G[Catálogo y versión]
 ```
+</details>
 
 ## Amplitude como ejemplo, no como sustituto del criterio
 
@@ -4187,6 +4614,12 @@ Un tracking plan útil se parece a un contrato de API: cada cambio tiene autor, 
 
 La instrumentación no termina en el frontend. Un cliente puede emitir una intención; el servidor debe confirmar operaciones que cambian estado. Ambos pueden enviarse, pero con fuentes explícitas y un `event_id` o `request_id` que permita detectar reintentos. Registra `occurred_at` en UTC y `received_at` por separado: si una aplicación offline envía tarde, la actividad ocurrió antes aunque llegue hoy. Deduplica por `event_id`, no por «dos filas parecidas».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Propuesta de evento o métrica](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--09-gobierno-y-amplitude-02-345074de.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Propuesta de evento o métrica] --> B[Revisión Producto, Datos e Ingeniería]
@@ -4197,6 +4630,7 @@ flowchart TD
     F --> G[Monitorizar SLA y consumidores]
     G --> H[Deprecar con sustituto y fecha]
 ```
+</details>
 
 El diagrama responde a quién impide que una modificación local rompa una serie histórica: ninguna persona aprueba en solitario. Producto valida el significado; Ingeniería, la emisión; Datos, el modelo y las pruebas; Privacidad, las propiedades sensibles. Por ejemplo, un SLA puede exigir que el propietario investigue cobertura inferior al 99,5 % en un día laborable y que una definición nueva se anuncie antes de entrar en el dashboard ejecutivo.
 
@@ -4239,6 +4673,12 @@ Una cuenta puede tener varios usuarios. Si el producto genera valor para la empr
 
 La siguiente arquitectura responde a «¿dónde se puede romper el significado de la métrica?». Las ramas representan fuentes diferentes; no son pasos intercambiables.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Usuario conecta fuente](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--10-caso-b2b-operacion-01-32bf8e04.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Usuario conecta fuente] --> B[Cliente emite intención]
@@ -4249,6 +4689,7 @@ flowchart TD
     F --> G[Warehouse y modelo métrico]
     G --> H[Catálogo, cohortes y decisión]
 ```
+</details>
 
 El clic del cliente explica intención y experiencia; la confirmación del servidor confirma una operación. Para activación usamos el evento canónico de backend. Si ambas fuentes se envían, deben poder relacionarse mediante `request_id` o `event_id`; no se suman como si fueran dos acciones. El flujo también muestra por qué un dashboard no es la fuente de verdad: depende de la semántica anterior.
 
@@ -4334,6 +4775,12 @@ Una **serie temporal** es una medida observada en momentos ordenados. En Lumen u
 
 Esto responde a la pregunta “¿qué contrato evita que una previsión sea una cifra sin contexto?”
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Contrato: pedidos diarios](../../../recursos/diagramas-moviles/curso--11-series-temporales--lecciones--01-indice-temporal-y-calidad-01-3202e574.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Contrato: pedidos diarios] --> B[Fecha de corte]
@@ -4341,6 +4788,7 @@ flowchart LR
  C --> D[Horizonte de 14 días]
  D --> E[Decisión de capacidad]
 ```
+</details>
 
 El diagrama es una secuencia de decisión: no se puede usar una campaña conocida el miércoles para predecir el lunes anterior. El contrato hace visible el momento en que el dato se vuelve utilizable.
 
@@ -4360,6 +4808,12 @@ Separarás patrones sostenidos, repeticiones de calendario, ruido y cambios estr
 
 Una serie puede contener **tendencia** (movimiento de largo plazo), **estacionalidad** (patrón que se repite por día, semana o año), ciclos, ruido y rupturas. En Lumen los viernes pueden superar a los martes; noviembre puede contener un pico de campañas; y un cierre de zonas de reparto puede producir un cambio de nivel. Una caída de lunes a domingo puede ser normal; una caída frente al mismo lunes de semanas comparables merece investigación.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedidos diarios](../../../recursos/diagramas-moviles/curso--11-series-temporales--lecciones--02-componentes-de-una-serie-01-656f42b1.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
  A[Pedidos diarios] --> B[Tendencia]
@@ -4371,6 +4825,7 @@ flowchart TD
  D --> F
  E --> G[Investigación y anotación]
 ```
+</details>
 
 Los componentes son ramas paralelas: no ocurren uno después de otro. Una descomposición puede ser **aditiva** si los efectos se suman aproximadamente (por ejemplo, +20 pedidos cada viernes) o **multiplicativa** si la amplitud crece con el nivel (por ejemplo, un 20 % más). Una transformación logarítmica puede ayudar en el segundo caso, pero no es una obligación ni admite ceros sin tratamiento explícito.
 
@@ -4422,12 +4877,19 @@ Validarás una previsión como se usaría en producción: entrenar con pasado y 
 
 Una partición temporal no se baraja. En Lumen puedes entrenar hasta septiembre, validar octubre-noviembre, ajustar una única vez y reservar diciembre como prueba final. Para conocer estabilidad, el enfoque **walk-forward** avanza sucesivos cortes: se predice la semana siguiente, se compara con lo observado y se avanza.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pasado: entrenamiento](../../../recursos/diagramas-moviles/curso--11-series-temporales--lecciones--05-validacion-walk-forward-y-fugas-01-090294c9.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pasado: entrenamiento] --> B[Validación futura 1]
  B --> C[Validación futura 2]
  C --> D[Prueba final intacta]
 ```
+</details>
 
 Cada bloque está en orden temporal. La prueba final no decide parámetros ni umbrales; estima cómo habría rendido el proceso al desplegarlo.
 
@@ -4581,6 +5043,12 @@ Un contrato transforma una intuición en trabajo verificable. Para Lumen:
 
 La siguiente figura responde a «¿cómo una pregunta termina en una acción controlada?».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta operativa](../../../recursos/diagramas-moviles/curso--12-modelos-predictivos--lecciones--01-caso-de-uso-y-objetivo-01-6eb2eed8.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Pregunta operativa] --> B[Contrato: población, corte y target]
@@ -4593,6 +5061,7 @@ flowchart LR
   G --> I[Resultado y monitorización]
   H --> I
 ```
+</details>
 
 La flecha hacia revisión humana es deliberada: una puntuación ordena casos, pero la política de atención decide qué se hace con ella.
 
@@ -4638,6 +5107,12 @@ La última columna se conoce solo después de esperar 30 días. Durante producci
 
 En problemas donde el producto y los clientes cambian, imitar el futuro es más honesto que barajar filas. Entrena con cortes antiguos, ajusta decisiones con un periodo posterior y reserva un periodo final que nadie toca hasta el final.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: ene-mar: entrenamiento](../../../recursos/diagramas-moviles/curso--12-modelos-predictivos--lecciones--02-preparacion-y-fuga-01-0599783f.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[ene-mar: entrenamiento] --> B[abr: validación y umbral]
@@ -4646,6 +5121,7 @@ flowchart LR
   A -.no usa etiquetas ni variables del futuro.-> D
   B -.no reajusta el modelo final.-> D
 ```
+</details>
 
 La línea temporal permite responder a «¿habría funcionado con la información y el comportamiento de entonces?». Una división aleatoria puede poner en entrenamiento una observación posterior de la misma cuenta y hacer que la prueba parezca más fácil.
 
@@ -4709,6 +5185,12 @@ Una regresión logística no es «lineal» en la probabilidad: combina las varia
 
 El siguiente diagrama responde a «¿cuándo una regla se convierte en predicción operativa?».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Cuenta en el corte](../../../recursos/diagramas-moviles/curso--12-modelos-predictivos--lecciones--03-baselines-y-modelos-01-d4862b0f.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Cuenta en el corte] --> B[Factura impagada]
@@ -4720,6 +5202,7 @@ flowchart TD
   E --> G
   F --> H[No priorizar ahora]
 ```
+</details>
 
 Este árbol es didáctico, no una verdad causal. «Factura impagada» puede ser señal de un problema de cobro y requerir una ruta distinta a una llamada de éxito de cliente.
 
@@ -4771,6 +5254,12 @@ Si hay solo 20 plazas, una precision alta en las primeras 20 puede importar más
 
 ROC-AUC resume cómo el score ordena, en promedio, positivos por encima de negativos para muchos umbrales. Puede parecer alta cuando churn es raro. PR-AUC resume el intercambio entre precision y recall y suele ser más informativa en clases desbalanceadas, como un 5 % de churn. Ninguna AUC responde cuántas cuentas debe atender el equipo: para eso inspecciona el umbral o el top-k real.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Scores de churn](../../../recursos/diagramas-moviles/curso--12-modelos-predictivos--lecciones--04-evaluacion-y-coste-de-error-01-836c40ee.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Scores de churn] --> B[Ordenar cuentas]
@@ -4780,6 +5269,7 @@ flowchart LR
   E --> F[Precision, recall y coste]
   F --> G[Revisar umbral y política]
 ```
+</details>
 
 El diagrama muestra que la capacidad viene antes de celebrar una métrica global: un modelo puede ordenar razonablemente y aun así no ser útil en las primeras 20 cuentas.
 
@@ -4828,6 +5318,12 @@ Una variable aparentemente inocua puede ser un **proxy**: por ejemplo, horario d
 
 Evalúa al menos por segmentos operativos relevantes: plan, antigüedad, región si es legítima y tamaño de cuenta. Busca diferencias de cobertura (recall), avisos incorrectos (precision) y calidad de datos. Una diferencia no prueba discriminación por sí sola: puede deberse a tamaños pequeños o definición distinta, pero exige investigación y registro.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Modelo y datos versionados](../../../recursos/diagramas-moviles/curso--12-modelos-predictivos--lecciones--05-interpretacion-sesgo-y-uso-responsable-01-979f0db6.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Modelo y datos versionados] --> B[Score semanal]
@@ -4838,6 +5334,7 @@ flowchart TD
   F --> G[Continuar y registrar]
   F --> H[Investigar, recalibrar o pausar]
 ```
+</details>
 
 El circuito se repite cada semana; se dibuja sin una flecha de vuelta para que el PDF no convierta el ciclo en una secuencia ilegible. Evita el error de «entrenar y olvidar»: las predicciones cambian la atención recibida, y esa atención también puede cambiar los datos con los que evaluamos.
 
@@ -4930,6 +5427,12 @@ Un equipo recibe: «la activación ha caído; miradlo». Es una **petición**, n
 
 Un *ticket* es una ficha compartida de trabajo. Jira es una aplicación popular para guardar estas fichas; la idea es independiente de la marca. Su función no es vigilar personas: conserva el contexto, las decisiones y los criterios de aceptación cuando la conversación ya no está en Slack o en la memoria de alguien.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Petición: cayó activación](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--01-ticket-analitico-01-a516bfa4.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
  A[Petición: cayó activación] --> B[¿Qué decisión depende del resultado?]
@@ -4938,6 +5441,7 @@ flowchart TD
  C --> E[Definir fuentes, periodo y riesgos]
  E --> F[Criterios de aceptación y responsable]
 ```
+</details>
 
 La pregunta del diagrama obliga a fijar el uso antes de medir. «¿Cayó?» no basta; en Nébula se decide entre revertir la versión 4.2, corregir el flujo o mantenerla.
 
@@ -5001,6 +5505,12 @@ activacion-nebula/
 
 ## Trazabilidad como cadena de custodia analítica
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Extracción: fecha, consulta, fuente](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--02-proyecto-reproducible-y-git-01-81a278fc.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Extracción: fecha, consulta, fuente] --> B[Script y parámetros]
@@ -5010,6 +5520,7 @@ flowchart LR
  F[Commit y revisión] --> B
  F --> E
 ```
+</details>
 
 Para reproducir una conclusión hay que poder recorrer las flechas hacia atrás. Un número en una diapositiva sin consulta, corte ni definición no es auditable aunque sea cierto.
 
@@ -5052,6 +5563,12 @@ Elegirás una forma de trabajo que permita explorar sin convertir el resultado e
 
 En Nébula Leo explora una muestra en un notebook: cuenta cuentas por versión, mira nulos y formula hipótesis. Cuando ya sabe la regla de activación, la mueve a `src/calcular_activacion.py` para que se ejecute siempre igual. El notebook final importa esa lógica, explica decisiones y muestra la tabla que revisa Producto.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta y datos de muestra](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--03-notebooks-scripts-y-revision-01-ac16460d.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
  A[Pregunta y datos de muestra] --> B[Notebook exploratorio]
@@ -5062,6 +5579,7 @@ flowchart TD
  E --> F[Revisión de pares]
  F --> G[Entrega]
 ```
+</details>
 
 El bucle de exploración es normal. El peligro aparece si una celda usa un estado oculto: el notebook parece funcionar porque una variable se ejecutó ayer, pero falla desde cero.
 
@@ -5112,6 +5630,12 @@ Un *tracking plan* es el contrato compartido de esos eventos. Amplitude es una p
 
 ## De una métrica a los eventos necesarios
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Métrica: activación a 7 días](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--04-instrumentacion-y-amplitude-01-fcce0395.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Métrica: activación a 7 días] --> B[Definir cuenta elegible]
@@ -5122,6 +5646,7 @@ flowchart LR
  E --> F[Validación y monitorización]
  F --> G[Funnel o cohorte]
 ```
+</details>
 
 El diagrama muestra una dependencia: un funnel es el último paso. Si `cuenta_creada` usa un identificador y `reserva_creada` otro, no se puede saber con honestidad si una misma cuenta hizo ambas cosas.
 
@@ -5175,6 +5700,12 @@ Para Nébula, el título «Activación» no basta. El contrato debe ser visible 
 - **Frescura:** última actualización, zona horaria y retraso esperado visibles.
 - **Propietario:** Datos mantiene la definición; Producto aprueba cambios de propósito.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Eventos validados](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--05-bi-y-dashboards-01-5f11b49b.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
  A[Eventos validados] --> B[Transformación versionada]
@@ -5184,6 +5715,7 @@ flowchart TD
  E --> F[Decisión de Producto]
  G[Alerta de frescura o calidad] --> E
 ```
+</details>
 
 Cada capa tiene una responsabilidad. Añadir una fórmula rápida directamente al gráfico evita el modelo compartido y multiplica definiciones. La alerta no implica que el dato sea falso, pero evita que una cifra atrasada se lea como presente.
 
@@ -5215,6 +5747,12 @@ Cerrarás un análisis de manera que una decisión sea revisable y genere aprend
 
 La secuencia siguiente muestra qué debe quedar unido cuando el análisis se entrega y se opera:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Hallazgo reproducible](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--06-entrega-y-seguimiento-01-3ae5a378.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
  A[Hallazgo reproducible] --> B[Recomendación proporcional]
@@ -5224,6 +5762,7 @@ flowchart TD
  E -->|Sí| F[Documentar aprendizaje]
  E -->|No| G[Revisar hipótesis, datos o acción]
 ```
+</details>
 
 La secuencia evita dos errores opuestos: defender la primera conclusión por orgullo y cambiar de decisión cada vez que un gráfico se mueve. Si la evidencia no es válida, se abre una nueva investigación; el seguimiento puede invalidar la interpretación inicial y eso es aprendizaje, no fracaso.
 
@@ -5303,6 +5842,12 @@ Una campaña de pago empezó el mismo día y trae visitas menos propensas a rese
 
 La pregunta es: ¿por qué una comparación bruta puede engañar? El siguiente grafo dirigido acíclico (DAG) no prueba causalidad; obliga a declarar qué caminos se deben bloquear.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Campaña y canal](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--01-preguntas-causales-y-disenos-01-38f7f580.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  C[Campaña y canal] --> F[Formulario mostrado]
@@ -5311,6 +5856,7 @@ flowchart LR
  D --> R
  F --> R
 ```
+</details>
 
 El camino `Formulario <- Campaña -> Reserva` no representa el efecto del formulario: mezcla audiencia con experiencia. Medir canal y dispositivo puede permitir ajustar; no medir una causa relevante impide prometer que el ajuste “ha eliminado el sesgo”. No controles una variable que ocurre **después** del tratamiento, como “tiempo dentro del nuevo formulario”: podría ser un mediador y cambiar la pregunta.
 
@@ -5359,6 +5905,12 @@ Podrás construir e interpretar una distribución bootstrap para una diferencia 
 
 Lumen observa una diferencia B-A de -0,6 puntos porcentuales. Una muestra alternativa de visitas habría dado una cifra algo distinta. El **bootstrap** aproxima esa variación: toma muchas muestras del mismo tamaño, con reemplazo, de los datos observados; recalcula la estadística en cada una; y usa la distribución resultante para describir estabilidad.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Visitas observadas A y B](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--02-bootstrap-y-sensibilidad-01-a7367495.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Visitas observadas A y B] --> B[Remuestrear con reemplazo]
@@ -5367,6 +5919,7 @@ flowchart LR
  D --> E[Distribución e intervalo percentil]
  E --> F[Decisión junto a coste y supuestos]
 ```
+</details>
 
 “Con reemplazo” significa que una visita puede aparecer dos veces en una réplica y otra ninguna. No inventa usuarios nuevos ni corrige el sesgo de selección. Si los eventos de una persona están repetidos, la unidad de remuestreo debe ser la persona o el clúster, no cada evento; de lo contrario se finge más información de la que existe.
 
@@ -5412,6 +5965,12 @@ Una **anomalía** es un valor que se aparta de un patrón esperado. Un descenso 
 
 Para Lumen se define: “alertar a la persona de guardia si la conversión diaria por plataforma está 25 % por debajo de la referencia comparable durante dos ventanas consecutivas, con al menos 1.000 visitas y frescura menor de 90 minutos”. La referencia debe ser explícita: mediana de los cuatro mismos días de semana anteriores, no una media de todo el mes que mezcle fin de semana y laborable.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Alerta de conversión](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--03-anomalias-monitorizacion-y-alertas-01-9a1bccb8.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Alerta de conversión] --> B[Comprobar frescura, volumen y duplicados]
@@ -5422,6 +5981,7 @@ flowchart LR
  F -->|No| G[Registrar y ajustar]
  F -->|Sí| H[Mitigar y escalar]
 ```
+</details>
 
 El flujo evita un error común: comunicar “la conversión cayó” a dirección cuando en realidad el SDK dejó de enviar eventos Android. El primer paso es validar la observabilidad.
 
@@ -5462,6 +6022,12 @@ Lumen guarda cientos de millones de eventos de visita. Abrir todo en memoria par
 
 Un archivo **Parquet** guarda columnas juntas, a diferencia de un archivo de texto que suele recorrer cada fila completa. Esto permite que un motor lea solo las columnas requeridas. Una **partición** divide el conjunto en carpetas o archivos por una clave, por ejemplo `fecha=2026-06-08/plataforma=android/`. No es una sustitución de índices ni una garantía de velocidad: demasiadas particiones pequeñas crean coste de archivos y metadatos.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Eventos crudos](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--04-escala-formatos-y-motores-01-a72b34f6.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Eventos crudos] --> B[Validar esquema y contrato]
@@ -5470,6 +6036,7 @@ flowchart LR
  D --> E[Agregación de conversión]
  E --> F[Tabla pequeña para alerta y análisis]
 ```
+</details>
 
 El diagrama muestra un punto esencial: el formato no decide qué significa una visita ni resuelve duplicados; el contrato se valida antes.
 
@@ -5532,6 +6099,12 @@ Una **API** es una interfaz mediante la que un programa solicita datos o una acc
 
 La respuesta puede venir en páginas: el servicio entrega, por ejemplo, 1.000 registros y un cursor para solicitar el siguiente lote. La extracción debe guardar cursor, fecha y respuesta cruda o hash para reproducibilidad. Ante `429 Too Many Requests`, espera el tiempo indicado o aplica espera exponencial con límite; no reintentes en bucle ni paralelices hasta derribar el límite. Ante errores 5xx, reintenta un número acotado; ante 4xx de validación, corrige la petición.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Petición con parámetros y versión](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--05-apis-geoespacial-y-datos-externos-01-14be1dea.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Petición con parámetros y versión] --> B[Clasificar respuesta]
@@ -5540,12 +6113,19 @@ flowchart LR
  B -->|429 o 5xx| E[Backoff acotado y registro]
  B -->|4xx no recuperable| F[Parar y revisar contrato]
 ```
+</details>
 
 El diagrama no es una receta para ignorar términos de uso: cada reintento debe tener límite, registro y dueño. Además, nunca guardes secretos de API en el repositorio; usa un almacén de secretos o variables de entorno autorizadas.
 
 ## Coordenadas: número, lugar y sistema de referencia no son sinónimos
 
 Una coordenada `40.4168, -3.7038` es una posición bajo un **sistema de referencia de coordenadas** (CRS). Antes de unirla a barrios o calcular distancia, declara su CRS. EPSG:4326 suele expresar longitud/latitud en grados; los grados no son metros. Calcular distancia euclídea directamente sobre longitud/latitud da una cifra difícil de interpretar y que varía según ubicación. Para medidas métricas locales, transforma a un CRS proyectado apropiado y documenta la decisión.
+
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Coordenada recibida](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--05-apis-geoespacial-y-datos-externos-02-bf484138.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
 
 ```mermaid
 flowchart LR
@@ -5554,6 +6134,7 @@ flowchart LR
  C --> D[Unir a zona o calcular distancia]
  D --> E[Agregar y minimizar precisión publicada]
 ```
+</details>
 
 No infieras hogar, salud, renta o comportamiento a partir de una posición de entrega. Para un panel de Lumen, publicar reservas por celda muy pequeña puede reidentificar a una persona incluso sin nombre. Agrega a zonas con suficiente población, aplica mínimos de conteo, limita acceso y conserva solo la precisión necesaria para la decisión.
 
@@ -5621,6 +6202,12 @@ En *Nimbo*, la responsable de producto pregunta: "Debemos invertir el proximo sp
 
 Este diagrama responde a "cuando una idea ya se puede convertir en proyecto?":
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Idea: mejorar altas](../../../recursos/diagramas-moviles/curso--15-portfolio--lecciones--01-seleccionar-y-delimitar-casos-01-c0054373.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Idea: mejorar altas] --> B[Decision: priorizar un paso]
@@ -5630,6 +6217,7 @@ flowchart LR
  E --> F[Evidencia y limites]
  F --> G[Entregable terminado]
 ```
+</details>
 
 Cada flecha obliga a concretar una pieza. Si faltan datos para la pregunta, se modifica la pregunta o se declara el limite; no se rellena con una conclusion atractiva.
 
@@ -5688,6 +6276,12 @@ No es necesario usar todas las carpetas en un proyecto pequeno. Si es necesario 
 
 Este diagrama responde a "que evidencia sostiene una recomendacion?":
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Contrato de decision](../../../recursos/diagramas-moviles/curso--15-portfolio--lecciones--02-estructurar-proyecto-defendible-01-e92e3416.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Contrato de decision] --> B[Datos documentados]
@@ -5698,6 +6292,7 @@ flowchart LR
  B --> G[Registro de calidad]
  G --> E
 ```
+</details>
 
 La rama de calidad no es burocracia: un duplicado, una ventana incompleta o un evento mal definido puede cambiar el resultado antes de que aparezca el grafico.
 
@@ -5738,6 +6333,12 @@ Para *Nimbo*, una presentacion de cinco diapositivas puede ser:
 
 El flujo responde a "que debe sobrevivir a una revision?":
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Hallazgo](../../../recursos/diagramas-moviles/curso--15-portfolio--lecciones--03-narrativa-revision-y-publicacion-01-8ed8ff5a.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Hallazgo] --> B[Fuente y calculo]
@@ -5747,6 +6348,7 @@ flowchart LR
  E --> F[Publicacion o correccion]
  E --> B
 ```
+</details>
 
 Volver de revision a fuente y calculo es normal: la revision busca descubrir errores, no aprobar una historia ya decidida.
 
@@ -5791,6 +6393,12 @@ La estructura **STAR** (situacion, tarea, accion, resultado) sirve para contar t
 
 Este diagrama responde a "como se conecta una respuesta oral con evidencia?":
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta de entrevista](../../../recursos/diagramas-moviles/curso--15-portfolio--lecciones--04-entrevistas-cv-y-capstone-01-161b6442.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pregunta de entrevista] --> B[Contrato y contexto]
@@ -5799,6 +6407,7 @@ flowchart LR
  D --> E[Limite explicito]
  E --> F[Siguiente verificacion]
 ```
+</details>
 
 Una buena respuesta enlaza a un archivo, consulta, metrica o decision registrada; no depende de memorizar una frase brillante.
 

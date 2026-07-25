@@ -16,12 +16,19 @@ print(pedidos[0]["importe"])  # 42.5
 
 `pedidos[0]` significa «primer elemento» porque Python empieza a contar desde cero. `pedido["importe"]` usa una clave, no una posición. El anidamiento (`lista` dentro de `dict`) se parece a una respuesta JSON de una API; todavía no es una tabla, pero ya obliga a preguntar qué campos son obligatorios.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Lista pedidos](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--02-colecciones-y-datos-sencillos-01-26b2f5c9.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
   A[Lista pedidos] --> B[Pedido p-101: diccionario]
   A --> C[Pedido p-102: diccionario]
   B --> D[etiquetas: lista]
 ```
+</details>
 
 La relación no es una secuencia: un pedido tiene varios campos y una lista contiene varios pedidos.
 

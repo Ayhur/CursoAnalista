@@ -22,6 +22,12 @@ resumen = (
 resumen["conversion"] = resumen["compras"] / resumen["visitas"]
 ```
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Total: compras / visitas](../../../recursos/diagramas-moviles/curso--06-analisis-exploratorio--lecciones--02-distribuciones-segmentos-y-outliers-01-8c77251c.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
  A[Total: compras / visitas] --> B[Segmentar con una pregunta]
@@ -31,6 +37,7 @@ flowchart TB
  D --> E
  E --> F[Preguntar que explicacion distingue el dato]
 ```
+</details>
 
 El diagrama muestra que los segmentos son ramas paralelas: no debemos sumar sus porcentajes ni tratarlos como pasos de una secuencia.
 

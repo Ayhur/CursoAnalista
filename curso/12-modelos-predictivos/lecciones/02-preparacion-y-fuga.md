@@ -19,6 +19,12 @@ La última columna se conoce solo después de esperar 30 días. Durante producci
 
 En problemas donde el producto y los clientes cambian, imitar el futuro es más honesto que barajar filas. Entrena con cortes antiguos, ajusta decisiones con un periodo posterior y reserva un periodo final que nadie toca hasta el final.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: ene-mar: entrenamiento](../../../recursos/diagramas-moviles/curso--12-modelos-predictivos--lecciones--02-preparacion-y-fuga-01-0599783f.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[ene-mar: entrenamiento] --> B[abr: validación y umbral]
@@ -27,6 +33,7 @@ flowchart LR
   A -.no usa etiquetas ni variables del futuro.-> D
   B -.no reajusta el modelo final.-> D
 ```
+</details>
 
 La línea temporal permite responder a «¿habría funcionado con la información y el comportamiento de entonces?». Una división aleatoria puede poner en entrenamiento una observación posterior de la misma cuenta y hacer que la prueba parezca más fácil.
 

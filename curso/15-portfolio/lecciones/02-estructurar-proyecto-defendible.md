@@ -27,6 +27,12 @@ No es necesario usar todas las carpetas en un proyecto pequeno. Si es necesario 
 
 Este diagrama responde a "que evidencia sostiene una recomendacion?":
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Contrato de decision](../../../recursos/diagramas-moviles/curso--15-portfolio--lecciones--02-estructurar-proyecto-defendible-01-e92e3416.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Contrato de decision] --> B[Datos documentados]
@@ -37,6 +43,7 @@ flowchart LR
  B --> G[Registro de calidad]
  G --> E
 ```
+</details>
 
 La rama de calidad no es burocracia: un duplicado, una ventana incompleta o un evento mal definido puede cambiar el resultado antes de que aparezca el grafico.
 

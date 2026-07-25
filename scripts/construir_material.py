@@ -223,6 +223,10 @@ def markdown_to_story(text: str, styles_map: dict[str, ParagraphStyle]) -> list:
             flush_list()
             story.append(Spacer(1, 3))
             continue
+        if line.startswith("<!-- mobile-diagram:") or line.startswith("![Diagrama:"):
+            continue
+        if line in {"<details>", "</details>"} or line.startswith("<summary>"):
+            continue
         if line.startswith("# "):
             flush_list()
             story.append(Paragraph(inline_markdown(line[2:]), styles_map["title"]))

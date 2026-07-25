@@ -32,11 +32,18 @@ Un diseño posible de tabla única para el historial del cliente es:
 | `PEDIDO#P100` | `METADATA` | `PEDIDO` | cliente, total |
 | `PEDIDO#P100` | `LINEA#001` | `LINEA` | producto, cantidad |
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Patrón: historial de C001](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--06-dynamodb-y-patrones-de-acceso-01-40cff177.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Patrón: historial de C001] --> B[PK = CLIENTE#C001]
  B --> C[Query por rango SK PEDIDO#fecha]
 ```
+</details>
 
 La pregunta agregada global de la tabla anterior no debe resolverse con un `Scan` periódico: se extrae a OLAP. La SK debe ordenarse para los rangos que realmente se consultan. Una PK con valor muy repetido, como `estado=pagado`, puede concentrar tráfico; AWS recomienda distribuir actividad de forma uniforme y analizar volumen por clave ([partition keys](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html)).
 

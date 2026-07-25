@@ -10,6 +10,12 @@ Una **distribución** es el conjunto de valores que toma una variable y la frecu
 
 La **media** suma y divide por el número de valores: `232 / 7 = 33,1 min`. La **mediana** es el valor central al ordenar: `26 min`. El pedido de 80 minutos arrastra la media, pero no la mediana. Ninguno de los dos números es "el correcto" fuera de contexto: la media sirve para estimar minutos totales de capacidad; la mediana describe mejor una entrega típica cuando existen extremos.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Lista de entregas](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--02-descriptiva-y-distribuciones-01-549a6894.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
   A[Lista de entregas] --> B[Ordenar y revisar unidades]
@@ -18,6 +24,7 @@ flowchart TD
   C --> E[Pregunta operativa]
   D --> E
 ```
+</details>
 
 El diagrama separa dos preguntas. Un centro alto puede deberse a que todos empeoran o a unos pocos pedidos muy tardíos; la dispersión lo aclara.
 

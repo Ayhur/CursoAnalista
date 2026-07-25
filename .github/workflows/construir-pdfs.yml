@@ -6,11 +6,15 @@ on:
     paths:
       - "curso/**"
       - "scripts/construir_material.py"
+      - "scripts/construir_diagramas_moviles.py"
+      - "recursos/diagramas-moviles/**"
       - ".github/workflows/construir-pdfs.yml"
   pull_request:
     paths:
       - "curso/**"
       - "scripts/construir_material.py"
+      - "scripts/construir_diagramas_moviles.py"
+      - "recursos/diagramas-moviles/**"
       - ".github/workflows/construir-pdfs.yml"
   workflow_dispatch:
 
@@ -27,8 +31,10 @@ jobs:
           python-version: "3.12"
       - name: Instalar dependencia de PDF
         run: pip install reportlab
-      - name: Generar Markdown consolidado y PDFs
-        run: python scripts/construir_material.py --all
+      - name: Comprobar fallbacks móviles y generar PDFs
+        run: |
+          python scripts/construir_diagramas_moviles.py --check
+          python scripts/construir_material.py --all
       - name: Publicar descargas como artefacto
         uses: actions/upload-artifact@v4
         with:

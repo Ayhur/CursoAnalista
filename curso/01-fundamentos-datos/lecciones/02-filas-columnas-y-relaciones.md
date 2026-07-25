@@ -16,6 +16,12 @@ Una **clave primaria** identifica de manera única una fila dentro de su tabla: 
 
 ¿Cómo se conectan las piezas del caso sin inventar relaciones?
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: usuarios: clave usuario_id](../../../recursos/diagramas-moviles/curso--01-fundamentos-datos--lecciones--02-filas-columnas-y-relaciones-01-7458099e.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     U[usuarios: clave usuario_id] -->|1 a N mediante usuario_id| P[pedidos: clave pedido_id]
@@ -23,6 +29,7 @@ flowchart LR
     P -->|1 a 1 o 0 a 1| F[pagos: clave pedido_id]
     U -->|1 a N; usuario puede ser nulo| E[eventos_app]
 ```
+</details>
 
 Un usuario puede tener muchos pedidos (1:N); cada pedido pertenece a un usuario si el negocio lo exige. Un pago puede ser 0:1 con pedido si hay pedidos iniciados pero no cobrados. Las relaciones describen una regla de negocio, no una forma de dibujo.
 

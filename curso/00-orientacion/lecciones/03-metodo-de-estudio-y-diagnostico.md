@@ -19,6 +19,12 @@ Desde el móvil puedes copiar la plantilla en una aplicación de notas y escribi
 
 Una investigación no es reproducible porque use una herramienta moderna. Es **reproducible** cuando otra persona puede entender qué se preguntó, qué información se usó, qué reglas se aplicaron y por qué se recomendó actuar. El siguiente mapa responde a «¿qué debe conservarse para revisar el caso de Lumen?».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Decisión y contexto](../../../recursos/diagramas-moviles/curso--00-orientacion--lecciones--03-metodo-de-estudio-y-diagnostico-01-3696afe2.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Decisión y contexto] --> B[Pregunta e hipótesis]
@@ -27,6 +33,7 @@ flowchart LR
   D --> E[Resultado y límites]
   E --> F[Acción y seguimiento]
 ```
+</details>
 
 Si alguien recibe solo un gráfico final, no puede comprobar si se incluyeron cuentas de prueba, si la comparación tenía la misma ventana o si la recomendación fue prudente. La [plantilla reutilizable](../plantillas/brief-analitico.md) guarda los seis eslabones.
 

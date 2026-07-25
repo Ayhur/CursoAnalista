@@ -37,6 +37,12 @@ por_canal = (
 
 Este flujo responde a «¿cómo sé que el resumen no perdió o duplicó dinero?»:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedidos válidos](../../../recursos/diagramas-moviles/curso--05-pandas--lecciones--03-transformacion-y-agregacion-01-f3184e6f.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pedidos válidos] --> B[Regla importe neto]
@@ -47,6 +53,7 @@ flowchart LR
  E --> G[Reconciliar]
  F --> G
 ```
+</details>
 
 La reconciliación compara dos caminos que deberían coincidir:
 

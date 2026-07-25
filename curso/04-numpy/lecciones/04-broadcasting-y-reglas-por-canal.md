@@ -22,12 +22,19 @@ desviacion = tiempos - objetivos
 
 La pregunta es «¿qué objetivo se resta de cada celda?»:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Matriz días x canales](../../../recursos/diagramas-moviles/curso--04-numpy--lecciones--04-broadcasting-y-reglas-por-canal-01-5d2bc3ee.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Matriz días x canales] --> C[Restar por columnas]
   B[Vector: objetivo por canal] --> C
   C --> D[Matriz: desviación por día y canal]
 ```
+</details>
 
 Cada columna recibe su objetivo. No se está calculando todavía la causa de las demoras: solo una diferencia respecto a una referencia acordada.
 

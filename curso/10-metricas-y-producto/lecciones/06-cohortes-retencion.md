@@ -8,6 +8,12 @@ Interpretar cuándo una población vuelve, se mantiene o abandona, y evitar comp
 
 Una cohorte agrupa entidades que comparten una condición de entrada: por ejemplo, usuarios registrados en la misma semana o cuentas que activaron una funcionalidad. La retención pregunta qué proporción vuelve a realizar una acción definida después de esa entrada. Sin cohorte, una media de usuarios activos mezcla generaciones de producto, campañas y antigüedad.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Cohorte: registro semana 1](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--06-cohortes-retencion-01-84843459.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Cohorte: registro semana 1] --> B[Actividad semana 1]
@@ -15,6 +21,7 @@ flowchart TD
     C --> D[Retención semana 4]
     D --> E[Investigación por segmento]
 ```
+</details>
 
 Define con precisión evento de entrada, evento de retorno, intervalo y tipo de retención. La retención clásica exige volver en un periodo concreto; la no acotada permite volver en o después de cierto día. Ambas son válidas si se nombran correctamente.
 

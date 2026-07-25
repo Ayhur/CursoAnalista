@@ -10,6 +10,12 @@ Una **anomalía** es un valor que se aparta de un patrón esperado. Un descenso 
 
 Para Lumen se define: “alertar a la persona de guardia si la conversión diaria por plataforma está 25 % por debajo de la referencia comparable durante dos ventanas consecutivas, con al menos 1.000 visitas y frescura menor de 90 minutos”. La referencia debe ser explícita: mediana de los cuatro mismos días de semana anteriores, no una media de todo el mes que mezcle fin de semana y laborable.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Alerta de conversión](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--03-anomalias-monitorizacion-y-alertas-01-9a1bccb8.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Alerta de conversión] --> B[Comprobar frescura, volumen y duplicados]
@@ -20,6 +26,7 @@ flowchart LR
  F -->|No| G[Registrar y ajustar]
  F -->|Sí| H[Mitigar y escalar]
 ```
+</details>
 
 El flujo evita un error común: comunicar “la conversión cayó” a dirección cuando en realidad el SDK dejó de enviar eventos Android. El primer paso es validar la observabilidad.
 

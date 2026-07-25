@@ -85,6 +85,12 @@ Primero se calcula un importe **por pedido**; después se clasifica. Clasificar 
 
 La pregunta «¿qué sucede antes de que aparezca el resultado?» se resume así:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: FROM: filas de pedidos](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--02-sql-seleccion-filtro-y-agregacion-01-6e3a6551.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     A[FROM: filas de pedidos] --> B[WHERE: solo pagados y periodo]
@@ -93,6 +99,7 @@ flowchart LR
     D --> E[HAVING: grupos con regla]
     E --> F[SELECT y ORDER BY: resultado]
 ```
+</details>
 
 El orden enseña por qué una condición de fila no se comporta igual que una condición de grupo. Un motor puede optimizar internamente el plan, pero el significado lógico debe mantenerse.
 

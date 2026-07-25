@@ -8,6 +8,12 @@ Sabrás definir un periodo comparable y calcular crecimiento sin mezclar días i
 
 Nexo registra cada pedido a las 23:30 UTC. En España puede pertenecer al día siguiente local. Antes de agrupar por día hay que fijar zona horaria y regla de corte. Después, una fila diaria puede contener total de pedidos, ingresos y p90 de entrega; una fila semanal resume siete días, pero ya no permite estudiar la hora punta.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Eventos con hora y zona](../../../recursos/diagramas-moviles/curso--03-matematicas-aplicadas--lecciones--06-tiempo-granularidad-y-ventanas-01-b41cd595.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Eventos con hora y zona] --> B[Normalizar calendario]
@@ -16,6 +22,7 @@ flowchart LR
   D --> E[Comparar periodos equivalentes]
   E --> F[Decisión]
 ```
+</details>
 
 La ventana temporal es parte de la definición de una métrica. Cambiarla cambia el valor y, con frecuencia, la conclusión.
 

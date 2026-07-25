@@ -35,6 +35,12 @@ por_dia = resueltas.sum(axis=1)    # [24, 27, 26, 27], un total por día
 
 La relación visual responde a «¿qué etiqueta conserva cada suma?»:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Matriz: días por canales](../../../recursos/diagramas-moviles/curso--04-numpy--lecciones--02-seleccion-mascaras-y-forma-01-5c583b62.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
   A[Matriz: días por canales] --> B[sum axis=0]
@@ -42,6 +48,7 @@ flowchart TB
   A --> D[sum axis=1]
   D --> E[Un total por día]
 ```
+</details>
 
 `axis=0` no significa «mejor» ni «vertical» en abstracto; solo resulta correcto porque el contrato asignó filas a días y columnas a canales. Verifica la forma del resultado antes de asignarle un nombre.
 

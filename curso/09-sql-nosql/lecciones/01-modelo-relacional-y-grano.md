@@ -16,6 +16,12 @@ La pregunta que evita la mayor parte de los errores es el **grano**: «¿qué re
 
 La pregunta «¿qué conecta clientes, pedidos, líneas, pagos y eventos?» se responde con este diagrama entidad-relación simplificado:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: clientes: PK cliente_id](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--01-modelo-relacional-y-grano-01-e0c9eaa9.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     C[clientes: PK cliente_id] -->|1 a N: realiza| P[pedidos: PK pedido_id, FK cliente_id]
@@ -23,6 +29,7 @@ flowchart LR
     P -->|0 a 1: se liquida con| G[pagos: PK pago_id, FK pedido_id]
     C -->|1 a N: genera| E[eventos: PK evento_id, FK cliente_id]
 ```
+</details>
 
 Interpretación: un cliente puede no tener pedidos o tener muchos; un pedido tiene varias líneas; el ejercicio impone como simplificación un único pago por pedido. `UNIQUE(pedido_id)` en `pagos` expresa esa última regla. En un sistema real podría existir reintento, reembolso o pago dividido; entonces el grano de pagos y la relación cambiarían.
 

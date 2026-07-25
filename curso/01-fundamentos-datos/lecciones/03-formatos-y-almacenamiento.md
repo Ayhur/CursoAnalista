@@ -36,6 +36,12 @@ Un archivo **JSON** (*JavaScript Object Notation*) también es texto, pero puede
 
 No hay una única conversión correcta de JSON a CSV. El objeto principal se puede convertir en una fila de `pedidos`; `usuario.usuario_id` se extrae como una columna; cada elemento de `items` debe crear una fila de `lineas_pedido`. Repetir el pedido en cada línea es válido solo si declaramos que el resultado tiene grano de línea y no reutilizamos `total_eur` como si fuera un importe por línea.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: JSON: un pedido con lista items](../../../recursos/diagramas-moviles/curso--01-fundamentos-datos--lecciones--03-formatos-y-almacenamiento-01-4e660629.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
     J[JSON: un pedido con lista items] --> P[Tabla pedidos: una fila por pedido]
@@ -44,6 +50,7 @@ flowchart LR
     L --> A[Analizar unidades y productos]
     P --> I[Analizar pedidos e ingreso]
 ```
+</details>
 
 El objetivo de la conversión no es «aplanar todo»: es conservar significado y poder analizar cada pregunta con el grano correspondiente.
 

@@ -8,12 +8,19 @@ Combinarás tablas de Lumen sin inflar ingresos y localizarás registros sin cor
 
 Un `JOIN` combina una fila izquierda con las filas derechas que satisfacen una condición. La **cardinalidad** describe cuántas coincidencias puede haber: 1:1, 1:N, N:1 o N:M. Declárala antes de ejecutar la consulta; es un supuesto de negocio verificable.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: pedidos\n1 fila por pedido](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--03-joins-y-cardinalidad-01-2cd02293.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
     A[pedidos\n1 fila por pedido] -->|JOIN pedido_id\n1 a N| B[lineas_pedido\nvarias filas por pedido]
     B --> C[resultado\nuna fila por línea]
     A --> D[pagos\n0 o 1 fila por pedido]
 ```
+</details>
 
 El resultado de `pedidos JOIN lineas_pedido` está a grano **línea**, no pedido. Por eso `SUM(p.importe_de_pedido)` tras ese join repetiría el importe de cada pedido tantas veces como líneas tenga.
 

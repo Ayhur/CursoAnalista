@@ -14,6 +14,12 @@ En Lumen se comprueba primero que `pago` cuenta pagos finalizados únicos y que 
 
 La pregunta siguiente guía la forma. Este esquema responde: “¿qué tipo de relación necesito ver?”
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta concreta](../../../recursos/diagramas-moviles/curso--07-visualizacion--lecciones--01-pregunta-y-tipo-de-grafico-01-70defe68.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Pregunta concreta] --> B[Comparación principal]
@@ -24,6 +30,7 @@ flowchart LR
  D --> H
  E --> H
 ```
+</details>
 
 La ramificación no es una receta automática. Una línea codifica continuidad temporal: úsala para la conversión diaria de Lumen, donde el eje horizontal sí tiene orden y distancia. Barras horizontales ordenadas permiten comparar la conversión por canal sin obligar al lector a adivinar cuál es mayor. Un histograma muestra cuántas observaciones caen en intervalos; sirve para estudiar la distribución de tiempo de carga, no para contar categorías. Una caja resume mediana, cuartiles y posibles valores extremos, pero no muestra todos los picos de una distribución pequeña.
 

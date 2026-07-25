@@ -8,6 +8,12 @@ Elegirás una forma de trabajo que permita explorar sin convertir el resultado e
 
 En Nébula Leo explora una muestra en un notebook: cuenta cuentas por versión, mira nulos y formula hipótesis. Cuando ya sabe la regla de activación, la mueve a `src/calcular_activacion.py` para que se ejecute siempre igual. El notebook final importa esa lógica, explica decisiones y muestra la tabla que revisa Producto.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pregunta y datos de muestra](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--03-notebooks-scripts-y-revision-01-ac16460d.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
  A[Pregunta y datos de muestra] --> B[Notebook exploratorio]
@@ -18,6 +24,7 @@ flowchart TD
  E --> F[Revisión de pares]
  F --> G[Entrega]
 ```
+</details>
 
 El bucle de exploración es normal. El peligro aparece si una celda usa un estado oculto: el notebook parece funcionar porque una variable se ejecutó ayer, pero falla desde cero.
 

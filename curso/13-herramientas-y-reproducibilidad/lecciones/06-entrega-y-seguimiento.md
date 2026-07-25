@@ -6,6 +6,12 @@ Cerrarás un análisis de manera que una decisión sea revisable y genere aprend
 
 La secuencia siguiente muestra qué debe quedar unido cuando el análisis se entrega y se opera:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Hallazgo reproducible](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--06-entrega-y-seguimiento-01-3ae5a378.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
  A[Hallazgo reproducible] --> B[Recomendación proporcional]
@@ -15,6 +21,7 @@ flowchart TD
  E -->|Sí| F[Documentar aprendizaje]
  E -->|No| G[Revisar hipótesis, datos o acción]
 ```
+</details>
 
 La secuencia evita dos errores opuestos: defender la primera conclusión por orgullo y cambiar de decisión cada vez que un gráfico se mueve. Si la evidencia no es válida, se abre una nueva investigación; el seguimiento puede invalidar la interpretación inicial y eso es aprendizaje, no fracaso.
 

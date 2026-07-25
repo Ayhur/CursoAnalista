@@ -16,6 +16,12 @@ El encargo útil no es «mirar los datos». Es decidir entre opciones con coste:
 
 Este flujo responde a «¿qué debe ocurrir entre una alarma y una decisión responsable?».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Brief: caída de activación](../../../recursos/diagramas-moviles/curso--00-orientacion--lecciones--01-rol-y-ciclo-de-decision-01-89ee04dc.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Brief: caída de activación] --> B[Pregunta y métrica]
@@ -25,6 +31,7 @@ flowchart LR
   E --> F[Acción de producto]
   F --> G[Seguimiento y aprendizaje]
 ```
+</details>
 
 El seguimiento vuelve a abrir una pregunta, aunque lo representemos como el final de este recorrido para conservar un diagrama legible en PDF. Si Lumen simplifica una pantalla, debe comprobar después si sube la activación **sin** empeorar cancelaciones, soporte o ingresos. Una recomendación no cierra el análisis; crea una nueva situación que hay que observar.
 

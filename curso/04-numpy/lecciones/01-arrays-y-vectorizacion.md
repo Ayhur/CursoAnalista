@@ -39,6 +39,12 @@ El resultado de `minutos / 60` conserva tres posiciones. La tercera línea compa
 
 Este diagrama responde a «¿qué tiene que seguir siendo cierto para que una operación vectorizada signifique lo que creemos?»:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Array de minutos por día](../../../recursos/diagramas-moviles/curso--04-numpy--lecciones--01-arrays-y-vectorizacion-01-696fddca.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Array de minutos por día] --> B[Regla: dividir entre 60]
@@ -46,6 +52,7 @@ flowchart LR
   C --> D[Resumen o decisión]
   E[Unidad y orden documentados] --> B
 ```
+</details>
 
 La flecha desde unidad y orden no es decorativa: sin ellos el cálculo puede ejecutarse y seguir siendo analíticamente falso.
 

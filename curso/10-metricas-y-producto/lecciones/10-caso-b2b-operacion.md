@@ -23,6 +23,12 @@ Una cuenta puede tener varios usuarios. Si el producto genera valor para la empr
 
 La siguiente arquitectura responde a «¿dónde se puede romper el significado de la métrica?». Las ramas representan fuentes diferentes; no son pasos intercambiables.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Usuario conecta fuente](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--10-caso-b2b-operacion-01-32bf8e04.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Usuario conecta fuente] --> B[Cliente emite intención]
@@ -33,6 +39,7 @@ flowchart TD
     F --> G[Warehouse y modelo métrico]
     G --> H[Catálogo, cohortes y decisión]
 ```
+</details>
 
 El clic del cliente explica intención y experiencia; la confirmación del servidor confirma una operación. Para activación usamos el evento canónico de backend. Si ambas fuentes se envían, deben poder relacionarse mediante `request_id` o `event_id`; no se suman como si fueran dos acciones. El flujo también muestra por qué un dashboard no es la fuente de verdad: depende de la semántica anterior.
 

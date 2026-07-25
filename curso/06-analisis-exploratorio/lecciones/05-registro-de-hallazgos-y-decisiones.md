@@ -22,6 +22,12 @@ Un análisis no termina al encontrar un número. Debe permitir que otra persona 
 
 Esta nota dice qué se observó y qué falta. Una mala versión sería «la versión 4.2 rompió Android»: oculta el método, borra incertidumbre y puede hacer actuar al equipo sobre una causa falsa.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Hallazgo reproducible](../../../recursos/diagramas-moviles/curso--06-analisis-exploratorio--lecciones--05-registro-de-hallazgos-y-decisiones-01-97e773f1.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Hallazgo reproducible] --> B[Limites y explicaciones rivales]
@@ -29,6 +35,7 @@ flowchart LR
  C --> D[Comprobacion tecnica o experimento]
  D --> E[Actualizar decision]
 ```
+</details>
 
 El flujo no termina en una conclusión tajante. La salida del EDA es una acción proporcional a la evidencia y una forma concreta de aprender más.
 

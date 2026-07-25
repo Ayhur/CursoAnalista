@@ -12,6 +12,12 @@ En *Nimbo*, la responsable de producto pregunta: "Debemos invertir el proximo sp
 
 Este diagrama responde a "cuando una idea ya se puede convertir en proyecto?":
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Idea: mejorar altas](../../../recursos/diagramas-moviles/curso--15-portfolio--lecciones--01-seleccionar-y-delimitar-casos-01-c0054373.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Idea: mejorar altas] --> B[Decision: priorizar un paso]
@@ -21,6 +27,7 @@ flowchart LR
  E --> F[Evidencia y limites]
  F --> G[Entregable terminado]
 ```
+</details>
 
 Cada flecha obliga a concretar una pieza. Si faltan datos para la pregunta, se modifica la pregunta o se declara el limite; no se rellena con una conclusion atractiva.
 

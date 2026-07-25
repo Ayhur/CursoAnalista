@@ -12,6 +12,12 @@ En Nébula, un día con muchas visitas y compras cero puede señalar un checkout
 
 ## Protocolo de investigación
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Valor inusual](../../../recursos/diagramas-moviles/curso--06-analisis-exploratorio--lecciones--03-valores-extremos-y-calidad-01-e125286f.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Valor inusual] --> B[Comprobar tipo, rango y duplicados]
@@ -22,6 +28,7 @@ flowchart LR
  E --> G[Documentar impacto]
  F --> G
 ```
+</details>
 
 La decisión tiene dos salidas legítimas. Solo se excluye después de confirmar el motivo; si hay duda, se conserva y se explica cómo cambia el resultado con y sin ese caso.
 

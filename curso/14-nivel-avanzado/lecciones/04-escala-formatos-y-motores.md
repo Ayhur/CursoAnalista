@@ -10,6 +10,12 @@ Lumen guarda cientos de millones de eventos de visita. Abrir todo en memoria par
 
 Un archivo **Parquet** guarda columnas juntas, a diferencia de un archivo de texto que suele recorrer cada fila completa. Esto permite que un motor lea solo las columnas requeridas. Una **partición** divide el conjunto en carpetas o archivos por una clave, por ejemplo `fecha=2026-06-08/plataforma=android/`. No es una sustitución de índices ni una garantía de velocidad: demasiadas particiones pequeñas crean coste de archivos y metadatos.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Eventos crudos](../../../recursos/diagramas-moviles/curso--14-nivel-avanzado--lecciones--04-escala-formatos-y-motores-01-a72b34f6.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Eventos crudos] --> B[Validar esquema y contrato]
@@ -18,6 +24,7 @@ flowchart LR
  D --> E[Agregación de conversión]
  E --> F[Tabla pequeña para alerta y análisis]
 ```
+</details>
 
 El diagrama muestra un punto esencial: el formato no decide qué significa una visita ni resuelve duplicados; el contrato se valida antes.
 

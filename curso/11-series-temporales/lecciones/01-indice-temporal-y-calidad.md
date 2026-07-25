@@ -8,6 +8,12 @@ Una **serie temporal** es una medida observada en momentos ordenados. En Lumen u
 
 Esto responde a la pregunta “¿qué contrato evita que una previsión sea una cifra sin contexto?”
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Contrato: pedidos diarios](../../../recursos/diagramas-moviles/curso--11-series-temporales--lecciones--01-indice-temporal-y-calidad-01-3202e574.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Contrato: pedidos diarios] --> B[Fecha de corte]
@@ -15,6 +21,7 @@ flowchart LR
  C --> D[Horizonte de 14 días]
  D --> E[Decisión de capacidad]
 ```
+</details>
 
 El diagrama es una secuencia de decisión: no se puede usar una campaña conocida el miércoles para predecir el lunes anterior. El contrato hace visible el momento en que el dato se vuelve utilizable.
 

@@ -24,6 +24,12 @@ Una **hipótesis** es una explicación provisional que podría ser falsa; por ej
 
 Este diagrama responde a «¿cómo evitar que una sospecha se disfrace de conclusión?».
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Hecho: baja la activación Android](../../../recursos/diagramas-moviles/curso--00-orientacion--lecciones--02-preguntas-hipotesis-y-evidencia-01-5d8445b7.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
   A[Hecho: baja la activación Android] --> B[Hipótesis: falla selector]
@@ -33,6 +39,7 @@ flowchart TB
   E -->|sí, con límites| F[Priorizar corrección]
   E -->|no o incompleta| G[Revisar hipótesis y medición]
 ```
+</details>
 
 La ruta «sí» no elimina los límites: quizá el cambio coincide con una campaña. Por eso la recomendación debe indicar el nivel de seguridad y qué se medirá tras actuar.
 

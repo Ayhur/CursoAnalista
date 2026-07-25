@@ -27,12 +27,19 @@ MongoDB agrupa documentos en **colecciones**. Un documento no requiere que todos
 
 La pregunta «¿cuándo conviene guardar juntos los datos relacionados?» tiene dos respuestas posibles:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Pedido](../../../recursos/diagramas-moviles/curso--09-sql-nosql--lecciones--05-mongodb-y-documentos-01-0f8f4963.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TB
  A[Pedido] --> B{¿Se lee y actualiza junto\ny el conjunto es acotado?}
  B -->|Sí| C[Incrustar líneas\nuna lectura y una escritura atómica]
  B -->|No: crece, cambia o es N:M| D[Referencia\nclienteId, productoId]
 ```
+</details>
 
 **Embedding** guarda datos relacionados dentro de un documento y puede servirlos en una sola lectura; es útil para líneas de un pedido cerrado. Las [guías oficiales de MongoDB sobre embedding](https://www.mongodb.com/docs/v8.2/data-modeling/embedding/) recalcan esas ventajas. Usa **referencias** si duplicar sería costoso, los datos cambian con frecuencia, hay relaciones muchos-a-muchos o un arreglo puede crecer sin control; la [documentación oficial](https://www.mongodb.com/docs/manual/data-modeling/referencing/) enumera estos casos.
 

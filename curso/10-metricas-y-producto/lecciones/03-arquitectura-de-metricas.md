@@ -10,6 +10,12 @@ Un objetivo formula una dirección: “hacer que equipos pequeños obtengan valo
 
 Una North Star útil debe estar relacionada con valor para el cliente, ser medible con suficiente calidad, responder a acciones de equipos y no ser tan fácil de manipular que incentive un comportamiento dañino. “Usuarios registrados” suele ser demasiado superficial; “cuentas que completan un flujo de valor semanal” suele estar más cerca de la experiencia real, aunque exige una definición cuidadosa.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Objetivo: valor recurrente](../../../recursos/diagramas-moviles/curso--10-metricas-y-producto--lecciones--03-arquitectura-de-metricas-01-09eeb267.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
     A[Objetivo: valor recurrente] --> B[North Star: cuentas con valor semanal]
@@ -22,6 +28,7 @@ flowchart TD
     E --> G
     F --> G
 ```
+</details>
 
 El árbol no es una cadena causal demostrada automáticamente. Es una hipótesis de negocio: debe contrastarse con análisis, experiencia de producto y experimentos. Su valor está en obligar a explicitar cómo se espera que una acción local contribuya al resultado global.
 

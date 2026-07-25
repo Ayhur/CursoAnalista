@@ -24,6 +24,12 @@ Para dos tasas similares, una aproximación de planificación por grupo es:
 
 Con línea base 20 %, MDE 1 pp, α=0,05 y potencia 80 %, el orden de magnitud es decenas de miles de usuarios por variante. Es una estimación: usa una calculadora o biblioteca validada para el cálculo final, documenta la fórmula y añade margen por pérdidas, exposición incompleta y exclusiones predefinidas.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Impacto mínimo que merece actuar](../../../recursos/diagramas-moviles/curso--08-estadistica--lecciones--06-tamano-de-efecto-y-decision-01-f0be8779.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
  A[Impacto mínimo que merece actuar] --> B[MDE]
@@ -34,6 +40,7 @@ flowchart LR
  E -->|No, incierto| G[Continuar o rediseñar]
  E -->|Daño| H[Detener y aprender]
 ```
+</details>
 
 El diagrama responde “¿cómo conecta el tamaño de muestra con una decisión?”. Se empieza por el impacto que justifica coste, no por ejecutar hasta que aparezca una etiqueta verde.
 

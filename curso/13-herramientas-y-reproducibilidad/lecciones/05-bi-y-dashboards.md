@@ -18,6 +18,12 @@ Para Nébula, el título «Activación» no basta. El contrato debe ser visible 
 - **Frescura:** última actualización, zona horaria y retraso esperado visibles.
 - **Propietario:** Datos mantiene la definición; Producto aprueba cambios de propósito.
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Eventos validados](../../../recursos/diagramas-moviles/curso--13-herramientas-y-reproducibilidad--lecciones--05-bi-y-dashboards-01-5f11b49b.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart TD
  A[Eventos validados] --> B[Transformación versionada]
@@ -27,6 +33,7 @@ flowchart TD
  E --> F[Decisión de Producto]
  G[Alerta de frescura o calidad] --> E
 ```
+</details>
 
 Cada capa tiene una responsabilidad. Añadir una fórmula rápida directamente al gráfico evita el modelo compartido y multiplica definiciones. La alerta no implica que el dato sea falso, pero evita que una cifra atrasada se lea como presente.
 

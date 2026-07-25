@@ -10,6 +10,12 @@ Producto quiere conocer el importe confirmado del día. Ingeniería advierte que
 
 El [laboratorio ejecutable](../../../notebooks/practicas/02-auditoria-pedidos.py) separa cuatro responsabilidades:
 
+<!-- mobile-diagram: rendered fallback -->
+![Diagrama: Lista de eventos](../../../recursos/diagramas-moviles/curso--02-python-desde-cero--lecciones--06-estilo-y-practica-gastos-01-43b01021.svg)
+
+<details>
+<summary>Ver código Mermaid editable</summary>
+
 ```mermaid
 flowchart LR
   A[Lista de eventos] --> B[validar_pedido]
@@ -18,6 +24,7 @@ flowchart LR
   C --> E[resumen verificable]
   D --> E
 ```
+</details>
 
 Separar funciones no es estética: permite probar la validación sin depender de la presentación del resumen.
 
