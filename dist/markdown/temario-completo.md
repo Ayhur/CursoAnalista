@@ -5577,103 +5577,251 @@ Una fuente externa requiere procedencia, límites de uso y validación; una coor
 2. ¿Por qué no debes calcular kilómetros directamente con longitud y latitud?
 3. ¿Qué regla de publicación reduce riesgo de reidentificación en un mapa?
 
-# Bloque 15 - Portfolio y preparación profesional
+# Bloque 15 - Portfolio y preparacion profesional
 
-## Propósito
+## Proposito
 
-Convertir competencias en evidencia visible: proyectos que muestran criterio, técnica, comunicación y honestidad sobre los límites.
+Convertir competencias en evidencia visible y verificable. Un portfolio de analista no es una galeria de graficos ni una lista de herramientas: es una pequena coleccion de decisiones que otra persona puede entender, cuestionar y reproducir. Al terminar, Leo podra construir y defender un caso de datos de principio a fin sin inflar resultados ni ocultar sus limites.
+
+## Resultados observables y prerrequisitos
+
+Se asume que ya ha trabajado tablas, Python, SQL, visualizacion, metricas y calidad de datos. Podra seleccionar un caso proporcionado a su alcance; redactar un contrato de proyecto; organizar una entrega reproducible; revisar un proyecto con una rubrica ponderada; presentar un hallazgo en cinco minutos; y ejecutar un capstone con hitos y criterios de terminado.
+
+> **Caso continuo.** Usaremos *Nimbo*, una aplicacion ficticia de reparto. Su equipo de producto pregunta si debe priorizar la activacion de nuevos comercios. Los datos son simulados y se declaran como tales. El objetivo no es afirmar un impacto real, sino demostrar como convertir una pregunta en una recomendacion honesta.
 
 ## Lecciones
 
 1. [Seleccionar y delimitar casos](lecciones/01-seleccionar-y-delimitar-casos.md)
 2. [Estructurar un proyecto defendible](lecciones/02-estructurar-proyecto-defendible.md)
-3. [Narrativa, revisión y publicación](lecciones/03-narrativa-revision-y-publicacion.md)
+3. [Narrativa, revision y publicacion](lecciones/03-narrativa-revision-y-publicacion.md)
 4. [Entrevistas, CV y capstone](lecciones/04-entrevistas-cv-y-capstone.md)
 
-## Capstone
+## Material de trabajo
 
-El [proyecto final](../../proyectos/capstone/README.md) integra el curso: datos sin limpiar, análisis, métricas, visualización, recomendación y una entrega para público no técnico.
+- [Guia del capstone](../../proyectos/capstone/README.md), con hitos, entregables y criterio de terminado.
+- [Plantillas reutilizables](../../proyectos/capstone/plantillas/README.md): README ejecutivo, diccionario de datos y registro de decisiones.
+- [Rubrica ponderada](../../evaluaciones/rubricas/capstone.md), que se usa antes, durante y al final de la entrega.
+- [Ejercicio de auditoria de portfolio](../../ejercicios/temario-15/auditoria-portfolio.md) y su [solucion razonada](../../soluciones/temario-15/auditoria-portfolio.md).
 
 ## Cierre
 
-Terminar el curso no significa saberlo todo. Significa tener un método fiable para aprender una herramienta nueva, hacer preguntas mejores y justificar decisiones con evidencia.
+Terminar el curso no significa saberlo todo. Significa tener un metodo fiable para aprender una herramienta nueva, hacer preguntas mejores, dejar evidencia y justificar decisiones ante personas tecnicas y no tecnicas.
 
 # Seleccionar y delimitar casos
 
-## Objetivos y prerrequisitos
+## Resultado y prerrequisitos
 
-Elegirás proyectos que demuestren competencias reales y limitarás su alcance para poder terminarlos con rigor.
+Al acabar podras convertir una idea vaga en un proyecto terminable: una pregunta, una decision, un conjunto de datos y una evidencia concreta. Se presupone que sabes distinguir tabla, metrica, visualizacion y asociacion de causalidad.
 
-Un portfolio no es una colección de gráficos ni una lista de tecnologías. Un caso valioso empieza por una decisión: priorizar una mejora de producto, prever demanda, entender abandono o detectar una ineficiencia. Debe permitir mostrar pregunta, datos, calidad, método, evidencia, límites y recomendación.
+## Antes del portfolio: una decision, no una herramienta
 
-Elige tres casos variados en vez de diez exploraciones a medias: uno de datos tabulares y limpieza; uno de métricas/producto o SQL; y uno que incorpore incertidumbre, previsión o modelo cuando sea apropiado. Usa datos con licencia y sin información personal innecesaria.
+"Hice un dashboard con Python" describe una actividad, no un problema. En cambio, "identifique en que paso del alta se concentran los abandonos para decidir que pantalla investigar primero" indica a quien ayuda el analisis y que podria cambiar.
 
-## Límite
+En *Nimbo*, la responsable de producto pregunta: "Debemos invertir el proximo sprint en activar comercios nuevos?". Un alcance defendible es analizar el embudo de alta de comercios iniciados entre el 1 y el 30 de abril, medir la proporcion que publica su primer menu en siete dias y localizar el paso con mayor abandono. No promete demostrar que un redisenyo aumentara ventas; para eso haria falta un experimento.
 
-No inventes impacto empresarial ni presentes datos simulados como si fueran clientes reales. Un proyecto didáctico puede ser excelente si declara qué es simulado, qué decisión ilustraría y qué evidencia faltaría en producción.
-
-## Resumen
-
-La calidad del problema y la honestidad del alcance pesan más que la complejidad aparente. Continúa con [estructura defendible](02-estructurar-proyecto-defendible.md).
-
-# Estructurar un proyecto defendible
-
-## Objetivos y prerrequisitos
-
-Organizarás los artefactos que permiten a otra persona entender, ejecutar y cuestionar un análisis.
-
-Un proyecto debe incluir README ejecutivo, pregunta y decisión, diccionario de datos, procedencia/licencia, código o notebook reproducible, visualizaciones, límites y próximos pasos. El README no repite cada detalle técnico: permite entender en dos minutos qué se halló y dónde está la evidencia.
-
-Este flujo responde a “¿qué debe poder seguir una persona que revisa un caso?”
+Este diagrama responde a "cuando una idea ya se puede convertir en proyecto?":
 
 ```mermaid
 flowchart LR
- A[Problema y decisión] --> B[Datos y calidad]
- B --> C[Métodos reproducibles]
- C --> D[Hallazgos]
- D --> E[Límites]
- E --> F[Recomendación]
- F --> G[README y presentación]
+ A[Idea: mejorar altas] --> B[Decision: priorizar un paso]
+ B --> C[Pregunta medible]
+ C --> D[Poblacion y ventana]
+ D --> E[Datos y licencia]
+ E --> F[Evidencia y limites]
+ F --> G[Entregable terminado]
 ```
 
-El diagrama no obliga a una secuencia rígida: al hallar un error de datos puedes volver a la pregunta. Sí obliga a no saltar de datos a recomendación sin mostrar el razonamiento.
+Cada flecha obliga a concretar una pieza. Si faltan datos para la pregunta, se modifica la pregunta o se declara el limite; no se rellena con una conclusion atractiva.
 
-## Resumen
+## Contrato de proyecto en una pagina
 
-Un caso defendible conserva tanto el resultado como el camino. Continúa con [narrativa y revisión](03-narrativa-revision-y-publicacion.md).
+Antes de abrir un notebook, redacta este contrato:
 
-# Narrativa, revisión y publicación
+1. **Decision y destinatario.** Quien decidira que, y cuando. Ejemplo: la responsable prioriza el sprint del lunes.
+2. **Pregunta y metrica.** "En que paso cae la activacion?"; activacion = comercio que publica menu en siete dias / comercio que inicia alta. Define denominador, ventana y grano.
+3. **Poblacion y corte.** Altas iniciadas en abril, con datos extraidos el 15 de mayo. Evita mezclar comercios sin tiempo suficiente para completar siete dias.
+4. **Evidencia disponible.** Tabla de eventos, definicion de cada evento, procedencia, licencia y si los datos son reales o simulados.
+5. **Entregable y exclusiones.** Un README, un analisis reproducible, una recomendacion y una presentacion de cinco diapositivas. Se excluye atribuir causalidad.
 
-## Objetivos y prerrequisitos
+Una **hipotesis** es una explicacion que se puede contrastar, no el resultado que se desea. "El paso fiscal parece friccion" es una hipotesis; el conteo por paso es evidencia observacional. El error habitual es escribir "el paso fiscal causa el abandono" solo porque coinciden: pueden influir tipo de comercio, canal de captacion o fallos de tracking.
 
-Comunicarás un hallazgo a una audiencia concreta y revisarás el proyecto antes de hacerlo público.
+## Seleccionar tres casos con senal profesional
 
-Una narrativa analítica ordena contexto, pregunta, evidencia, interpretación, recomendación y límite. No empieza por la herramienta: “usé Python” no es un hallazgo. Un título útil dice qué ocurrió y para quién; una visualización enseña la comparación que lo respalda.
+Un portfolio inicial puede tener dos casos muy terminados y un capstone. Busca variedad de decisiones, no de logos:
 
-Antes de publicar, revisa enlaces, rutas, instrucciones de ejecución, dependencias, datos sensibles, licencias, definiciones de métricas y conclusiones excesivas. Pide a otra persona que intente seguir el README: si no sabe cómo reproducir o entender una decisión, el proyecto todavía no está listo.
+- **Fundamentos y limpieza:** datos tabulares con diccionario, duplicados, valores ausentes y una decision descriptiva.
+- **Producto u operaciones:** SQL, metrica con contrato, segmentacion y una recomendacion priorizada.
+- **Incertidumbre:** prevision, experimento o modelo solo si puedes validar y explicar su limite.
 
-## Error habitual
+No uses datos personales innecesarios. Una licencia permite ciertos usos; cita URL y fecha de consulta. Si generas datos simulados, dilo en el titulo y explica que parte del razonamiento ilustran.
 
-Eliminar los pasos incómodos para que el portfolio parezca perfecto. Documentar una limitación o un dato descartado con razón aumenta credibilidad profesional.
+## Comprobacion y proximo paso
 
-## Resumen
+Responde: que decision cambiaria si el resultado fuese A en vez de B? Si la respuesta es "ninguna", el caso es una exploracion, no un proyecto analitico. Redacta el contrato del [ejercicio de auditoria](../../../ejercicios/temario-15/auditoria-portfolio.md) antes de consultar su solucion.
 
-Publicar es una entrega para lectores reales, no el final de una carpeta local.
+# Estructurar un proyecto defendible
+
+## Resultado y prerrequisitos
+
+Organizaras los archivos que permiten a otra persona entender, ejecutar y cuestionar un analisis sin depender de tu memoria. Necesitas el contrato anterior y un entorno desde el que ejecutar Python o SQL.
+
+## De notebook exploratorio a entrega
+
+Un **notebook** mezcla texto, codigo y resultados; es excelente para explorar. Una **entrega reproducible** es el conjunto de instrucciones y archivos con los que otra persona obtiene el mismo resultado a partir de una fuente conocida. Ninguno sustituye al otro. En *Nimbo*, un notebook puede probar como contar el embudo; la entrega debe aclarar que archivo contiene eventos, que columnas se usan y como generar la tabla final.
+
+La estructura minima responde a "donde esta cada evidencia?":
+
+```text
+capstone-nimbo/
+  README.md                 # decision, resultado y como reproducir
+  data/README.md            # procedencia; no subir datos sensibles
+  docs/diccionario-datos.md # significado, grano y calidad de columnas
+  docs/registro-decisiones.md
+  notebooks/01_analisis.ipynb
+  src/                      # pasos repetibles, si son necesarios
+  outputs/                  # tablas y graficos generados
+  requirements.txt          # versiones o instrucciones del entorno
+  LICENSE
+```
+
+No es necesario usar todas las carpetas en un proyecto pequeno. Si es necesario que toda omision sea intencionada y que las rutas del README existan.
+
+Este diagrama responde a "que evidencia sostiene una recomendacion?":
+
+```mermaid
+flowchart LR
+ A[Contrato de decision] --> B[Datos documentados]
+ B --> C[Transformaciones reproducibles]
+ C --> D[Tabla o grafico verificable]
+ D --> E[Interpretacion]
+ E --> F[Recomendacion acotada]
+ B --> G[Registro de calidad]
+ G --> E
+```
+
+La rama de calidad no es burocracia: un duplicado, una ventana incompleta o un evento mal definido puede cambiar el resultado antes de que aparezca el grafico.
+
+## Los cuatro documentos que hacen defendible el caso
+
+1. **README ejecutivo.** En menos de dos minutos responde: decision, datos, hallazgo, recomendacion, limites y como reproducir. "El 42 % abandona antes del menu" es observacion; "redisenyar aumentara activacion" es una propuesta a probar.
+2. **Diccionario de datos.** Por campo: nombre, significado, tipo, unidad, ejemplo, grano, nulos permitidos y fuente. `event_time` no es solo "fecha": puede ser hora UTC de registro y no hora real de accion.
+3. **Registro de decisiones.** Fecha, decision, motivo, evidencia, impacto y alternativa descartada. Anota por que filtraste pruebas internas o fijaste siete dias de ventana.
+4. **Licencia y procedencia.** Indica de donde salen datos y codigo, que permiso existe y que no se puede redistribuir. Nunca publiques identificadores, correos, ubicaciones precisas o credenciales.
+
+Las [plantillas del capstone](../../../proyectos/capstone/plantillas/README.md) dan un inicio. Copiarlas no basta: sustituye cada marcador por informacion comprobable.
+
+## Reproducibilidad proporcional y limite
+
+Para aprendizaje, es aceptable una instruccion precisa como `python notebooks/01_analisis.py` y un archivo de requisitos. Para datos no publicables, incluye esquema, datos sinteticos pequenos o pasos de acceso autorizados; no inventes un enlace. El error habitual es pegar una captura de pantalla sin consulta, tabla o script: comunica, pero no permite verificar.
+
+## Comprobacion
+
+Pide a otra persona que encuentre pregunta, definicion de activacion, fuente de cada grafico y comando de ejecucion. Si tarda mas de unos minutos, reordena la entrega antes de anadir otra visualizacion.
+
+# Narrativa, revision y publicacion
+
+## Resultado y prerrequisitos
+
+Comunicaras una evidencia a una audiencia concreta, revisaras una entrega con criterios observables y publicaras solo lo que sea seguro y defendible. Parte de una estructura de proyecto ya creada.
+
+## La historia es un argumento, no una cronologia
+
+Una narrativa analitica responde, en orden, a: que decision existe; que evidencia se observo; que significa con cautela; que propones hacer; y que falta comprobar. "Use Python y SQL" describe medios. "La mayor caida observada esta entre verificacion y menu; revisar ese paso es la prioridad, condicionado a validar el tracking" permite decidir.
+
+Para *Nimbo*, una presentacion de cinco diapositivas puede ser:
+
+1. Decision y poblacion: altas de abril que disponen de siete dias de observacion.
+2. Contrato de metrica y calidad: eventos excluidos, duplicados y cobertura.
+3. Evidencia: embudo con numeradores y denominadores visibles.
+4. Interpretacion y alternativas: asociacion, no causalidad; posible sesgo por canal.
+5. Recomendacion, prueba siguiente y riesgo: auditoria de tracking y experimento acotado.
+
+El flujo responde a "que debe sobrevivir a una revision?":
+
+```mermaid
+flowchart LR
+ A[Hallazgo] --> B[Fuente y calculo]
+ B --> C[Interpretacion permitida]
+ C --> D[Recomendacion]
+ D --> E[Revision de calidad y privacidad]
+ E --> F[Publicacion o correccion]
+ E --> B
+```
+
+Volver de revision a fuente y calculo es normal: la revision busca descubrir errores, no aprobar una historia ya decidida.
+
+## Auditoria cuantificable antes de publicar
+
+Usa la [rubrica ponderada](../../../evaluaciones/rubricas/capstone.md) para puntuar cada dimension de 0 a 4. La nota no sustituye el juicio: un 80/100 con un fallo critico de privacidad no esta listo. Exige al menos 3/4 en datos, metodo, razonamiento y etica, ademas de una puntuacion total de 70/100. Registra defecto, prioridad y correccion en el registro de decisiones.
+
+Un ejemplo defectuoso ayuda a calibrar: un repositorio afirma que "la nueva pantalla mejoro la retencion 20 %", adjunta un grafico sin denominador, no dice de que fechas salen datos ni como define retencion, y comparte un CSV con correos. Aunque el grafico sea bonito, recibe 0/4 en datos, razonamiento y etica: no se publica. La [solucion del ejercicio](../../../soluciones/temario-15/auditoria-portfolio.md) muestra como justificar la evaluacion y priorizar arreglos.
+
+## Lista de control de publicacion
+
+- Ejecuta instrucciones desde un entorno limpio o pide a otra persona que las siga.
+- Comprueba que cada visual tiene fuente, unidad, poblacion, ventana y explicacion equivalente.
+- Revisa enlaces, rutas, versiones, licencia y si el dataset puede redistribuirse.
+- Busca identificadores, secretos, correos, tokens y rutas locales antes de subir.
+- Cambia afirmaciones causales por lenguaje observacional cuando no hay diseno causal.
+- Declara datos simulados, decisiones excluidas y limites que afectarian la recomendacion.
+
+**Error habitual.** Eliminar pasos incomodos para que el portfolio parezca perfecto. Documentar una limitacion o dato descartado con su motivo aumenta credibilidad; ocultar un resultado negativo la destruye cuando alguien reproduce el trabajo.
+
+## Comprobacion
+
+Haz una revision ciega: entrega el README y sus enlaces a una persona. Si no puede explicar que se decidio, de donde sale el numero principal y que no permite concluir, la narrativa necesita trabajo.
 
 # Entrevistas, CV y capstone
 
-## Objetivos y prerrequisitos
+## Resultado y prerrequisitos
 
-Prepararás una explicación oral de tu método y cerrarás el curso con un proyecto integrador.
+Defenderas un proyecto con un guion de cinco minutos, responderas preguntas tecnicas sin sobreafirmar y ejecutaras el capstone por hitos. Necesitas un caso documentado y la rubrica del bloque.
 
-En entrevista, empieza por aclarar decisión, población, métrica y datos disponibles. Al explicar un caso, distingue hecho observado, interpretación, riesgo y siguiente comprobación. Practica responder: “¿qué grano tiene esta tabla?”, “¿cómo validarías este JOIN?”, “¿qué harías ante un dato ausente?” o “¿por qué no demuestra causalidad este gráfico?”.
+## Guion de defensa de cinco minutos
 
-El CV y GitHub deben enlazar proyectos que puedas defender línea a línea: problema, contribución, herramientas, resultado y límite. No declares competencias que no puedas aplicar o explicar.
+Una defensa no es leer el README. Es un argumento breve para quien evalua tu criterio. Ensaya esta distribucion:
 
-## Capstone
+1. **0:00-0:45, situacion y decision.** "En Nimbo evalue donde investigar la activacion de comercios; no medi el impacto de una intervencion".
+2. **0:45-1:30, tarea y contrato.** Poblacion, ventana, grano y definicion exacta de la metrica.
+3. **1:30-3:00, acciones y evidencia.** Calidad revisada, transformaciones, validaciones y grafico o tabla central.
+4. **3:00-4:00, resultado e interpretacion.** Que se observo, que no prueba y que alternativa se considero.
+5. **4:00-5:00, recomendacion y siguiente prueba.** Accion proporcional, riesgo, propietario y como verificarias el resultado.
 
-El [proyecto final](../../../proyectos/capstone/README.md) integra el curso: datos sin limpiar, análisis, métricas, visualización, recomendación y una entrega para público no técnico. Empieza leyendo su [rúbrica](../../../evaluaciones/rubricas/capstone.md); úsala como lista de control, no solo como nota final.
+La estructura **STAR** (situacion, tarea, accion, resultado) sirve para contar tu contribucion, pero anade siempre evidencia y limite. Decir "mejore la retencion" sin diseno experimental no es defendible; di "observe una diferencia y propuse una prueba".
 
-## Cierre
+Este diagrama responde a "como se conecta una respuesta oral con evidencia?":
 
-El objetivo no es saberlo todo: es tener un método fiable para aprender una herramienta nueva, hacer preguntas mejores y justificar decisiones con evidencia.
+```mermaid
+flowchart LR
+ A[Pregunta de entrevista] --> B[Contrato y contexto]
+ B --> C[Evidencia reproducible]
+ C --> D[Respuesta STAR]
+ D --> E[Limite explicito]
+ E --> F[Siguiente verificacion]
+```
+
+Una buena respuesta enlaza a un archivo, consulta, metrica o decision registrada; no depende de memorizar una frase brillante.
+
+## Preguntas que debes poder responder
+
+- Que representa una fila y que filas excluiste? Explica el grano y por que.
+- Como comprobaste que un `JOIN` no duplicaba importes o usuarios? Menciona cardinalidad y conteos antes y despues.
+- Que ocurre si faltan datos, hay ceros o cambia el tracking? Distingue ausencia, cero y cambio de definicion.
+- Por que el grafico no demuestra causalidad? Identifica una variable de confusion y una prueba posible.
+- Que harias diferente con una semana mas? Propone una comprobacion concreta, no "usaria IA".
+
+El CV y GitHub deben enlazar solo casos defendibles linea a linea: problema, contribucion, herramientas, resultado, evidencia y limite. Una tecnologia se menciona porque resolvio algo; no como palabra clave.
+
+## Ruta del capstone: hitos y criterio de terminado
+
+El [capstone](../../../proyectos/capstone/README.md) integra el curso con datos publicos o simulados declarados. No se avanza por calendario sino por evidencia:
+
+1. **Hito 1: contrato aprobado.** Decision, pregunta, metrica, poblacion, fuente/licencia y exclusiones escritos. Terminado cuando otra persona puede repetir la pregunta sin pedir definiciones.
+2. **Hito 2: datos auditados.** Diccionario, grano, calidad, privacidad y validaciones. Terminado cuando problemas y tratamiento estan registrados.
+3. **Hito 3: evidencia reproducible.** Consulta o script ejecutable que genera tabla o grafico. Terminado cuando una ejecucion limpia reproduce el resultado o se documenta la limitacion de acceso.
+4. **Hito 4: recomendacion revisada.** Narrativa, limites, siguiente prueba y rubrica. Terminado con al menos 70/100 y sin fallo critico.
+5. **Hito 5: entrega y defensa.** README, licencia, presentacion y guion. Terminado cuando un revisor puede seguirla y plantear objeciones fundamentadas.
+
+## Cierre y practica
+
+Ejecuta el [proyecto minimo de Nimbo](../../../proyectos/capstone/README.md#proyecto-minimo-guiado) o adapta su contrato a un dominio que conozcas. Despues, resuelve la [auditoria de portfolio](../../../ejercicios/temario-15/auditoria-portfolio.md). El objetivo no es parecer experto: es hacer visible un metodo fiable para aprender, preguntar y justificar decisiones con evidencia.
