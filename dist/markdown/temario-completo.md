@@ -2791,122 +2791,408 @@ Para la incidencia de Lumen, una nota de una página puede seguir esta estructur
 
 Un dashboard es un acuerdo de seguimiento, no una galería. Antes de publicar pregunta quién actuará, qué valor dispara revisión y qué limitación puede invertir la interpretación. Completa el [diagnóstico Lumen](../../../ejercicios/temario-07/aplicacion/diagnostico-lumen.md); el bloque 08 aporta herramientas formales para cuantificar incertidumbre.
 
-# Bloque 08 - Estadística para decisiones
+# Bloque 08 — Estadística para decisiones y experimentos
 
 ## Propósito
 
-Medir incertidumbre, evaluar diferencias y comunicar resultados sin convertir una prueba estadística en una respuesta automática.
+La estadística no es una colección de fórmulas para declarar que un cambio «funciona». Es el lenguaje para separar una señal plausible del ruido, cuantificar cuánto no sabemos y decidir qué riesgo es razonable asumir. En este bloque Leo acompaña a **Nexo**, una aplicación de gestión de tareas. El equipo quiere probar un onboarding B: una lista de tres acciones guiadas en lugar de la pantalla habitual. La pregunta final es concreta: **¿debe lanzarse B para todos los nuevos usuarios, seguir aprendiendo o descartarse?**
 
-## Lecciones
+El caso usa una métrica binaria: activación dentro de 24 horas. Un usuario está activado (`1`) si crea un proyecto y una tarea; de lo contrario vale `0`. Trabajaremos con usuarios —no sesiones— como unidad de análisis. Esta precisión evita contar a una misma persona varias veces.
 
-1. [Describir variabilidad](lecciones/01-describir-variabilidad.md)
-2. [Población, muestra y sesgo](lecciones/02-poblacion-muestra-y-sesgo.md)
-3. [Probabilidad e incertidumbre](lecciones/03-probabilidad-e-incertidumbre.md)
-4. [Intervalos y pruebas de hipótesis](lecciones/04-intervalos-y-pruebas.md)
-5. [Experimentos A/B](lecciones/05-experimentos-ab.md)
-6. [Tamaño de efecto y decisión](lecciones/06-tamano-de-efecto-y-decision.md)
+## Resultados observables
 
-## Práctica
+Al terminar podrás:
 
-Analiza [un experimento de onboarding](../../ejercicios/temario-08/aplicacion/experimento-onboarding.md) y revisa [la interpretación](../../soluciones/temario-08/experimento-onboarding.md).
+- describir una conversión y su variabilidad sin esconder usuarios ni colas importantes;
+- distinguir población, muestra, sesgo y azar de asignación;
+- estimar una diferencia con un intervalo de confianza e interpretar correctamente un p-valor;
+- diseñar y auditar un experimento A/B: contrato, aleatorización, exposición, guardrails y regla de parada;
+- traducir puntos porcentuales a valor, coste, incertidumbre y recomendación;
+- ejecutar un laboratorio reproducible y defender una decisión limitada por la evidencia.
 
-# Describir variabilidad
+## Prerrequisitos y mapa
 
-## Objetivos y prerrequisitos
-
-Sabrás resumir un conjunto sin esconder su dispersión. Requiere promedios y distribuciones.
-
-La media responde “¿cuál es el promedio?”, pero no “¿cuánto varían los casos?”. Mediana, percentiles, rango y desviación estándar describen perspectivas distintas. En tiempos de carga, una media de dos segundos puede convivir con usuarios que esperan veinte; los percentiles altos suelen importar para experiencia real.
-
-No elijas la medida que haga mejor la historia. Declara por qué la métrica representa la decisión: media para coste total esperado, mediana para cliente típico, percentil 95 para un compromiso de rendimiento.
-
-## Resumen
-
-Centro y variabilidad se interpretan juntos. Continúa con [población y muestra](02-poblacion-muestra-y-sesgo.md).
-
-# Población, muestra y sesgo
-
-## Objetivos y prerrequisitos
-
-Distinguirás el conjunto sobre el que quieres decidir de los datos que realmente observaste.
-
-La **población** es el conjunto de interés, por ejemplo todos los nuevos usuarios elegibles. Una **muestra** es una parte observada. Un **estadístico** resume la muestra; un parámetro describe la población. Muestras diferentes producen resultados diferentes: esa variabilidad no es un fallo, es la razón para comunicar incertidumbre.
-
-El problema no se arregla solo con más filas. Si solo respondieron usuarios muy activos a una encuesta, hay **sesgo de selección**: la muestra puede ser grande y seguir sin representar a la población.
-
-## Resumen
-
-Pregunta siempre quién quedó dentro, quién fuera y por qué. Sigue con [probabilidad e incertidumbre](03-probabilidad-e-incertidumbre.md).
-
-# Probabilidad e incertidumbre
-
-## Objetivos y prerrequisitos
-
-Usarás probabilidad como modelo de incertidumbre, no como promesa sobre un caso individual.
-
-Una probabilidad expresa qué tan frecuente sería un resultado dentro de un modelo y unas condiciones. Si una conversión histórica es 10 %, no significa que cada décimo usuario vaya a comprar ni que el siguiente tenga 10 % “garantizado”. Depende de población, periodo, medición y estabilidad del proceso.
-
-La incertidumbre aparece porque observamos una parte del proceso, existe variación y las mediciones pueden tener error. Separar esos componentes evita comunicar una cifra estimada como si fuera exacta.
-
-## Resumen
-
-Un modelo probabilístico necesita supuestos explícitos. Sigue con [intervalos y pruebas](04-intervalos-y-pruebas.md).
-
-# Intervalos y pruebas de hipótesis
-
-## Objetivos y prerrequisitos
-
-Interpretarás un intervalo y un p-valor sin atribuirles un significado que no tienen.
-
-Un intervalo de confianza ofrece un rango de valores compatibles con un método, datos y nivel de confianza bajo sus supuestos. Una prueba compara datos con una **hipótesis nula**, por ejemplo “no hay diferencia de conversión”. Un p-valor pequeño indica que los datos serían poco compatibles con esa hipótesis si el modelo fuera correcto.
-
-No dice la probabilidad de que la hipótesis nula sea cierta, no mide importancia de negocio y no corrige sesgo, medición mala ni pruebas repetidas. Comunica efecto absoluto, relativo, intervalo y decisión propuesta.
+Necesitas porcentajes, media y lectura de tablas de los bloques 01–07. No se presupone vocabulario estadístico. Cuando aparezca una palabra nueva se presenta primero con el problema que resuelve.
 
 ```mermaid
 flowchart LR
- A[Población] --> B[Muestra]
- B --> C[Estimación]
- C --> D[Intervalo]
- C --> E[Prueba]
- D --> F[Decisión con límite]
+ A[Contrato del experimento] --> B[Datos y descriptiva]
+ B --> C[Muestra y azar]
+ C --> D[Estimación e intervalo]
+ D --> E[Prueba y potencia]
+ E --> F[Guardrails y decisión]
+```
+
+El diagrama responde «¿en qué orden se construye una decisión defendible?». Un p-valor aparece casi al final: no puede reparar un objetivo mal definido, datos incompletos o una asignación defectuosa.
+
+## Lecciones
+
+1. [Describir una métrica y su variabilidad](lecciones/01-describir-variabilidad.md)
+2. [Población, muestra, aleatorización y sesgo](lecciones/02-poblacion-muestra-y-sesgo.md)
+3. [Probabilidad, simulación y distribución muestral](lecciones/03-probabilidad-e-incertidumbre.md)
+4. [Intervalos, hipótesis y errores de decisión](lecciones/04-intervalos-y-pruebas.md)
+5. [Diseñar y operar un experimento A/B](lecciones/05-experimentos-ab.md)
+6. [Efecto, tamaño de muestra y recomendación](lecciones/06-tamano-de-efecto-y-decision.md)
+
+## Material práctico
+
+- [Laboratorio ejecutable: experimento de onboarding](../../notebooks/practicas/08-experimento-onboarding.py). Se puede ejecutar con Python 3 sin instalar librerías; también sirve en Replit o Google Colab desde móvil.
+- [Ejercicio de decisión](../../ejercicios/temario-08/aplicacion/experimento-onboarding.md) y su [solución razonada](../../soluciones/temario-08/experimento-onboarding.md).
+
+> **Aviso matemático.** Si ya dominas proporciones, varianzas y distribución normal, puedes avanzar más deprisa por las derivaciones. No saltes las interpretaciones, el contrato ni los límites: ahí está la aplicación profesional.
+
+# 01 — Describir una métrica y su variabilidad
+
+## Resultado y prerrequisitos
+
+Al terminar podrás construir una descripción inicial de un experimento que diga **quién fue medido, qué ocurrió y cuánto varían los casos**. Requiere saber calcular porcentajes. El resultado observable es una tabla de activación de Nexo que no confunda promedio, proporción y experiencia individual.
+
+## Antes de la jerga: ¿qué estamos resumiendo?
+
+Imagina diez personas que abren Nexo. Ocho crean una tarea en menos de un día y dos no. Antes de hablar de «tasa de conversión», vemos diez resultados: `1, 1, 1, 0, 1, 1, 1, 1, 0, 1`. Un `1` representa activación y un `0` no activación. El resumen `8 de 10` es útil porque permite comparar grupos, pero borra la historia de cada persona.
+
+La **proporción** o tasa de activación es `éxitos / usuarios elegibles`. Aquí es `8 / 10 = 0,80`, o 80 %. Para una variable de ceros y unos, su media numérica coincide con esa proporción. No ocurre así con cualquier variable: la media de tiempos de carga no es un porcentaje.
+
+En el experimento de Nexo la definición completa es: «proporción de usuarios nuevos, elegibles, asignados y expuestos, que crean proyecto y tarea en las 24 horas posteriores a la exposición». Esta frase es el **contrato de métrica**. Sin ventana, población y evento, dos personas pueden calcular “activación” y obtener números incompatibles.
+
+## Centro, dispersión y forma
+
+Una media responde dónde está el centro; la **variabilidad** indica cuánto se alejan los casos de ese centro. Para variables numéricas continuas, como minutos hasta completar onboarding, se combinan varias lentes:
+
+- **Mediana:** valor del usuario central tras ordenar los tiempos. Resiste mejor una cola de usuarios bloqueados.
+- **Percentil 90 (p90):** el 90 % tarda ese valor o menos; deja visible la experiencia lenta.
+- **Rango intercuartílico (IQR):** distancia entre p75 y p25; describe la parte central sin depender tanto de extremos.
+- **Desviación estándar:** distancia típica respecto de la media; es útil, pero puede ocultar asimetría y valores extremos.
+
+Supón que A y B tienen media de 4 minutos. En A casi todos tardan entre 3 y 5; en B unos tardan 1 y otros 12. La media no permite concluir que la experiencia sea igual. Para un flujo de producto conviene mirar una distribución o percentiles antes de celebrar una media.
+
+```mermaid
+flowchart LR
+ A[Usuarios expuestos] --> B[Resultado por usuario]
+ B --> C[Proporción de activación]
+ B --> D[Tiempo hasta activar]
+ D --> E[Mediana y p90]
+ C --> F[Comparación A vs B]
  E --> F
 ```
 
-## Resumen
+Este esquema separa dos preguntas: si B cambia la probabilidad de activar y si cambia el esfuerzo o demora de quien activa. Una variante puede elevar conversiones y empeorar mucho el tiempo de algunos usuarios; ambas cosas importan.
 
-La inferencia cuantifica incertidumbre; no sustituye juicio ni diseño. Continúa con [experimentos A/B](05-experimentos-ab.md).
+## Ejemplo trabajado: primera lectura de Nexo
 
-# Experimentos A/B
+| Variante | Elegibles | Activados | Activación | Mediana de minutos | p90 de minutos |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| A | 2.000 | 400 | 20,0 % | 6 | 19 |
+| B | 2.000 | 430 | 21,5 % | 5 | 27 |
 
-## Objetivos y prerrequisitos
+B supera a A en 1,5 **puntos porcentuales** (pp): 21,5 % − 20,0 %. Su cambio **relativo** es `1,5 / 20,0 = 7,5 %`. No son lo mismo: «7,5 %» sin base puede sonar mucho; «1,5 pp» hace visible el tamaño sobre cada 100 usuarios. El p90 de B merece investigación: el tutorial ayuda a muchos, pero puede atascar a una minoría.
 
-Diseñarás la estructura mínima de un experimento antes de mirar su resultado.
+## Error frecuente y límite
 
-Un experimento A/B asigna unidades elegibles a variantes para comparar una métrica. Define antes población, unidad de asignación, métrica principal, guardrails, duración, tamaño necesario y criterio de decisión. Si aleatorizas por usuario pero mides por sesión sin cuidado, puedes contar varias veces una experiencia.
+No elimines automáticamente a quien no activó porque “ensucia” la media de minutos. Ese usuario forma parte del resultado del producto; convertirlo en dato ausente sesga la descripción. En cambio, hay que distinguir un cero real (no activó) de una ausencia de registro por fallo de tracking. El bloque 05 enseña cómo auditar y limpiar esa diferencia.
 
-No mires cada día hasta encontrar significación: ese comportamiento eleva falsos positivos. También vigila calidad del tracking, exposición real a la variante y efectos por segmentos relevantes.
+Describir no demuestra que B causó el cambio. Todavía puede haber azar, segmentos distintos o fallos de asignación. En la siguiente lección definimos qué conjunto queremos conocer y por qué una muestra puede engañar.
 
-## Límite
+## Resumen y comprobación
 
-Un experimento válido estima efecto en la población y periodo estudiados; no garantiza el mismo efecto después de lanzar globalmente ni en otro mercado.
+Una buena descriptiva conserva denominadores, unidad y variabilidad. La media no sustituye a percentiles ni a una definición de evento.
 
-## Práctica
+1. ¿Por qué una tasa de 21 % necesita un denominador y una ventana temporal?
+2. Si el p90 empeora pero la mediana mejora, ¿qué usuarios merece revisar el equipo?
+3. ¿Cuántos puntos porcentuales separan 20 % y 21,5 %?
 
-Analiza el [experimento de onboarding](../../../ejercicios/temario-08/aplicacion/experimento-onboarding.md) antes de leer su solución.
+Práctica: registra la tabla inicial en el [ejercicio de onboarding](../../../ejercicios/temario-08/aplicacion/experimento-onboarding.md).
 
-# Tamaño de efecto y decisión
+# 02 — Población, muestra, aleatorización y sesgo
 
-## Objetivos y prerrequisitos
+## Resultado y prerrequisitos
 
-Vincularás una diferencia estadística con coste, beneficio, riesgo y recomendación.
+Sabrás dibujar el recorrido desde los usuarios a los que se quiere afectar hasta los datos que se analizan, identificando exclusiones y sesgos. Necesitas la definición de métrica de la lección anterior.
 
-Una diferencia minúscula puede resultar “significativa” con millones de usuarios y aun así no pagar el coste de ingeniería. Una diferencia grande con pocos datos puede ser prometedora pero incierta. Por eso una decisión profesional reúne tamaño absoluto, cambio relativo, intervalo, volumen afectado, guardrails y reversibilidad de la acción.
+## El conjunto deseado no siempre es el observado
 
-Ejemplo: +0,2 puntos de conversión puede significar miles de pedidos si hay mucho tráfico, pero no conviene lanzar si aumenta reclamaciones o si el intervalo incluye una pérdida importante. La recomendación debe declarar el umbral que hace que actuar merezca la pena.
+Nexo quiere decidir sobre los nuevos usuarios de web en España que pueden ver onboarding. Ese conjunto completo se llama **población objetivo**. Durante dos semanas solo vemos a 4.000 de ellos: una **muestra**. El número calculado con la muestra —por ejemplo 21,5 %— es un **estadístico**. El valor real, desconocido, para toda la población se llama **parámetro**.
 
-## Cierre
+Una muestra grande reduce fluctuación aleatoria, pero no cura que esté mal escogida. Si B se muestra únicamente a personas que llegan desde una campaña de pago y A a tráfico orgánico, la diferencia mezcla variante y canal. Eso es **sesgo de selección**: el mecanismo de entrar en cada grupo está relacionado con características que afectan al resultado.
 
-Estadística no concede permiso automático para afirmar o lanzar. Ayuda a calibrar qué se sabe, qué riesgo queda y qué evidencia faltaría.
+```mermaid
+flowchart LR
+ A[Población elegible] --> B[Regla de elegibilidad]
+ B --> C[Asignación aleatoria A o B]
+ C --> D[Exposición verificada]
+ D --> E[Eventos medidos]
+ E --> F[Muestra analizada]
+```
+
+El flujo responde «¿dónde puede cambiar quién llega al análisis?». Cada flecha es auditable: una exclusión tras conocer el resultado, una asignación rota o un evento perdido cambian lo que el número representa.
+
+## Aleatorizar no es repartir “más o menos igual”
+
+La **asignación aleatoria** usa una regla impredecible para que, en promedio y con suficiente muestra, las características conocidas y desconocidas se repartan entre A y B. Por ejemplo, un identificador de usuario y una función de asignación estable deciden una sola vez la variante. La **unidad de asignación** es ese usuario; se debe analizar al mismo nivel para no dar más peso a quien abre veinte sesiones.
+
+No basta con alternar por día: si A se enseña lunes y B viernes, día de la semana queda confundido con variante. Tampoco se debe cambiar de variante a una misma persona. Ambas prácticas rompen la comparación causal.
+
+### Comprobación previa, no búsqueda de excusas
+
+Antes de mirar activación, revisa una tabla de calidad: número asignado, porcentaje expuesto, duplicados, país, dispositivo y fecha. Las pequeñas diferencias por azar pueden ocurrir; una diferencia grande y sistemática revela posible problema de implementación. No “ajustes” datos hasta equilibrarlos: documenta la exclusión y decide antes si la regla era válida.
+
+| Revisión | Señal sana | Señal de alarma |
+| --- | --- | --- |
+| Asignación | cerca de 50/50, según diseño | 80/20 sin explicación |
+| Exposición | evento de vista en ambas variantes | B asignada pero no renderizada |
+| Unidad | un usuario por fila | sesiones repetidas como usuarios |
+| Periodo | variantes concurrentes | A antes de una campaña, B después |
+
+## Sesgo, confusión y generalización
+
+**Confusión** significa que una tercera variable cambia junto con la variante. Si B coincide con una actualización de la app, no sabemos qué originó el efecto. La aleatorización concurrente combate confusores promedio; la calidad de medición y ejecución sigue siendo necesaria.
+
+Incluso un experimento bien aleatorizado no prueba todo. Si solo participaron usuarios de web española, la conclusión se aplica directamente a esa población y periodo. Llevar B a móvil, otro país o una temporada de alta demanda es una extrapolación que debe etiquetarse y, si importa, probarse.
+
+## Resumen y comprobación
+
+Población es la decisión que importa; muestra es lo observado. El azar protege la comparación frente a muchas diferencias, no frente a tracking defectuoso o una población mal definida.
+
+1. ¿Por qué 100.000 encuestas voluntarias pueden estar sesgadas?
+2. ¿Cuál es la unidad adecuada si la variante se conserva por usuario?
+3. ¿Qué diferencia hay entre falta de exposición y falta de activación?
+
+En la siguiente lección simularemos cómo cambian muestras honestas aun cuando el producto no cambie.
+
+# 03 — Probabilidad, simulación y distribución muestral
+
+## Resultado y prerrequisitos
+
+Podrás explicar por qué dos muestras honestas dan tasas distintas y usar una simulación para hacer visible la incertidumbre. Requiere conocer población, muestra y proporción.
+
+## Probabilidad como modelo, no como promesa
+
+Decir que la activación de A es 20 % significa: bajo una población, periodo y medición definidos, esperamos aproximadamente 20 activaciones por cada 100 usuarios en repetidos conjuntos comparables. No significa que el siguiente usuario tenga garantizado ese resultado ni que siempre aparecerán exactamente 20 éxitos.
+
+Para una métrica de `0/1`, un modelo simple es una **variable Bernoulli**: cada usuario tiene éxito con probabilidad `p` y fracaso con `1 − p`. Al sumar `n` usuarios obtenemos un conteo binomial. Es un modelo útil para entender el azar; sus supuestos —usuarios independientes y una probabilidad estable— pueden fallar por campañas, contagio entre usuarios o cambios de producto.
+
+## Simular antes de memorizar una fórmula
+
+Imagina que A y B son idénticas y ambas activan al 20 %. Extraemos 500 usuarios para cada una muchas veces. Algunas repeticiones darán 18,4 % frente a 21,0 % solo por azar. La colección de resultados de esas repeticiones se llama **distribución muestral** de la estimación.
+
+```mermaid
+flowchart LR
+ A[Proceso real: p = 20%] --> B[Muestra de 500]
+ B --> C[Tasa observada]
+ A --> D[Otra muestra de 500]
+ D --> E[Otra tasa observada]
+ C --> F[Distribución de tasas]
+ E --> F
+ F --> G[Error estándar]
+```
+
+El diagrama muestra que el error estándar no es el error de un usuario ni un fallo del analista: resume cuánto suele variar el estimador si repitiéramos el muestreo bajo los supuestos del modelo.
+
+## Error estándar e intuición de tamaño
+
+Para una proporción, una aproximación del **error estándar** es:
+
+`SE(p_estimado) = sqrt(p_estimado * (1 - p_estimado) / n)`.
+
+Con `p_estimado = 0,20` y `n = 500`, el SE es aproximadamente 1,8 puntos porcentuales. Con 2.000 usuarios baja a aproximadamente 0,9 pp. Cuadruplicar `n` divide el error aproximadamente entre dos: por eso “el doble de datos” no duplica precisión.
+
+Para la diferencia `p_estimado_B - p_estimado_A`, bajo grupos independientes, se combinan las incertidumbres de ambos grupos. La simulación del laboratorio evita aceptar esta fórmula a ciegas y permite comprobar que variación esperada no equivale a sesgo.
+
+## Probabilidad condicional y segmentos
+
+`P(activar | B)` es la tasa entre quienes recibieron B. No es igual que `P(B | activar)`, la fracción de activados que vio B. Invertir la condición es un error frecuente al leer dashboards.
+
+Segmentar puede ser útil: quizá B ayuda a móvil y no a escritorio. Pero probar veinte segmentos aumenta oportunidades de encontrar un resultado extremo por azar. Un segmento debe ser preespecificado, tener tamaño suficiente y comunicarse como exploratorio si se descubrió después de mirar.
+
+## Límite y resumen
+
+La probabilidad modela incertidumbre condicionada a supuestos; no arregla datos mal instrumentados. Simular es una buena comprobación pedagógica y operativa, pero una simulación hereda el modelo que se le da.
+
+1. Si A y B son idénticas, ¿puede B observar 1 pp más en una muestra? ¿Por qué?
+2. ¿Qué cambia más el error estándar: pasar de 500 a 2.000 usuarios o de 500 a 600?
+3. ¿Por qué `P(activar | B)` no responde a `P(B | activar)`?
+
+Sigue con [intervalos y pruebas](04-intervalos-y-pruebas.md), que convierten esa variación en una regla de comunicación y decisión.
+
+# 04 — Intervalos, hipótesis y errores de decisión
+
+## Resultado y prerrequisitos
+
+Podrás comunicar una diferencia A/B con intervalo, p-valor y sus límites sin convertir ninguno en una sentencia automática. Requiere entender error estándar y asignación aleatoria.
+
+## Primero una estimación, después una etiqueta
+
+Nexo observa A = 400/2.000 (20,0 %) y B = 430/2.000 (21,5 %). La estimación de efecto es **+1,5 pp**. Esa cifra no es el efecto verdadero conocido: otra muestra plausible habría dado otro valor.
+
+Un **intervalo de confianza** al 95 % ofrece un conjunto de valores de diferencia que son compatibles con los datos y el procedimiento de muestreo repetido. Usando una aproximación normal, B − A podría estar, por ejemplo, entre −1,0 y +4,0 pp. La frase honesta es: “el intervalo incluye mejora y también un pequeño perjuicio; los datos no separan con precisión ambas posibilidades”. No es correcto decir “hay 95 % de probabilidad de que el parámetro esté dentro” bajo la interpretación frecuentista del intervalo.
+
+La aproximación normal requiere tamaños y proporciones adecuados. Con tasas muy bajas, muestras pequeñas o decisiones de alto riesgo, usa intervalos de proporciones más robustos (por ejemplo Wilson), métodos exactos o consulta apoyo estadístico. El concepto sigue igual: mostrar rango y supuestos, no una falsa certeza.
+
+## Hipótesis nula y p-valor
+
+Una **hipótesis nula** es un punto de referencia, normalmente `H0: pB − pA = 0`. El **p-valor** responde una pregunta condicional: si H0 y el modelo fueran ciertos, ¿qué tan inusuales serían estos datos o unos más extremos? Un p-valor de 0,03 no significa “3 % de probabilidad de que no haya efecto”, ni mide valor económico.
+
+Elegir `α = 0,05` antes de mirar datos fija una tasa de falsos positivos a largo plazo para una familia de decisiones bien especificada. Rechazar H0 con `p < α` es una regla operativa, no una prueba de certeza.
+
+```mermaid
+flowchart LR
+ A[Estimación: B - A] --> B[Intervalo de confianza]
+ A --> C[Prueba contra H0]
+ B --> D[¿Pérdida relevante posible?]
+ C --> E[p-valor bajo umbral predefinido]
+ D --> F[Decisión con guardrails y coste]
+ E --> F
+```
+
+El diagrama responde por qué intervalo y prueba no compiten: la prueba compara una referencia; el intervalo muestra magnitudes plausibles. La decisión necesita ambas y el contexto de negocio.
+
+## Errores I, II y potencia
+
+- **Error de tipo I:** declarar un efecto cuando en realidad no existe. Su tasa se controla aproximadamente con α si se respeta el plan.
+- **Error de tipo II:** no detectar un efecto real de interés. Su probabilidad es β.
+- **Potencia (`1 − β`):** probabilidad de detectar un efecto de tamaño especificado si realmente existe, normalmente se planifica en 80–90 %.
+
+Un resultado “no significativo” no demuestra equivalencia. Puede indicar poco tráfico, métrica ruidosa o efecto menor que la precisión alcanzada. Si el intervalo aún contiene un perjuicio importante y una mejora importante, la conclusión correcta es incertidumbre, no “B no hace nada”.
+
+## Multiplicidad y parada anticipada
+
+Si el equipo prueba cinco métricas, diez segmentos y mira el resultado cada día, aumenta la posibilidad de descubrir una coincidencia llamativa. Predefine una métrica primaria, un número de comparaciones y una regla de parada. Para múltiples pruebas confirmatorias puede usarse corrección (Bonferroni, Holm) o control de FDR según el objetivo; no apliques una receta sin documentar la familia de hipótesis.
+
+Mirar repetidamente y detenerse en el primer `p < 0,05` invalida la interpretación convencional. Hay diseños secuenciales válidos, pero sus umbrales y análisis se planifican antes. Siempre se pueden detener experimentos por seguridad: los guardrails no esperan a la “significación”.
+
+## Resumen y comprobación
+
+1. ¿Qué afirmación incorrecta suele hacerse sobre un p-valor de 0,03?
+2. ¿Por qué un intervalo ancho cambia una recomendación aunque el punto estimado sea positivo?
+3. ¿Qué dos decisiones deben estar escritas antes de mirar resultados?
+
+La siguiente lección convierte estos principios en un contrato A/B operativo.
+
+# 05 — Diseñar y operar un experimento A/B
+
+## Resultado y prerrequisitos
+
+Sabrás escribir un contrato mínimo de experimento antes de lanzar código y auditarlo antes de interpretar resultados. Requiere población, intervalos y errores de decisión.
+
+## El contrato de Nexo
+
+Un experimento empieza por la decisión, no por un gráfico. Nexo quiere saber si desplegar un onboarding guiado. Su contrato puede resumirse así:
+
+| Elemento | Decisión predefinida |
+| --- | --- |
+| Hipótesis de producto | La guía reduce fricción inicial y eleva activación. |
+| Población | usuarios nuevos web ES, no empleados ni cuentas de prueba. |
+| Unidad | usuario; variante persistente durante 24 horas. |
+| Primaria | activación en 24 h, definida como proyecto + tarea. |
+| Duración | hasta tamaño calculado y al menos un ciclo semanal completo. |
+| Guardrails | error técnico, tiempo p90, cancelación en 7 días. |
+| Regla | lanzar solo si efecto/intervalo superan umbral y guardrails son seguros. |
+
+La variante es un tratamiento; la activación es el resultado. Para estimar un efecto causal, B debe llegar por asignación aleatoria y la medición ha de ser igual para ambos grupos. “Tener B en el código” no demuestra que el usuario la haya visto: registra una **exposición** cuando la pantalla se renderiza correctamente.
+
+```mermaid
+flowchart LR
+ A[Usuario elegible] --> B[Asignación estable]
+ B --> C[Control A]
+ B --> D[Tratamiento B]
+ C --> E[Exposición y eventos]
+ D --> E
+ E --> F[Auditoría de calidad]
+ F --> G[Análisis predefinido]
+ G --> H[Decisión documentada]
+```
+
+El flujo responde “¿qué datos hacen falta para confiar en la comparación?”. La auditoría va antes del análisis: no se usa la estadística para maquillar una experiencia que no se mostró o se midió de forma desigual.
+
+## Intention-to-treat, exposición y exclusiones
+
+El análisis principal suele seguir **intention-to-treat (ITT)**: comparar según variante asignada, incluso si una persona no completó la pantalla, siempre que sea elegible y esté correctamente asignada. ITT preserva la aleatorización y responde al efecto de ofrecer B.
+
+Un análisis por exposición puede ser diagnóstico, pero excluir a quien no vio B después de asignarlo puede introducir sesgo: quizá precisamente los usuarios con conexión lenta no cargaron la guía. Declara siempre el denominador, la regla de exclusión y cuántos registros se eliminaron por variante.
+
+## Guardrails y criterios de parada
+
+La métrica primaria puede mejorar a costa de daño. Nexo fija como guardrails: tasa de errores de pantalla menor que +0,2 pp, p90 de tiempo no peor en más de 2 minutos y cancelación a 7 días sin deterioro relevante. Los umbrales no los decide el analista en solitario: producto, ingeniería y soporte aportan coste y tolerancia al riesgo.
+
+Si una guardrail muestra daño grave, se pausa aunque falte muestra. Para concluir eficacia se respeta la duración/regla predefinida. Diferencia entre **parar por seguridad** y **parar para perseguir significación**.
+
+## Heterogeneidad, privacidad y despliegue
+
+Los segmentos previstos —por ejemplo móvil/escritorio— ayudan a detectar que un promedio oculta daño relevante. No uses segmentos exploratorios como confirmación sin replicación. Minimiza datos personales: no hace falta guardar nombre o correo para medir activación; usa identificadores pseudonimizados y controla acceso.
+
+Un resultado positivo no obliga a un lanzamiento global instantáneo. Puede justificarse un ramp-up al 10 %, monitorización de guardrails y rollback claro. La inferencia del experimento se combina con operación segura.
+
+## Resumen y comprobación
+
+1. ¿Por qué conviene medir exposición además de asignación?
+2. ¿Cuándo puede detenerse un experimento antes de alcanzar su muestra?
+3. ¿Qué riesgo introduce excluir después de asignar a los usuarios que no completaron B?
+
+Usa este contrato para resolver el [ejercicio](../../../ejercicios/temario-08/aplicacion/experimento-onboarding.md). La última lección traduce resultado a tamaño de muestra y decisión económica.
+
+# 06 — Efecto, tamaño de muestra y recomendación
+
+## Resultado y prerrequisitos
+
+Al terminar podrás convertir un resultado estadístico en una recomendación con tamaño, precisión, valor económico, guardrails y plan de seguimiento. Requiere la lección de experimentos A/B.
+
+## Tres tamaños que nunca conviene mezclar
+
+Para Nexo, si A convierte 20,0 % y B 21,5 %:
+
+- **Efecto absoluto:** `+1,5 puntos porcentuales`; por cada 100 usuarios elegibles hay, en promedio, 1,5 activaciones adicionales.
+- **Efecto relativo:** `1,5 / 20,0 = +7,5 %`; compara con la línea base, pero necesita mostrar también la base.
+- **Tamaño económico:** con 100.000 usuarios/mes, +1,5 pp equivale aproximadamente a 1.500 activaciones extra/mes. Si una activación adicional genera 4 € de margen esperado, el valor bruto orientativo es 6.000 €/mes antes de coste, retención y riesgo.
+
+El valor económico no sale del p-valor. Exige un modelo explícito y revisable: tasa de activación, volumen afectado, valor posterior, coste de implementación y posibles daños. No conviertas una activación en ingreso seguro sin justificar la cadena.
+
+## MDE y tamaño de muestra: diseñar para una decisión
+
+El **efecto mínimo detectable (MDE)** es la menor diferencia que el equipo quiere poder detectar con una potencia y nivel de error elegidos. No debe elegirse porque “queda bonito”: sale de un umbral de producto. Si menos de +1 pp no paga el mantenimiento del onboarding, un experimento que solo detecta +3 pp no sirve para la decisión fina.
+
+Para dos tasas similares, una aproximación de planificación por grupo es:
+
+`n ≈ 2 × (z(1−α/2) + z(potencia))² × p × (1−p) / MDE²`.
+
+Con línea base 20 %, MDE 1 pp, α=0,05 y potencia 80 %, el orden de magnitud es decenas de miles de usuarios por variante. Es una estimación: usa una calculadora o biblioteca validada para el cálculo final, documenta la fórmula y añade margen por pérdidas, exposición incompleta y exclusiones predefinidas.
+
+```mermaid
+flowchart LR
+ A[Impacto mínimo que merece actuar] --> B[MDE]
+ B --> C[Tamaño y duración]
+ C --> D[Estimación e intervalo]
+ D --> E[¿Efecto útil y seguro?]
+ E -->|Sí| F[Ramp-up y monitorización]
+ E -->|No, incierto| G[Continuar o rediseñar]
+ E -->|Daño| H[Detener y aprender]
+```
+
+El diagrama responde “¿cómo conecta el tamaño de muestra con una decisión?”. Se empieza por el impacto que justifica coste, no por ejecutar hasta que aparezca una etiqueta verde.
+
+## Recomendación con incertidumbre
+
+Una recomendación profesional incluye siempre:
+
+1. **Estimación y precisión:** “B: +1,5 pp; IC 95 % [−0,3, +3,3 pp]” (ejemplo ilustrativo).
+2. **Importancia:** volumen, valor esperado y MDE acordado.
+3. **Daños y datos:** guardrails, exposición, duplicados, pérdidas y segmentos previstos.
+4. **Acción reversible:** lanzar, mantener, continuar, replicar o detener; con responsable y fecha de revisión.
+
+Ejemplo: “No recomiendo lanzamiento global aún. La mejora puntual es +1,5 pp, pero el intervalo permite una pérdida de 0,3 pp y el p90 empeora 3 minutos. Continuaría hasta la muestra predefinida si la guardrail de tiempo no excede el límite; si se confirma una mejora ≥1 pp sin daño, propondría ramp-up al 10 %.” Esta frase no finge que el resultado es definitivo y deja una acción verificable.
+
+## Contraejemplos importantes
+
+Un p-valor diminuto con millones de usuarios puede corresponder a +0,05 pp: quizá no compensa meses de ingeniería. Al revés, +3 pp con intervalo ancho puede ser económicamente prometedor pero aún no justificar un lanzamiento global. “No significativo” tampoco significa “equivalente”: para afirmar que un perjuicio no supera un límite se necesita un diseño de equivalencia/no inferioridad, umbral predefinido y asesoramiento adecuado.
+
+## Cierre y comprobación
+
+Estadística ayuda a cuantificar evidencia, no sustituye la decisión. La calidad del experimento, el tamaño que importa, las guardrails y la reversibilidad se razonan juntos.
+
+1. ¿Por qué +7,5 % relativo necesita acompañarse de +1,5 pp y de la base?
+2. ¿Qué decisión de negocio debe preceder al cálculo de tamaño muestral?
+3. ¿Qué afirmación no permite hacer por sí solo `p > 0,05`?
+
+Completa el [ejercicio de onboarding](../../../ejercicios/temario-08/aplicacion/experimento-onboarding.md) y ejecuta el [laboratorio](../../../notebooks/practicas/08-experimento-onboarding.py).
 
 # Bloque 09 - SQL, NoSQL y almacenamiento
 
