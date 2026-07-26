@@ -1,0 +1,7 @@
+id_operacion;fecha_hora;resultado;importe;canal;cliente_id;es_prueba
+op-001;2026-07-13 08:00;pagada;120,00;web;c-101;0
+op-002;2026-07-14 09:30;rechazada;80,00;app;c-102;0
+op-003;2026-07-15 10:00;pagada;50,00;web;c-101;0
+op-004;2026-07-16 14:15;devuelta;30,00;partner;c-103;0
+op-005;2026-07-17 12:20;pendiente;25,00;app;c-104;0
+op-test;2026-07-18 10:00;pagada;1,00;web;c-interno;1

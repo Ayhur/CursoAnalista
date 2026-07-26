@@ -36,7 +36,7 @@ El flujo separa **fuente**, **cálculo**, **control** y **entrega**. Excel puede
 
 ## Práctica
 
-Resuelve el [informe semanal de operaciones](../../ejercicios/temario-16/informe-semanal-operaciones.md) antes de ver la [solución razonada](../../soluciones/temario-16/informe-semanal-operaciones.md). El [script de laboratorio](../../notebooks/practicas/16-informe-operaciones.py) genera un libro real a partir de una base SQLite local; puedes ejecutarlo en Colab u ordenador tras instalar [`pandas` y `openpyxl`](../../notebooks/practicas/requirements-bloque-16.txt). El planteamiento también se puede razonar desde el móvil.
+Resuelve el [informe semanal de operaciones](../../ejercicios/temario-16/informe-semanal-operaciones.md) antes de ver la [solución razonada](../../soluciones/temario-16/informe-semanal-operaciones.md). El [script de laboratorio](../../notebooks/practicas/16-informe-operaciones.py) genera un libro real a partir de una base SQLite local; puedes ejecutarlo en Colab u ordenador tras instalar [`pandas` y `openpyxl`](../../notebooks/practicas/requirements-bloque-16.txt). Para practicar realmente Power Query, usa los [archivos brutos, consulta M y pasos guiados](../../recursos/power-query/). El planteamiento también se puede razonar desde el móvil.
 
 ## Criterio de dominio
 

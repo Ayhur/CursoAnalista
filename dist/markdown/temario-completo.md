@@ -6473,7 +6473,7 @@ El flujo separa **fuente**, **cálculo**, **control** y **entrega**. Excel puede
 
 ## Práctica
 
-Resuelve el [informe semanal de operaciones](../../ejercicios/temario-16/informe-semanal-operaciones.md) antes de ver la [solución razonada](../../soluciones/temario-16/informe-semanal-operaciones.md). El [script de laboratorio](../../notebooks/practicas/16-informe-operaciones.py) genera un libro real a partir de una base SQLite local; puedes ejecutarlo en Colab u ordenador tras instalar [`pandas` y `openpyxl`](../../notebooks/practicas/requirements-bloque-16.txt). El planteamiento también se puede razonar desde el móvil.
+Resuelve el [informe semanal de operaciones](../../ejercicios/temario-16/informe-semanal-operaciones.md) antes de ver la [solución razonada](../../soluciones/temario-16/informe-semanal-operaciones.md). El [script de laboratorio](../../notebooks/practicas/16-informe-operaciones.py) genera un libro real a partir de una base SQLite local; puedes ejecutarlo en Colab u ordenador tras instalar [`pandas` y `openpyxl`](../../notebooks/practicas/requirements-bloque-16.txt). Para practicar realmente Power Query, usa los [archivos brutos, consulta M y pasos guiados](../../recursos/power-query/). El planteamiento también se puede razonar desde el móvil.
 
 ## Criterio de dominio
 
@@ -6643,7 +6643,7 @@ Extraerás datos de una base con una consulta de solo lectura, parámetros y con
 
 ## Antes de programar: contrato de extracción
 
-Para el informe semanal define: variable objetivo = importes cobrados; grano = un intento de cobro; periodo = desde el lunes 00:00 UTC inclusive hasta el lunes siguiente exclusivo; fuente = tabla `operaciones`; exclusión = pruebas internas; salida = resumen, detalle y rechazados. Sin este contrato, el código puede ser correcto y responder otra pregunta.
+Para el informe semanal define: variable objetivo = importes cobrados; grano = un intento de cobro; periodo = desde el lunes 00:00 UTC inclusive hasta el lunes siguiente exclusivo; fuente = tabla `operaciones`; exclusión = pruebas internas; salida = resumen, detalle y no pagadas. Sin este contrato, el código puede ser correcto y responder otra pregunta.
 
 <!-- mobile-diagram: rendered fallback -->
 ![Diagrama: Parámetros: inicio y fin](../../../recursos/diagramas-moviles/curso--16-excel-power-query-y-entrega--lecciones--04-sql-python-y-validacion-01-612e8e93.svg)
@@ -6671,7 +6671,7 @@ import sqlite3
 import pandas as pd
 
 consulta = """
-SELECT operacion_id, fecha_utc, estado, importe_eur, canal
+SELECT operacion_id, fecha_utc, estado, importe_centimos, canal
 FROM operaciones
 WHERE fecha_utc >= :inicio AND fecha_utc < :fin
   AND es_prueba = 0
@@ -6684,6 +6684,8 @@ with sqlite3.connect("operaciones.sqlite") as conexion:
     )
 ```
 
+El laboratorio usa `importe_centimos`: `12000` equivale a 120,00 EUR. El nombre hace visible que SQL y Python trabajan con enteros para conciliar; la conversión a euros se reserva para el libro que leerá una persona.
+
 `read_sql_query` crea un DataFrame —una tabla en memoria con filas y columnas— a partir de la consulta. SQLite es útil para aprender porque es local; en un entorno empresarial el conector puede ser PostgreSQL u otro motor. Las credenciales no se escriben dentro del script ni se suben al repositorio: se inyectan mediante variables de entorno o un gestor de secretos y se usan con un usuario de solo lectura.
 
 ## Controles que responden a riesgos
@@ -6692,10 +6694,12 @@ with sqlite3.connect("operaciones.sqlite") as conexion:
 - **Periodo:** ¿la fecha mínima y máxima están dentro de los límites declarados?
 - **Unicidad:** ¿`operacion_id` se repite cuando el grano promete una fila por intento?
 - **Completitud:** ¿hay nulos en identificador, fecha, estado o importe?
-- **Conciliación:** ¿el número e importe de pagos concuerda con una consulta independiente o total de control?
+- **Conciliación:** ¿las filas extraídas, pruebas excluidas, elegibles, pagos y no pagos encajan entre sí? ¿El importe de pagos calculado en el DataFrame coincide exactamente, en céntimos, con una segunda consulta SQL?
 - **Exclusiones:** ¿cuántas filas de prueba, devoluciones o estados desconocidos quedaron fuera y por qué?
 
-Un `assert` o una excepción con mensaje claro puede impedir la entrega. Un control no es un adorno: debe estar vinculado a una decisión de qué hacer al fallar.
+Un control debe fallar correctamente. Si faltase `operacion_id`, intentar contar duplicados produciría un `KeyError` técnico y ocultaría el problema real. Primero se comprueba el esquema; si faltan columnas, el laboratorio genera un control fallido con los nombres ausentes, bloquea la entrega y no ejecuta los controles que dependen de ellas. Un `assert` o una excepción de dominio clara puede impedir la entrega, pero el informe de controles debe explicar qué corregir.
+
+Para dinero, la base didáctica guarda `importe_centimos` como entero: 12 000 representa 120,00 EUR. Así, tanto Pandas como SQL suman enteros y la conciliación exige igualdad exacta. El Excel final muestra euros para lectura; en una base empresarial usarías un tipo decimal apropiado o centavos enteros, no `float` como fuente de verdad.
 
 ## Límite técnico y ético
 
@@ -6713,7 +6717,7 @@ Construirás un archivo que sirva para leer y revisar, no solo para descargar fi
 
 ## Diseño antes del código
 
-El libro semanal de Norte Operaciones tendrá cinco hojas: `Resumen`, `Detalle`, `Rechazados`, `Conciliacion` y `Metadatos`. Esta separación evita que el resumen esconda excepciones y permite a cada audiencia empezar por la hoja adecuada.
+El libro semanal de Norte Operaciones tendrá cinco hojas: `Resumen`, `Detalle`, `No_pagadas`, `Conciliacion` y `Metadatos`. Esta separación evita que el resumen esconda excepciones y permite a cada audiencia empezar por la hoja adecuada. **No_pagadas** no significa «rechazadas»: separa explícitamente un cobro fallido, uno pendiente y uno devuelto.
 
 <!-- mobile-diagram: rendered fallback -->
 ![Diagrama: Datos validados](../../../recursos/diagramas-moviles/curso--16-excel-power-query-y-entrega--lecciones--05-generar-libro-excel-01-542b05cc.svg)
@@ -6725,7 +6729,7 @@ El libro semanal de Norte Operaciones tendrá cinco hojas: `Resumen`, `Detalle`,
 flowchart LR
  A[Datos validados] --> B[Resumen ejecutivo]
  A --> C[Detalle filtrable]
- A --> D[Rechazados y motivo]
+ A --> D[No pagadas y motivo]
  B --> E[Conciliación]
  C --> E
  D --> E
@@ -6747,7 +6751,7 @@ ruta = Path("salidas/informe_operaciones_2026-07-13.xlsx")
 with pd.ExcelWriter(ruta, engine="openpyxl") as escritor:
     resumen.to_excel(escritor, sheet_name="Resumen", index=False)
     detalle.to_excel(escritor, sheet_name="Detalle", index=False)
-    rechazados.to_excel(escritor, sheet_name="Rechazados", index=False)
+    no_pagadas.to_excel(escritor, sheet_name="No_pagadas", index=False)
     controles.to_excel(escritor, sheet_name="Conciliacion", index=False)
     metadatos.to_excel(escritor, sheet_name="Metadatos", index=False)
 
@@ -6765,11 +6769,13 @@ El formato sigue al significado: `importe_eur` usa moneda; `fecha_utc` usa un fo
 
 ## Conciliación y lectura humana
 
-En `Conciliacion`, compara al menos: filas extraídas, identificadores distintos, importe de estados pagados, importe de devoluciones y diferencia contra el total de la consulta de control. Muestra resultado, umbral y acción: «diferencia = 0 → entregar; diferencia ≠ 0 → bloquear y revisar». Los registros rechazados deben conservar motivo y regla de rechazo, no desaparecer.
+En `Conciliacion`, compara al menos: filas extraídas, pruebas excluidas, filas elegibles, pagos, no pagos, identificadores distintos y total pagado de dos cálculos. La identidad `elegibles = pagadas + no_pagadas` debe cuadrar antes de entregar. Para dinero se concilian **céntimos enteros**; no una comparación aproximada de coma flotante. Muestra resultado, umbral y acción: «diferencia = 0 → entregar; diferencia ≠ 0 → bloquear y revisar».
+
+Los registros no pagados conservan estado y motivo: `rechazada` = autorización o cobro fallido; `pendiente` = resultado no definitivo; `devuelta` = pago revertido. Clasificar no es filtrar: una fila excluida del total puede seguir siendo imprescindible para explicar una tasa o una incidencia.
 
 ## Errores frecuentes
 
-Un archivo con formato bonito puede ser inutilizable si: cambia la columna de fecha a texto, trunca decimales, exporta filas personales no necesarias, sobrescribe el informe anterior o titula “Total” a una suma que mezcla monedas. El nombre de archivo debe incluir periodo y momento de generación, por ejemplo `operaciones_2026-07-13_a_2026-07-20_generado_2026-07-20T0815Z.xlsx`.
+Un archivo con formato bonito puede ser inutilizable si: cambia la columna de fecha a texto, trunca decimales, exporta filas personales no necesarias, sobrescribe el informe anterior o titula “Total” a una suma que mezcla monedas. El laboratorio crea títulos, instrucciones visibles, tablas estructuradas, formato monetario, cabeceras consistentes y controles fallidos resaltados. `Metadatos` se protege contra cambios accidentales, pero esa protección no sustituye los permisos de acceso. El nombre de archivo debe incluir periodo y momento de generación, por ejemplo `operaciones_2026-07-13_a_2026-07-20_generado_2026-07-20T0815Z.xlsx`.
 
 ## Resumen
 
@@ -6817,7 +6823,7 @@ El planificador no sustituye el juicio analítico. Si un cambio de negocio hace 
 
 ## Ejemplo de informe útil
 
-El director de Operaciones abre `Resumen`: importe cobrado, variación frente a semana comparable y estado de controles. Si hay diferencia, no usa ese total para decidir. El equipo analista abre `Conciliacion` y `Rechazados`, identifica si el origen es un estado nuevo o una carga tardía, corrige o explica la excepción y deja registro. Esta es la diferencia entre enviar un Excel y entregar un proceso.
+El director de Operaciones abre `Resumen`: importe cobrado, variación frente a semana comparable y estado de controles. Si hay diferencia, no usa ese total para decidir. El equipo analista abre `Conciliacion` y `No_pagadas`, identifica si el origen es un estado nuevo o una carga tardía, corrige o explica la excepción y deja registro. Esta es la diferencia entre enviar un Excel y entregar un proceso.
 
 ## Autoevaluación y siguiente paso
 

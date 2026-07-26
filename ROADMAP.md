@@ -27,7 +27,13 @@
 
 ## Fase 5 - Interactividad
 
-- [ ] GitHub Pages, tests autocorregibles y progreso local.
+- [ ] Aula web estática publicada en GitHub Pages, generada desde el Markdown para no mantener dos cursos.
+- [ ] Tests autocorregibles, pistas y progreso local guardado en el navegador.
+- [ ] Primeros laboratorios visuales: grano/cardinalidad y el informe semanal del bloque 16.
+- [ ] Motor de ejercicios definido en JSON para no programar cada pregunta desde cero.
+- [ ] Backend Python local **opcional** para SQLite, Pandas y generación de Excel; la capa conceptual debe funcionar sin instalarlo.
+
+No se empezará por autenticación, una base de datos de usuarios, React/Next.js ni ejecución arbitraria de código. La primera versión será HTML, CSS y JavaScript estáticos; la ejecución real de Python llegará solo cuando los laboratorios lo justifiquen.
 
 ## Fase 6 - Profesionalización aplicada
 
