@@ -70,6 +70,10 @@ La teoría, los ejercicios de razonamiento y las autoevaluaciones se pueden cons
 
 [Abrir la primera práctica en Google Colab](https://colab.research.google.com/github/Ayhur/CursoAnalista/blob/main/notebooks/practicas/02-gastos-personales.ipynb)
 
+## Aula interactiva beta
+
+La carpeta [`web/`](web/README.md) contiene una primera aula estática: dos laboratorios autocorregibles, progreso guardado solo en el navegador y enlaces al Markdown fuente. Se puede abrir en local con `python -m http.server 8000 --directory web`; la publicación en GitHub Pages se añadirá tras validar el MVP.
+
 ## Herramientas que aprenderás a entender
 
 Python, Pandas, SQL, MongoDB, DynamoDB, GitHub, Jira, Amplitude y herramientas BI. El objetivo no es memorizar una interfaz: primero se aprende el concepto de análisis y después cómo aplicarlo en cada herramienta.
