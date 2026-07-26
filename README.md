@@ -31,6 +31,7 @@ Los mismos contenidos se mantienen en Markdown y en PDF. Puedes descargar:
 - [Bloque 13 - Herramientas y reproducibilidad](dist/pdf/13-herramientas-y-reproducibilidad.pdf)
 - [Bloque 14 - Nivel avanzado](dist/pdf/14-nivel-avanzado.pdf)
 - [Bloque 15 - Portfolio](dist/pdf/15-portfolio.pdf)
+- [Bloque 16 - Excel, Power Query y entrega automatizada](dist/pdf/16-excel-power-query-y-entrega.pdf)
 
 Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el script del repositorio y en GitHub Actions.
 
@@ -45,6 +46,7 @@ Cada nuevo bloque añadirá su propio enlace. Los PDFs se regeneran con el scrip
 | 04-09 | NumPy, Pandas, EDA, visualización, estadística y datos | Desarrollados: 34 lecciones |
 | 10 | Métricas y producto | Desarrollado: 10 lecciones |
 | 11-15 | Especialización y portfolio | Desarrollados: 29 lecciones |
+| 16 | Excel, Power Query y entrega automatizada | En desarrollo: profesionalización aplicada |
 
 ## Cómo se organiza el material
 
@@ -74,7 +76,7 @@ Python, Pandas, SQL, MongoDB, DynamoDB, GitHub, Jira, Amplitude y herramientas B
 
 ## Estado del curso
 
-Los 16 bloques están desarrollados como **92 lecciones** y se pueden leer en Markdown o descargar por bloque y como temario consolidado en PDF. El criterio docente, la auditoría de reconstrucción y el mapa de cobertura están documentados en el [programa docente](docs/programa-docente.md) y la [auditoría docente](docs/auditoria-docente-2026-07.md).
+Los 16 bloques originales están desarrollados como **92 lecciones**; el bloque 16 añade una primera experiencia profesional práctica. Se pueden leer en Markdown o descargar por bloque y como temario consolidado en PDF. Eso significa que la ruta conceptual está cubierta; no significa todavía que un alumno haya completado todas las experiencias prácticas propias de un puesto junior. La ampliación de Excel/Power Query, BI práctico, entregas automatizadas y casos empresariales se controla explícitamente en el [roadmap](ROADMAP.md). El criterio docente, la auditoría de reconstrucción y el mapa de cobertura están documentados en el [programa docente](docs/programa-docente.md) y la [auditoría docente](docs/auditoria-docente-2026-07.md).
 
 ## Licencia
 

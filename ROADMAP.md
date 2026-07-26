@@ -13,11 +13,12 @@
 - [x] Matemáticas aplicadas, NumPy, Pandas, EDA y visualización.
 - [ ] Primer proyecto de limpieza y análisis.
 
-## Fase 3 - Competencia profesional
+## Fase 3 - Competencia profesional: fundamentos conceptuales
 
 - [x] Estadística, SQL, NoSQL, métricas, KPIs y analítica de producto.
-- [x] Herramientas de empresa y reproducibilidad.
-- [ ] Jira, Amplitude, BI y reproducibilidad.
+- [x] Fundamentos de Jira, Amplitude, BI y reproducibilidad.
+- [ ] Práctica guiada de una herramienta BI con modelo, medidas, seguridad y entrega.
+- [ ] Proyecto de limpieza y análisis con datos imperfectos y trazabilidad de decisiones.
 
 ## Fase 4 - Especialización
 
@@ -27,3 +28,21 @@
 ## Fase 5 - Interactividad
 
 - [ ] GitHub Pages, tests autocorregibles y progreso local.
+
+## Fase 6 - Profesionalización aplicada
+
+El curso tiene una ruta teórica desarrollada de 92 lecciones. Esta fase no la sustituye: añade las experiencias completas que permiten demostrar competencia laboral. No se marcará como finalizada por tener documentos de teoría; cada hito exige un entregable reproducible, datos imperfectos, controles y una rúbrica.
+
+- [ ] Bloque 16: Excel, Power Query y entrega automatizada SQL → Python → Excel.
+- [ ] Laboratorios cortos acumulativos: objetivo 15–20, incluidos ejercicios de auditoría de resultados plausibles pero erróneos.
+- [ ] Casos medianos: objetivo 6–8, con ficheros, esquemas y definiciones que cambian.
+- [ ] Proyecto BI: modelo estrella, calendario, medidas, filtros, accesibilidad, control de frescura y seguridad por filas cuando aplique.
+- [ ] Tres casos empresariales completos: operaciones financieras/seguros, retail e producto digital.
+- [ ] Capstone final que recorra petición ambigua, extracción, validación, análisis, entrega y seguimiento.
+
+## Fase 7 - Plataforma analítica del analista
+
+- [ ] Modelado dimensional: hechos, dimensiones, granularidad, medidas aditivas y cambios históricos.
+- [ ] SQL operativo con DuckDB o PostgreSQL: planes, límites, consultas incrementales, permisos de solo lectura y coste.
+- [ ] Calidad y operación: contratos de datos, pruebas, logging, configuración, secretos y ejecuciones programadas.
+- [ ] APIs paginadas, Parquet, particionado y automatización en GitHub Actions como introducción orientada a analistas.
