@@ -29,4 +29,3 @@ Diseña —o completa a partir del laboratorio— un proceso que genere un `.xls
 Un compañero calcula una tasa de pago de 100 % porque divide pagos entre filas de la hoja `Detalle`, pero esa hoja solo contiene pagos. Explica el error, corrige el denominador y añade un control que impida repetirlo.
 
 Consulta la [solución razonada](../../soluciones/temario-16/informe-semanal-operaciones.md) solo después de intentar el diseño.
-

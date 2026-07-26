@@ -24,4 +24,3 @@ La tasa de pago no es pagos / filas de `Detalle` cuando `Detalle` ya está filtr
 Power Query puede cargar y normalizar CSV recurrentes: tipos, separadores, nombres y anexado. SQL filtra y agrega cerca de la base; Python valida, registra y genera el libro; Excel permite revisión, tablas dinámicas y anotaciones de negocio. No se exportaría `cliente_email` al destinatario si no necesita contactar al cliente: es información personal que no aporta a la conciliación.
 
 Una entrega no se envía si falla unicidad, periodo o conciliación. Se genera un registro de fallo con parámetros y conteos, sin datos sensibles, y se comunica la incidencia.
-

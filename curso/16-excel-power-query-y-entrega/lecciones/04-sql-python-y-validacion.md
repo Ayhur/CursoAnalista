@@ -67,4 +67,3 @@ Parametrizar valores no habilita parametrizar arbitrariamente nombres de tabla o
 **Comprobación:** si el total cae a cero porque cambió el nombre de un estado, ¿qué control lo detectaría y qué debería hacer el proceso?
 
 **Fuente primaria:** [pandas `read_sql_query`](https://pandas.pydata.org/docs/reference/api/pandas.read_sql_query.html).
-
