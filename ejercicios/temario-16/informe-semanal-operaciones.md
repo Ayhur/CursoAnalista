@@ -12,8 +12,8 @@ Diseña —o completa a partir del laboratorio— un proceso que genere un `.xls
 
 1. `Resumen`: total cobrado, intentos, operaciones pagadas y distribución por canal.
 2. `Detalle`: operaciones del periodo, excluyendo pruebas, con filtros y encabezado congelado.
-3. `Rechazados`: filas que no entran en el total pagado, con un motivo explícito.
-4. `Conciliacion`: controles de filas, IDs únicos, nulos, rango de fechas y total pagado frente a cálculo independiente.
+3. `No_pagadas`: filas que no entran en el total pagado, con estado y motivo explícito. No llames «rechazada» a una devolución o a un resultado pendiente.
+4. `Conciliacion`: controles de filas extraídas, pruebas excluidas, elegibles, pagos, no pagos, IDs únicos, nulos, rango de fechas, identidad de estados y total pagado frente a cálculo SQL independiente.
 5. `Metadatos`: inicio, fin exclusivo, fecha UTC de generación, fuente, versión y estado final de controles.
 
 ## Requisitos de razonamiento
@@ -21,6 +21,7 @@ Diseña —o completa a partir del laboratorio— un proceso que genere un `.xls
 - Declara el contrato: grano, periodo, estados, exclusiones y moneda.
 - Usa una consulta SQL parametrizada. Explica por qué `fin` es exclusivo.
 - Propón una regla para bloquear el archivo si aparece un `operacion_id` duplicado o un importe pagado nulo.
+- Explica por qué guardarías dinero como céntimos enteros o decimal, y no como coma flotante para conciliar.
 - Explica qué parte harías con Power Query si los archivos llegan como CSV, qué parte con SQL/Python y qué parte dejarías para revisión en Excel.
 - Indica qué dato no exportarías si `cliente_email` existiera y el destinatario fuese solo Operaciones.
 

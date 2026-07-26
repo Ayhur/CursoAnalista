@@ -6,7 +6,7 @@ Construirás un archivo que sirva para leer y revisar, no solo para descargar fi
 
 ## Diseño antes del código
 
-El libro semanal de Norte Operaciones tendrá cinco hojas: `Resumen`, `Detalle`, `Rechazados`, `Conciliacion` y `Metadatos`. Esta separación evita que el resumen esconda excepciones y permite a cada audiencia empezar por la hoja adecuada.
+El libro semanal de Norte Operaciones tendrá cinco hojas: `Resumen`, `Detalle`, `No_pagadas`, `Conciliacion` y `Metadatos`. Esta separación evita que el resumen esconda excepciones y permite a cada audiencia empezar por la hoja adecuada. **No_pagadas** no significa «rechazadas»: separa explícitamente un cobro fallido, uno pendiente y uno devuelto.
 
 <!-- mobile-diagram: rendered fallback -->
 ![Diagrama: Datos validados](../../../recursos/diagramas-moviles/curso--16-excel-power-query-y-entrega--lecciones--05-generar-libro-excel-01-542b05cc.svg)
@@ -18,7 +18,7 @@ El libro semanal de Norte Operaciones tendrá cinco hojas: `Resumen`, `Detalle`,
 flowchart LR
  A[Datos validados] --> B[Resumen ejecutivo]
  A --> C[Detalle filtrable]
- A --> D[Rechazados y motivo]
+ A --> D[No pagadas y motivo]
  B --> E[Conciliación]
  C --> E
  D --> E
@@ -40,7 +40,7 @@ ruta = Path("salidas/informe_operaciones_2026-07-13.xlsx")
 with pd.ExcelWriter(ruta, engine="openpyxl") as escritor:
     resumen.to_excel(escritor, sheet_name="Resumen", index=False)
     detalle.to_excel(escritor, sheet_name="Detalle", index=False)
-    rechazados.to_excel(escritor, sheet_name="Rechazados", index=False)
+    no_pagadas.to_excel(escritor, sheet_name="No_pagadas", index=False)
     controles.to_excel(escritor, sheet_name="Conciliacion", index=False)
     metadatos.to_excel(escritor, sheet_name="Metadatos", index=False)
 
@@ -58,11 +58,13 @@ El formato sigue al significado: `importe_eur` usa moneda; `fecha_utc` usa un fo
 
 ## Conciliación y lectura humana
 
-En `Conciliacion`, compara al menos: filas extraídas, identificadores distintos, importe de estados pagados, importe de devoluciones y diferencia contra el total de la consulta de control. Muestra resultado, umbral y acción: «diferencia = 0 → entregar; diferencia ≠ 0 → bloquear y revisar». Los registros rechazados deben conservar motivo y regla de rechazo, no desaparecer.
+En `Conciliacion`, compara al menos: filas extraídas, pruebas excluidas, filas elegibles, pagos, no pagos, identificadores distintos y total pagado de dos cálculos. La identidad `elegibles = pagadas + no_pagadas` debe cuadrar antes de entregar. Para dinero se concilian **céntimos enteros**; no una comparación aproximada de coma flotante. Muestra resultado, umbral y acción: «diferencia = 0 → entregar; diferencia ≠ 0 → bloquear y revisar».
+
+Los registros no pagados conservan estado y motivo: `rechazada` = autorización o cobro fallido; `pendiente` = resultado no definitivo; `devuelta` = pago revertido. Clasificar no es filtrar: una fila excluida del total puede seguir siendo imprescindible para explicar una tasa o una incidencia.
 
 ## Errores frecuentes
 
-Un archivo con formato bonito puede ser inutilizable si: cambia la columna de fecha a texto, trunca decimales, exporta filas personales no necesarias, sobrescribe el informe anterior o titula “Total” a una suma que mezcla monedas. El nombre de archivo debe incluir periodo y momento de generación, por ejemplo `operaciones_2026-07-13_a_2026-07-20_generado_2026-07-20T0815Z.xlsx`.
+Un archivo con formato bonito puede ser inutilizable si: cambia la columna de fecha a texto, trunca decimales, exporta filas personales no necesarias, sobrescribe el informe anterior o titula “Total” a una suma que mezcla monedas. El laboratorio crea títulos, instrucciones visibles, tablas estructuradas, formato monetario, cabeceras consistentes y controles fallidos resaltados. `Metadatos` se protege contra cambios accidentales, pero esa protección no sustituye los permisos de acceso. El nombre de archivo debe incluir periodo y momento de generación, por ejemplo `operaciones_2026-07-13_a_2026-07-20_generado_2026-07-20T0815Z.xlsx`.
 
 ## Resumen
 

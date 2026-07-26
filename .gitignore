@@ -3,6 +3,7 @@
 scripts/__pycache__/
 __pycache__/
 tmp-*.png
+/tmp-render/
 /tmp/
 /salidas/
 /datasets/temario-16/operaciones.sqlite

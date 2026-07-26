@@ -1,0 +1,6 @@
+id_operacion;fecha_hora;resultado;importe;canal;cliente_id;es_prueba;segmento;responsable;motivo_exclusion_total
+op-001;2026-07-13 08:00;pagada;120,00;web;c-101;0;pyme;Laura;
+op-002;2026-07-14 09:30;rechazada;80,00;app;c-102;0;enterprise;Dani;Cobro no autorizado o fallido
+op-003;2026-07-15 10:00;pagada;50,00;web;c-101;0;pyme;Laura;
+op-004;2026-07-16 14:15;devuelta;30,00;partner;c-103;0;pyme;Laura;Pago revertido posteriormente
+op-005;2026-07-17 12:20;pendiente;25,00;app;c-104;0;startup;Marta;Resultado aún no definitivo

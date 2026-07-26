@@ -6,7 +6,7 @@ Extraerás datos de una base con una consulta de solo lectura, parámetros y con
 
 ## Antes de programar: contrato de extracción
 
-Para el informe semanal define: variable objetivo = importes cobrados; grano = un intento de cobro; periodo = desde el lunes 00:00 UTC inclusive hasta el lunes siguiente exclusivo; fuente = tabla `operaciones`; exclusión = pruebas internas; salida = resumen, detalle y rechazados. Sin este contrato, el código puede ser correcto y responder otra pregunta.
+Para el informe semanal define: variable objetivo = importes cobrados; grano = un intento de cobro; periodo = desde el lunes 00:00 UTC inclusive hasta el lunes siguiente exclusivo; fuente = tabla `operaciones`; exclusión = pruebas internas; salida = resumen, detalle y no pagadas. Sin este contrato, el código puede ser correcto y responder otra pregunta.
 
 <!-- mobile-diagram: rendered fallback -->
 ![Diagrama: Parámetros: inicio y fin](../../../recursos/diagramas-moviles/curso--16-excel-power-query-y-entrega--lecciones--04-sql-python-y-validacion-01-612e8e93.svg)
@@ -34,7 +34,7 @@ import sqlite3
 import pandas as pd
 
 consulta = """
-SELECT operacion_id, fecha_utc, estado, importe_eur, canal
+SELECT operacion_id, fecha_utc, estado, importe_centimos, canal
 FROM operaciones
 WHERE fecha_utc >= :inicio AND fecha_utc < :fin
   AND es_prueba = 0
@@ -47,6 +47,8 @@ with sqlite3.connect("operaciones.sqlite") as conexion:
     )
 ```
 
+El laboratorio usa `importe_centimos`: `12000` equivale a 120,00 EUR. El nombre hace visible que SQL y Python trabajan con enteros para conciliar; la conversión a euros se reserva para el libro que leerá una persona.
+
 `read_sql_query` crea un DataFrame —una tabla en memoria con filas y columnas— a partir de la consulta. SQLite es útil para aprender porque es local; en un entorno empresarial el conector puede ser PostgreSQL u otro motor. Las credenciales no se escriben dentro del script ni se suben al repositorio: se inyectan mediante variables de entorno o un gestor de secretos y se usan con un usuario de solo lectura.
 
 ## Controles que responden a riesgos
@@ -55,10 +57,12 @@ with sqlite3.connect("operaciones.sqlite") as conexion:
 - **Periodo:** ¿la fecha mínima y máxima están dentro de los límites declarados?
 - **Unicidad:** ¿`operacion_id` se repite cuando el grano promete una fila por intento?
 - **Completitud:** ¿hay nulos en identificador, fecha, estado o importe?
-- **Conciliación:** ¿el número e importe de pagos concuerda con una consulta independiente o total de control?
+- **Conciliación:** ¿las filas extraídas, pruebas excluidas, elegibles, pagos y no pagos encajan entre sí? ¿El importe de pagos calculado en el DataFrame coincide exactamente, en céntimos, con una segunda consulta SQL?
 - **Exclusiones:** ¿cuántas filas de prueba, devoluciones o estados desconocidos quedaron fuera y por qué?
 
-Un `assert` o una excepción con mensaje claro puede impedir la entrega. Un control no es un adorno: debe estar vinculado a una decisión de qué hacer al fallar.
+Un control debe fallar correctamente. Si faltase `operacion_id`, intentar contar duplicados produciría un `KeyError` técnico y ocultaría el problema real. Primero se comprueba el esquema; si faltan columnas, el laboratorio genera un control fallido con los nombres ausentes, bloquea la entrega y no ejecuta los controles que dependen de ellas. Un `assert` o una excepción de dominio clara puede impedir la entrega, pero el informe de controles debe explicar qué corregir.
+
+Para dinero, la base didáctica guarda `importe_centimos` como entero: 12 000 representa 120,00 EUR. Así, tanto Pandas como SQL suman enteros y la conciliación exige igualdad exacta. El Excel final muestra euros para lectura; en una base empresarial usarías un tipo decimal apropiado o centavos enteros, no `float` como fuente de verdad.
 
 ## Límite técnico y ético
 
