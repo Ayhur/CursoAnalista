@@ -4,7 +4,7 @@
 
 Este no es un índice de lectura rápida. Es un itinerario profesional progresivo para formar a un analista capaz de trabajar en equipos tecnológicos: formular problemas, modelar datos, usar Python y SQL, definir métricas, cuestionar evidencia y comunicar una recomendación verificable.
 
-El programa contiene **16 bloques y 161 temas nucleares**. Los temas se agrupan en lecciones para que el alumno pueda aprender una idea completa antes de saltar a la siguiente. Cada bloque tiene un proyecto o prueba de dominio; cada lección no se considera terminada hasta que incluye ejemplos, contraejemplos, práctica y al menos un recurso visual cuando el concepto tenga estructura, flujo o relación entre entidades.
+El programa contiene **16 bloques y 161 temas nucleares** en su ruta inicial. Los temas se agrupan en lecciones para que el alumno pueda aprender una idea completa antes de saltar a la siguiente. Cada bloque tiene un proyecto o prueba de dominio; cada lección no se considera terminada hasta que incluye ejemplos, contraejemplos, práctica y al menos un recurso visual cuando el concepto tenga estructura, flujo o relación entre entidades. La profesionalización aplicada posterior se mantiene como ampliación explícita en `ROADMAP.md`; no se confunde la existencia de teoría con práctica laboral completada.
 
 ## Estándar de una lección
 
@@ -41,8 +41,9 @@ Los diagramas se escriben dentro de la lección con Mermaid y se generan tambié
 | 13. Herramientas y reproducibilidad | 6 | Entregar análisis colaborables y mantenibles. |
 | 14. Nivel avanzado | 5 | Abordar causalidad, escala, anomalías y fuentes externas. |
 | 15. Portfolio | 4 | Demostrar competencias mediante proyectos defendibles. |
+| 16. Excel, Power Query y entrega automatizada | 6 | Extraer, validar y entregar un informe operativo reproducible. |
 
-Total: **92 lecciones**, que cubren los 161 temas del índice maestro.
+Total inicial: **92 lecciones**, que cubren los 161 temas del índice maestro. La ampliación aplicada incorpora 6 lecciones adicionales de entrega profesional.
 
 ## Mapa de lecciones por bloque
 
@@ -106,6 +107,15 @@ Total: **92 lecciones**, que cubren los 161 temas del índice maestro.
 - Herramientas: proyecto reproducible; Git; Jira; Amplitude; BI; documentación y entrega.
 - Avanzado: causalidad; bootstrap; anomalías; escala; APIs, geoespacial y revisión crítica.
 - Portfolio: selección de casos; narrativa; calidad; entrevistas; CV y capstone.
+
+### 16. Excel, Power Query y entrega automatizada
+
+1. Exportación manual frente a proceso reproducible.
+2. Tablas, fórmulas, validación y controles en Excel.
+3. Power Query para importación y preparación refrescable.
+4. SQL parametrizado desde Python y validación de extracción.
+5. Libro Excel con resumen, detalle, rechazados, conciliación y metadatos.
+6. Automatización, logging, manejo de fallos y entrega operativa.
 
 ## Criterio de publicación
 
