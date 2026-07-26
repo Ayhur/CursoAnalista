@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aula interactiva local del CursoAnalista">
+  <title>CursoAnalista · Aula práctica</title>
+  <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow">CursoAnalista · práctica inmediata</p>
+    <h1>Aula de análisis de datos</h1>
+    <p>Los apuntes siguen en Markdown. Aquí practicas decisiones que producen resultados plausibles, pero pueden estar mal.</p>
+    <nav aria-label="Navegación del aula">
+      <a href="#grano">Laboratorio de grano</a>
+      <a href="#operaciones">Informe semanal</a>
+      <a href="https://github.com/Ayhur/CursoAnalista/tree/main/curso" target="_blank" rel="noreferrer">Leer el curso en GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="progress" aria-label="Progreso local">
+      <strong>Tu progreso en este navegador:</strong> <span id="progress-text">0 de 2 laboratorios superados</span>
+      <button id="reset-progress" type="button">Reiniciar progreso</button>
+    </section>
+
+    <section id="grano" class="lab" aria-labelledby="grano-title">
+      <div class="lab-intro"><p class="eyebrow">Laboratorio 01 · bloques 01 y 09</p><h2 id="grano-title">Declara el grano antes de calcular</h2>
+      <p>La tabla contiene una fila por artículo incluido en un pedido. Dirección pregunta: «¿cuántos clientes compraron?». ¿Qué representa cada fila?</p></div>
+      <div class="table-wrap"><table><thead><tr><th>pedido_id</th><th>cliente_id</th><th>artículo</th><th>importe EUR</th></tr></thead><tbody>
+        <tr><td>P-01</td><td>C-10</td><td>Teclado</td><td>35</td></tr><tr><td>P-01</td><td>C-10</td><td>Ratón</td><td>20</td></tr><tr><td>P-02</td><td>C-10</td><td>Monitor</td><td>180</td></tr><tr><td>P-03</td><td>C-11</td><td>Base</td><td>25</td></tr>
+      </tbody></table></div>
+      <fieldset><legend>¿Cuál es el grano de la tabla?</legend>
+        <label><input type="radio" name="grano" value="cliente"> Una fila por cliente</label>
+        <label><input type="radio" name="grano" value="pedido"> Una fila por pedido</label>
+        <label><input type="radio" name="grano" value="linea"> Una fila por línea de pedido</label>
+        <button id="check-grain" type="button">Comprobar respuesta</button>
+      </fieldset>
+      <fieldset><legend>¿Qué cardinalidad esperas entre pedidos y clientes?</legend>
+        <select id="cardinality"><option value="">Elige una opción</option><option value="uno-uno">Uno a uno</option><option value="muchos-uno">Muchos pedidos a un cliente</option><option value="muchos-muchos">Muchos a muchos</option></select>
+        <button id="check-cardinality" type="button">Comprobar cardinalidad</button>
+      </fieldset>
+      <p id="grain-feedback" class="feedback" aria-live="polite"></p>
+    </section>
+
+    <section id="operaciones" class="lab" aria-labelledby="operations-title">
+      <div class="lab-intro"><p class="eyebrow">Laboratorio 02 · bloque 16</p><h2 id="operations-title">Construye un informe semanal defendible</h2>
+      <p>Operaciones solicita el total cobrado entre el 13 y el 20 de julio, en UTC. Una fila representa un intento de cobro; el final del periodo es exclusivo.</p></div>
+      <div class="table-wrap"><table><thead><tr><th>operación</th><th>fecha UTC</th><th>estado</th><th>importe EUR</th><th>prueba</th></tr></thead><tbody id="operations-rows"></tbody></table></div>
+      <fieldset><legend>Estados incluidos en «importe cobrado»</legend><div id="status-options" class="checks"></div></fieldset>
+      <fieldset><legend>Controles del periodo</legend>
+        <label><input id="exclude-tests" type="checkbox"> Excluir operaciones de prueba</label>
+        <label><input id="exclusive-end" type="checkbox"> Usar intervalo <code>[inicio, fin)</code>: el 20 de julio no entra</label>
+      </fieldset>
+      <button id="calculate-report" type="button">Calcular mi informe</button>
+      <div id="report-result" class="result" aria-live="polite"></div>
+      <p class="source-link">Amplía el caso con la <a href="https://github.com/Ayhur/CursoAnalista/tree/main/curso/16-excel-power-query-y-entrega" target="_blank" rel="noreferrer">teoría y laboratorio del bloque 16</a>.</p>
+    </section>
+  </main>
+  <footer>Progreso guardado solo en este navegador. No se envían datos ni se ejecuta Python en esta primera capa.</footer>
+  <script src="js/app.js"></script>
+</body>
+</html>
